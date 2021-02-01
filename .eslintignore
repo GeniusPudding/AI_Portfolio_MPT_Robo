@@ -1,0 +1,6 @@
+/build/
+/config/
+/dist/
+/*.js
+/src/mixins/*.js
+/src/main.js
