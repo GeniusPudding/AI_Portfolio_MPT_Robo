@@ -1,4 +1,4 @@
-import {Highcharts} from 'highcharts-vue/'
+var Highcharts = require('highcharts/highstock');  
 export default {
   data() {
     return {

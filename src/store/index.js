@@ -18,34 +18,11 @@ export default new Vuex.Store({
   },
   mutations: {
     updateField,
-    // setKey(state, data) {
-    //   state["open_no"] = data;
-    // },
-    // updateData(state, data) {
-    //   state[data.type] = data.val;
-    // },
-    // updateKYC(state, data) {
-    //   state["KYC_DATA"][data.type] = data.val;
-    // },
     reset(state) {
       const source = data;
       Object.keys(source).forEach((key) => {
         state[key] = source[key];
       });
     },
-  },
-  actions: {
-    // handlerKYC({ state, commit }, data) {
-    //   var oldData = state["KYC_DATA"][data.type].slice();
-    //   if (oldData.indexOf(data.val) > -1) {
-    //     oldData.splice(oldData.indexOf(data.val), 1);
-    //   } else {
-    //     oldData.push(data.val);
-    //   }
-    //   commit("updateKYC", {
-    //     type: data.type,
-    //     val: oldData
-    //   });
-    // }
   },
 });

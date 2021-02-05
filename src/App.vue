@@ -443,7 +443,12 @@ export default {
 </script>
 
 <style>
+@import url("https://use.fontawesome.com/releases/v5.2.0/css/all.css");
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans+TC:400,700&display=swap");
+@import url("https://event.franklin.com.tw/commonResources/css/slick.css" );
+@import url("./assets/css/animate-v4.0.0.css");
 @import url('./assets/css/style.css'); 
+@import url("./assets/css/element-ui.css");
 /* #app { 
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
