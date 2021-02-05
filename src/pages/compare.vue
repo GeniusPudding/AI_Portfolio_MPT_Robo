@@ -5,11 +5,11 @@
       <div class="container">
         <h2 class="tit-type2" title="您的基金組合">您的基金組合</h2>
         <fundList></fundList>
-        <div class="btnArea">
+        <!-- <div class="btnArea">
           <div class="btn">
             <a href="" title="取得建議">取得建議</a>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="container">
         <h2 class="tit-type2" title="建議的投組清單">建議的投組清單</h2>
@@ -29,7 +29,7 @@
 
         <div class="btnArea twoBtn" v-show="questionnaire == 0">
           <div class="btn type6">
-            <a href="" target="_blank" title="重新建議投組">重新建議投組</a>
+            <a href="myportfolio" title="重新自訂投組">重新自訂投組</a>
           </div>
           <div class="btn">
             <!-- <a href="" title="儲存建議投組">儲存建議投組</a> -->

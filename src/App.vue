@@ -38,8 +38,6 @@ export default {
     screenHeight: document.body.clientHeight,
     windowWidth: $(window).innerWidth(),
     windowHeight: $(window).innerHeight(),
-    menuBtnActive: false,
-    navbarShow: false,
     ieUseMask: true,
     thisPath: location.protocol + '//' + location.host,
     step: 1,

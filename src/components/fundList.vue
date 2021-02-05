@@ -56,7 +56,7 @@
             <input type="number" step="1000" min="5000" class="text-center" />
             元
           </li>
-          <li data-title=""><a href="" class="btn">刪除</a></li>
+          <li v-if="isEditable" data-title=""><a href="" class="btn">刪除</a></li>
         </ol>
         <ol class="tr">
           <li data-title="類型">
@@ -102,7 +102,7 @@
             <input type="number" step="1000" min="5000" class="text-center" />
             元
           </li>
-          <li data-title=""><a href="" class="btn">刪除</a></li>
+          <li v-if="isEditable" data-title=""><a href="" class="btn">刪除</a></li>
         </ol>
         <ol class="tr">
           <li data-title="類型">
@@ -141,14 +141,14 @@
             </select>
           </li>
           <li data-title="投資比重">
-            <input type="text" disabled="disabled" class="text-center isEdit" />
+            <input type="text" v-model="percent" disabled="disabled" class="text-center isEdit" />
             %
           </li>
           <li data-title="投資金額">
             <input type="number" step="1000" min="5000" class="text-center" />
             元
           </li>
-          <li data-title=""><a class="btn">刪除</a></li>
+          <li v-if="isEditable" data-title=""><a class="btn">刪除</a></li>
         </ol>
       </li>
       <li class="more">
@@ -157,3 +157,28 @@
     </ul>
   </div>
 </template>
+<script>//抓後端資料, 只有在myportfolio自訂頁面可以有修改功能, v-for
+import { mapFields } from "vuex-map-fields";
+export default {
+  data: {
+    percent: 10
+  },
+  computed: {
+    ...mapFields(['isEditable'])
+  },
+  mounted() {
+    console.log('fundlist mounted')
+    if (this.$route.name == "myportfolio"){
+      this.isEditable = true
+    } else{
+      this.isEditable = false
+    }
+    calPercent()
+  },
+  methods: {
+    calPercent () {
+      this.percent = 33
+    }
+  }
+}
+</script>

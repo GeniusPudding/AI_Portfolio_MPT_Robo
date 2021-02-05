@@ -1,34 +1,46 @@
 <template>
-  <header class='header'>
-    <div class='container clearfix'>
-      <div class='logo'>
+  <header class="header">
+    <div class="container clearfix">
+      <div class="logo">
         <a
-          href='http://www.franklin.com.tw/'
-          target='_blank'
-          title='富蘭克林證券投顧'
+          href="http://www.franklin.com.tw/"
+          target="_blank"
+          title="富蘭克林證券投顧"
         >
           <picture>
             <source
-              media='(max-width: 991px)'
-              srcset='
+              media="(max-width: 991px)"
+              srcset="
                 https://event.franklin.com.tw/commonResources/images/logo2019.svg
-              '
+              "
             />
             <img
-              src='https://event.franklin.com.tw/commonResources/images/header-logo.png'
-              alt='富蘭克林‧國民的基金'
+              src="https://event.franklin.com.tw/commonResources/images/header-logo.png"
+              alt="富蘭克林‧國民的基金"
             />
           </picture>
-          <div class='logo-text'>富蘭克林‧國民的基金</div>
+          <div class="logo-text">富蘭克林‧國民的基金</div>
         </a>
       </div>
-
+      <nav class="navBar" v-if="navbarShow" :class="{ show: navbarShow }">
+        <ul>
+          <li>Hi, {{name}} 您的風險屬性</li>
+          <li v-if="isEditable">
+            <select>
+              <option>穩健</option>
+              <option>積極</option>
+              <option>保守</option>
+            </select>
+          </li>
+          <li v-else>待抓取客戶風險屬性</li>
+        </ul>
+      </nav>
       <!--手機menu按鍵-->
       <div
-        class='menuBtn'
-        data-wow-delay='0.8s'
-        :class='{ active: menuBtnActive }'
-        @click='toggleMobileNavbar()'
+        class="menuBtn"
+        data-wow-delay="0.8s"
+        :class="{ active: menuBtnActive }"
+        @click="toggleMobileNavbar()"
       >
         <span> </span>
         <span> </span>
@@ -41,27 +53,38 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  data () {
+  data() {
     return {
-      menuBtnActive: false,
-      navbarShow: false
+      menuBtnActive: false, //這兩個啥意思?
+      navbarShow: false, //這兩個啥意思?
+      name: 'ftsice' 
+    };
+  },
+  computed: {
+    ...mapState(['isEditable'])
+  },
+  props: ["activeNumber"],
+  mounted() {
+    if(this.$route.name !== 'home'){
+      this.navbarShow = true
     }
   },
-  props: ['activeNumber'],
   methods: {
-    toggleMobileNavbar () {
+    toggleMobileNavbar() {
+      // console.log('toggleMobileNavbar:')
       this.menuBtnActive === false
         ? (this.menuBtnActive = true)
-        : (this.menuBtnActive = false)
+        : (this.menuBtnActive = false);
       this.navbarShow === false
         ? (this.navbarShow = true)
-        : (this.navbarShow = false)
+        : (this.navbarShow = false);
     },
-    hideMobileNavbar () {
-      this.menuBtnActive = false
-      this.navbarShow = false
-    }
-  }
-}
+    hideMobileNavbar() {
+      this.menuBtnActive = false;
+      this.navbarShow = false;
+    },
+  },
+};
 </script>
