@@ -14,7 +14,8 @@
       <div class="container">
         <h2 class="tit-type2" title="建議的投組清單">建議的投組清單</h2>
         <div class="btn reportbtn">
-          <a href="fundreport.html">理財健檢報告</a>
+          <router-link to="/fundreport">理財健檢報告</router-link>
+          <!-- <a href="fundreport">理財健檢報告</a> -->
         </div>
         <recommendList></recommendList>
 

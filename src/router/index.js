@@ -4,9 +4,14 @@ import Router from 'vue-router'
 import home from '@/pages/home'
 import content from '@/pages/content'
 import fundreport from '@/pages/fundreport'
+import edm from '@/pages/edm'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
+  scrollBehavior (to, from, savedPosition) {
+    return { x: 0, y: 0 }
+  },
   routes: [
     // {
     //   path: '/',
@@ -19,7 +24,7 @@ export default new Router({
       component: home
     },
     {
-      path: '/',
+      path: '/content',
       name: 'content',
       component: content
     },
@@ -27,6 +32,11 @@ export default new Router({
       path: '/fundreport',
       name: 'fundreport',
       component: fundreport
+    },
+    {
+      path: '/edm',
+      name: 'edm',
+      component: edm
     }
   ]
 })
