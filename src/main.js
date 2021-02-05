@@ -8,6 +8,9 @@ import VueScrollTo from 'vue-scrollto'
 import HighchartsVue from 'highcharts-vue'
 import ElementUI from 'element-ui'
 import VueScrollmagic from 'vue-scrollmagic'
+import VueApexCharts from "vue-apexcharts";
+Vue.use(VueApexCharts);
+Vue.component("apexchart", VueApexCharts);
 Vue.use(VueScrollmagic)
 // Vue.config.productionTip = false
 Vue.use(VueScrollTo)

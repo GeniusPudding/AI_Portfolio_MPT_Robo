@@ -18,8 +18,8 @@
 // import { mapFields } from 'vuex-map-fields';
 import mptHeader from './components/mptHeader';
 import mptFooter from './components/mptFooter';
-import fixedRightBtns from './components/fixedRightBtns';
-import topBtn from './components/topBtn';
+import fixedRightBtns from './components/buttons/fixedRightBtns';
+import topBtn from './components/buttons/topBtn';
 import front from './mixins/front'
 import newQuestionnaire from './mixins/newQuestionnaire'
 import slickFunction from './mixins/slickFunction'
@@ -72,9 +72,6 @@ export default {
         "color: #fff; border-radius: 5px; background: #1a4f9c; padding: 2px 10px; font-weight: bold;",
         "color: #000; border-radius: 5px; background: #ffde00; padding: 2px 10px; margin: 0px 5px;"
       );
-    },
-    toggleModal(name) {
-      this.$refs[name].toggle = !this.$refs[name].toggle;
     },
     toggleMobileNavbar() {
       this.menuBtnActive === false ? (this.menuBtnActive = true) : (this.menuBtnActive = false);

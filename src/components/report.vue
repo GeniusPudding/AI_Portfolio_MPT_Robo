@@ -2,12 +2,12 @@
   <div class="fundrpt-item-area">
     <article>
       <h3 title="基金投資組合成長圖">基金投資組合成長圖</h3>
-      <p>chart</p>
+      <lineChart></lineChart>
     </article>
 
     <article>
       <h3 title="年化報酬率">年化報酬率</h3>
-      <p>chart</p>
+      <barChart></barChart>
     </article>
 
     <article>
@@ -480,3 +480,13 @@
     </article>
   </div>
 </template>
+<script>
+import lineChart from "./charts/line"
+import barChart from "./charts/bar"
+export default {
+  components: {
+    lineChart,
+    barChart
+  }
+}
+</script>

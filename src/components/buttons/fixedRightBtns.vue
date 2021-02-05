@@ -6,7 +6,7 @@
         target="_blank"
         title="獲獎紀錄"
       >
-        <img src="../assets/images/fixedRightBtn-icon-1.png" alt="" /> 獲獎紀錄
+        <img src="../../assets/images/fixedRightBtn-icon-1.png" alt="" /> 獲獎紀錄
       </a>
     </div>
     <div class="fixedRightBtn type2">
@@ -15,7 +15,7 @@
         target="_blank"
         title="立即開戶"
       >
-        <img src="../assets/images/fixedRightBtn-icon-2.png" alt="" /> 立即開戶
+        <img src="../../assets/images/fixedRightBtn-icon-2.png" alt="" /> 立即開戶
       </a>
     </div>
   </div>
