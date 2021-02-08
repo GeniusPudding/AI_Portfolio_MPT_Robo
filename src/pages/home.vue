@@ -63,7 +63,7 @@
                   </label>
                 </div>
                 <div class="formArea-item-input">
-                  <input type="text" name="" id="id" placeholder="請輸入Email或身分證字號"/>
+                  <input type="text" v-model="ec_id" @keyup.enter="next" autocomplete="off" name="" id="id" placeholder="請輸入Email或身分證字號"/>
                 </div>
                 <div class="formArea-item-error">
                   請確認您的帳號或身分證字號
@@ -76,7 +76,7 @@
                   </label>
                 </div>
                 <div class="formArea-item-input">
-                  <input type="password" name="" id="password" placeholder="請輸密碼"/>
+                  <input type="password" v-model="pwd" @keyup.enter="next" autocomplete="off" name="" id="password" placeholder="請輸密碼"/>
                 </div>
                 <div class="formArea-item-error">
                   請確認您的密碼
@@ -98,7 +98,7 @@
               <div class="btnArea">
                 <a href="">忘記密碼?</a>
                 <div class="btn">
-                  <a href="" title="登入"> 登入 <i class="fas fa-angle-right"></i> </a>
+                  <a href="" :class="isSubmit ? 'disabled' : ''" :disabled="isSubmit" @click.prevent="!isSubmit ? next() : null" title="登入"> 登入 <i class="fas fa-angle-right"></i> </a>
                 </div>
               </div>
             </div>
@@ -212,7 +212,7 @@ export default {
     ...mapState(['questionnaire']),
     loginData() {
       return {
-        account: this.sales_id,
+        account: this.ec_id,
         pwd: this.pwd,
       };
     }
@@ -226,7 +226,7 @@ export default {
       return this.$api.login("/user/auth/login", this.loginData);
     },
     async next() {
-      if (this.sales_id == "") {
+      if (this.ec_id == "") {
         alert("請輸入帳號");
         return;
       }
@@ -248,7 +248,7 @@ export default {
         // this.sales_name = login.Result.name;
         this.$nextTick(() => {
           this.$cookies.set("twbLogin", {
-            sales_id: this.sales_id,
+            ec_id: this.ec_id,
             // roro: this.roro,
             // sales_branch_id: this.sales_branch_id,
             // sales_name: this.sales_name,
