@@ -10,6 +10,8 @@ import ElementUI from 'element-ui'
 import VueScrollmagic from 'vue-scrollmagic'
 import VueApexCharts from "vue-apexcharts";
 import axios from './axios'
+import VueCookies from "vue-cookies";
+Vue.use(VueCookies)
 Vue.use(axios)
 Vue.use(VueApexCharts);
 Vue.component("apexchart", VueApexCharts);

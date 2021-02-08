@@ -229,12 +229,13 @@ export default {
       const res = await fetch('https://wt.franklin.com.tw/areas/myip/myip.aspx')
       const ip = await res.text()
       console.log('ip:',ip)
+      const testdata = {"IdNo":"A154277085","Passwd":"e267cfcd18461ce938067eca67c59f41"};
       const ECheaders = {
-        'x-ft-idno': this.loginData.account,
+        'x-ft-idno': 'A154277085',//this.loginData.account,
         'x-ft-clientip': ip,
-        'x-ft-apikey': 'c6db7c09-3798-4ded-b851-c806f7066c2d'
+        'x-ft-apikey': '4750b422-8dec-4162-a855-5afe9626a4b7'//app:4750b422-8dec-4162-a855-5afe9626a4b7, web: c6db7c09-3798-4ded-b851-c806f7066c2d
       }
-      return this.$api.login("/user/auth/login", this.loginData,ECheaders);
+      return this.$api.login("/user/auth/login", testdata,ECheaders);
     },
     async next() {
       if (this.ec_id == "") {
