@@ -223,7 +223,7 @@ export default {
       this.$refs[name].toggle = !this.$refs[name].toggle;
     },
     checkLogin() {
-      return this.$api.query("/user/auth/login", this.loginData);
+      return this.$api.login("/user/auth/login", this.loginData);
     },
     async next() {
       if (this.sales_id == "") {
