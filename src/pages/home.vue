@@ -197,6 +197,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import { mapFields } from "vuex-map-fields";
 import modal from '../components/modal'
 import md5 from "blueimp-md5";
 export default {
@@ -212,6 +213,7 @@ export default {
   },
   computed: {
     ...mapState(['questionnaire']),
+    ...mapFields(['isLogin']),
     loginData() {
       return {
         IdNo: this.IdNo,
@@ -225,11 +227,9 @@ export default {
       this.$refs[name].toggle = !this.$refs[name].toggle;
     },
     async checkLogin() {
-      console.log('loginData:',this.loginData)
       const res = await fetch('https://wt.franklin.com.tw/areas/myip/myip.aspx')
       const ip = await res.text()
-      console.log('ip:',ip)
-      const testdata = {"IdNo":"A154277085","Passwd":"e267cfcd18461ce938067eca67c59f41"};
+      // const testdata = {"IdNo":"A154277085","Passwd":"e267cfcd18461ce938067eca67c59f41"};
       const ECheaders = {
         'x-ft-idno': this.loginData.IdNo,
         'x-ft-clientip': ip,
@@ -259,7 +259,8 @@ export default {
         // this.sales_branch_id = login.Result.branch_id;
         // this.sales_name = login.Result.name;
         this.$nextTick(() => {
-          this.$cookies.set("twbLogin", {
+          console.log('nextTick')
+          this.$cookies.set("mptLogin", {
             IdNo: this.IdNo,
             // roro: this.roro,
             // sales_branch_id: this.sales_branch_id,
