@@ -1,4 +1,13 @@
 import axios from "./api";
+import axiosEC from "./apiEC";
+
+export const login = (url, params, ECheaders) => {
+  return axiosEC({
+    url: url,
+    method: "get",
+    params,
+  }, ECheaders);
+};
 
 export const query = (url, params) => {
   return axios({

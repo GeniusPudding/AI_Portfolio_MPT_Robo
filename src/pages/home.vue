@@ -199,17 +199,72 @@
 import { mapState } from 'vuex'
 import modal from '../components/modal'
 export default {
+  data () {
+    return {
+      isSubmit: false,
+      pwd: "",
+    };
+  },
   components: {
     modal
   },
   computed: {
-    ...mapState(['questionnaire'])
+    ...mapState(['questionnaire']),
+    loginData() {
+      return {
+        account: this.sales_id,
+        pwd: this.pwd,
+      };
+    }
   },
   methods: {
     toggleModal(name) {
       console.log('test toggleModal:',name)
       this.$refs[name].toggle = !this.$refs[name].toggle;
-    }
+    },
+    checkLogin() {
+      return this.$api.query("/user/auth/login", this.loginData);
+    },
+    async next() {
+      if (this.sales_id == "") {
+        alert("請輸入帳號");
+        return;
+      }
+      if (this.pwd == "") {
+        alert("請輸入密碼");
+        return;
+      }
+
+      if (this.isSubmit) return;
+      this.isSubmit = true;
+
+      try {
+        var login = await this.checkLogin();
+        console.log("login:", login);
+
+        this.isLogin = true;
+        // this.roro = login.Result.roro;
+        // this.sales_branch_id = login.Result.branch_id;
+        // this.sales_name = login.Result.name;
+        this.$nextTick(() => {
+          this.$cookies.set("twbLogin", {
+            sales_id: this.sales_id,
+            // roro: this.roro,
+            // sales_branch_id: this.sales_branch_id,
+            // sales_name: this.sales_name,
+            // user_id: "",
+            // strategyType: "",
+            isLogin: true,
+          });
+          this.$router.push("myportfolio");
+        });
+      } catch (error) {
+        this.isLogin = false;
+        this.$api.handlerErr(error);
+      } finally {
+        this.isSubmit = false;
+      }
+    },
   }
 }
 </script>
