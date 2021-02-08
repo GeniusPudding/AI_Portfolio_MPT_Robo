@@ -63,7 +63,7 @@
                   </label>
                 </div>
                 <div class="formArea-item-input">
-                  <input type="text" v-model="ec_id" @keyup.enter="next" autocomplete="off" name="" id="id" placeholder="請輸入Email或身分證字號"/>
+                  <input type="text" v-model="ec_id" @keyup.enter="next" autocomplete="off" name="" placeholder="請輸入Email或身分證字號"/>
                 </div>
                 <div class="formArea-item-error">
                   請確認您的帳號或身分證字號
@@ -76,13 +76,13 @@
                   </label>
                 </div>
                 <div class="formArea-item-input">
-                  <input type="password" v-model="pwd" @keyup.enter="next" autocomplete="off" name="" id="password" placeholder="請輸密碼"/>
+                  <input type="password" v-model="pwd" @keyup.enter="next" autocomplete="off" name="" placeholder="請輸密碼"/>
                 </div>
                 <div class="formArea-item-error">
                   請確認您的密碼
                 </div>
               </div>
-              <div class="formArea-item">
+              <!-- <div class="formArea-item">
                 <div class="formArea-item-tit">
                   <label for="repassword">
                     驗證碼
@@ -94,7 +94,7 @@
                 <div class="formArea-item-error">
                   請確認您的驗證碼
                 </div>
-              </div>
+              </div> -->
               <div class="btnArea">
                 <a href="">忘記密碼?</a>
                 <div class="btn">
@@ -198,6 +198,7 @@
 <script>
 import { mapState } from 'vuex'
 import modal from '../components/modal'
+import md5 from "blueimp-md5";
 export default {
   data () {
     return {
@@ -213,7 +214,7 @@ export default {
     loginData() {
       return {
         account: this.ec_id,
-        pwd: this.pwd,
+        pwd: md5(this.pwd),
       };
     }
   },
@@ -222,8 +223,17 @@ export default {
       console.log('test toggleModal:',name)
       this.$refs[name].toggle = !this.$refs[name].toggle;
     },
-    checkLogin() {
-      return this.$api.login("/user/auth/login", this.loginData);
+    async checkLogin() {
+      console.log('loginData:',this.loginData)
+      const res = await fetch('https://wt.franklin.com.tw/areas/myip/myip.aspx')
+      const ip = await res.text()
+      console.log('ip:',ip)
+      const ECheaders = {
+        'x-ft-idno': loginData.account,
+        'x-ft-clientip': ip,
+        'x-ft-apikey': 'c6db7c09-3798-4ded-b851-c806f7066c2d'
+      }
+      return this.$api.login("/user/auth/login", this.loginData,ECheaders);
     },
     async next() {
       if (this.ec_id == "") {
@@ -237,7 +247,7 @@ export default {
 
       if (this.isSubmit) return;
       this.isSubmit = true;
-
+      console.log('trying login')
       try {
         var login = await this.checkLogin();
         console.log("login:", login);
