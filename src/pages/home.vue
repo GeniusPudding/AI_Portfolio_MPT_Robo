@@ -63,7 +63,7 @@
                   </label>
                 </div>
                 <div class="formArea-item-input">
-                  <input type="text" v-model="ec_id" @keyup.enter="next" autocomplete="off" name="" placeholder="請輸入Email或身分證字號"/>
+                  <input type="text" v-model="IdNo" @keyup.enter="next" autocomplete="off" name="" placeholder="請輸入Email或身分證字號"/>
                 </div>
                 <div class="formArea-item-error">
                   請確認您的帳號或身分證字號
@@ -76,7 +76,7 @@
                   </label>
                 </div>
                 <div class="formArea-item-input">
-                  <input type="password" v-model="pwd" @keyup.enter="next" autocomplete="off" name="" placeholder="請輸密碼"/>
+                  <input type="password" v-model="Passwd" @keyup.enter="next" autocomplete="off" name="" placeholder="請輸密碼"/>
                 </div>
                 <div class="formArea-item-error">
                   請確認您的密碼
@@ -202,9 +202,9 @@ import md5 from "blueimp-md5";
 export default {
   data () {
     return {
-      ec_id: '',
+      IdNo: '',
       isSubmit: false,
-      pwd: "",
+      Passwd: "",
     };
   },
   components: {
@@ -214,8 +214,8 @@ export default {
     ...mapState(['questionnaire']),
     loginData() {
       return {
-        account: this.ec_id,
-        pwd: md5(this.pwd),
+        IdNo: this.IdNo,
+        Passwd: md5(this.Passwd),
       };
     }
   },
@@ -231,18 +231,18 @@ export default {
       console.log('ip:',ip)
       const testdata = {"IdNo":"A154277085","Passwd":"e267cfcd18461ce938067eca67c59f41"};
       const ECheaders = {
-        'x-ft-idno': 'A154277085',//this.loginData.account,
+        'x-ft-idno': this.loginData.IdNo,
         'x-ft-clientip': ip,
-        'x-ft-apikey': '4750b422-8dec-4162-a855-5afe9626a4b7'//app:4750b422-8dec-4162-a855-5afe9626a4b7, web: c6db7c09-3798-4ded-b851-c806f7066c2d
+        'x-ft-apikey': 'c6db7c09-3798-4ded-b851-c806f7066c2d'//app:4750b422-8dec-4162-a855-5afe9626a4b7, web: c6db7c09-3798-4ded-b851-c806f7066c2d
       }
-      return this.$api.login("/user/auth/login", testdata,ECheaders);
+      return this.$api.login("/user/auth/login", this.loginData,ECheaders);
     },
     async next() {
-      if (this.ec_id == "") {
+      if (this.IdNo == "") {
         alert("請輸入帳號");
         return;
       }
-      if (this.pwd == "") {
+      if (this.Passwd == "") {
         alert("請輸入密碼");
         return;
       }
@@ -260,7 +260,7 @@ export default {
         // this.sales_name = login.Result.name;
         this.$nextTick(() => {
           this.$cookies.set("twbLogin", {
-            ec_id: this.ec_id,
+            IdNo: this.IdNo,
             // roro: this.roro,
             // sales_branch_id: this.sales_branch_id,
             // sales_name: this.sales_name,
