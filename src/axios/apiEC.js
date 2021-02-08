@@ -1,14 +1,13 @@
+/* eslint-disable */
 import axios from "axios";
 
-ECbaseURL = location.hostname == 'etrade.fraklin.com.tw' ? 'https://etrade.fraklin.com.tw/v2' : 'https://wt.franklin.com.tw:8080/v2'
+const ECbaseURL = location.hostname == 'etrade.fraklin.com.tw' ? 'https://etrade.fraklin.com.tw/v2' : 'https://wt.franklin.com.tw:8080/v2'
 
-export default function $axios(options,ECheaders) {
+export default function $axios(options) {
   console.log('login options:',options)
-  console.log('login ECheaders:',ECheaders)
   return new Promise((resolve, reject) => {
     const instance = axios.create({
       baseURL: ECbaseURL,
-      headers: ECheaders,
     });
 
     // request 攔截器
@@ -89,6 +88,8 @@ export default function $axios(options,ECheaders) {
     );
 
     instance(options)
+
+    
       .then((res) => {
         resolve(res);
         return false;

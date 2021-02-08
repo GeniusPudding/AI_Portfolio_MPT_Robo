@@ -157,23 +157,28 @@
     </ul>
   </div>
 </template>
-<script>//抓後端資料, 只有在myportfolio自訂頁面可以有修改功能, v-for
-import { mapFields } from "vuex-map-fields";
+<script>
+/* eslint-disable */
+//抓後端資料, 只有在myportfolio自訂頁面可以有修改功能, v-for
+import { mapFields } from "vuex-map-fields"
 export default {
-  data: {
-    percent: 10
+  data () {
+    return {
+      percent: 10
+    }
   },
   computed: {
     ...mapFields(['isEditable'])
   },
   mounted() {
     console.log('fundlist mounted')
-    if (this.$route.name == "myportfolio"){
+    if (this.$route.name === "myportfolio"){
       this.isEditable = true
-    } else{
+    } else {
       this.isEditable = false
     }
     calPercent()
+
   },
   methods: {
     calPercent () {

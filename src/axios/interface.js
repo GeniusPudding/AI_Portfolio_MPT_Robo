@@ -1,12 +1,15 @@
 import axios from "./api";
 import axiosEC from "./apiEC";
 
-export const login = (url, params, ECheaders) => {
+export const login = (url, data, header) => {
+  console.log('check ECheaders:',header)
+  console.log('check EC data:',data)
   return axiosEC({
     url: url,
-    method: "get",
-    params,
-  }, ECheaders);
+    method: "post",
+    headers: header,
+    data: data,
+  });
 };
 
 export const query = (url, params) => {
@@ -30,7 +33,7 @@ export const upload = (url, data, header) => {
 export const handlerErr = (err) => {
   // if (!err || !err.response) return alert("系統繁忙中，請稍後再試！");
   // return alert(err.response.data.message);
-
+  console.log('err:',err)
   var msg = "系統繁忙中，請稍後再試！";
   if (err && err.response) {
     if (err.response.hasOwnProperty("data")) {
@@ -46,4 +49,5 @@ export default {
   query,
   upload,
   handlerErr,
+  login
 };

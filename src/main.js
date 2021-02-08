@@ -9,6 +9,8 @@ import HighchartsVue from 'highcharts-vue'
 import ElementUI from 'element-ui'
 import VueScrollmagic from 'vue-scrollmagic'
 import VueApexCharts from "vue-apexcharts";
+import axios from './axios'
+Vue.use(axios)
 Vue.use(VueApexCharts);
 Vue.component("apexchart", VueApexCharts);
 Vue.use(VueScrollmagic)

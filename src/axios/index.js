@@ -8,6 +8,7 @@ const install = (Vue) => {
     $api: {
       // USE >> this.$api
       get() {
+        console.log('apiList:',apiList)
         return apiList;
       },
     },

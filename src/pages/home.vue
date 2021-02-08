@@ -202,6 +202,7 @@ import md5 from "blueimp-md5";
 export default {
   data () {
     return {
+      ec_id: '',
       isSubmit: false,
       pwd: "",
     };
@@ -229,7 +230,7 @@ export default {
       const ip = await res.text()
       console.log('ip:',ip)
       const ECheaders = {
-        'x-ft-idno': loginData.account,
+        'x-ft-idno': this.loginData.account,
         'x-ft-clientip': ip,
         'x-ft-apikey': 'c6db7c09-3798-4ded-b851-c806f7066c2d'
       }
