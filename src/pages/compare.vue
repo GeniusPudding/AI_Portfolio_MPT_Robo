@@ -22,8 +22,8 @@
         <div class="report-item-area">
           <p>定期投資報告通知發送設定</p>
           <div class="report-item-btn">
-            <div class="sItem active">電子郵件</div>
-            <div class="sItem">手機簡訊</div>
+            <div class="sItem">電子郵件</div>
+            <div class="sItem active">手機簡訊</div>
           </div>
         </div>
 

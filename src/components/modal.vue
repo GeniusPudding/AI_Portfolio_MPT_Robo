@@ -25,17 +25,17 @@
 </template>
 <script>
 export default {
-  props: ["canClose"],
+  props: ['canClose'],
   data: function () {
     return {
       toggle: false,
-      isFixedHeight: false,
-    };
+      isFixedHeight: false
+    }
   },
   methods: {
-    closeModal() {
-      this.toggle = false;
-    },
-  },
-};
+    closeModal () {
+      this.toggle = false
+    }
+  }
+}
 </script>

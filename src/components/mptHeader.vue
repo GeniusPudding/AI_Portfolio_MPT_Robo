@@ -24,15 +24,15 @@
       </div>
       <nav class="navBar" v-if="navbarShow" :class="{ show: navbarShow }">
         <ul>
-          <li>Hi, {{name}} 您的風險屬性</li>
+          <li>Hi, {{username}} 您的風險屬性</li>
           <li v-if="isEditable">
-            <select>
-              <option>穩健</option>
+            <select v-model="risk_prop">
+              <option selected="selected">穩健</option>
               <option>積極</option>
               <option>保守</option>
             </select>
           </li>
-          <li v-else>待抓取客戶風險屬性</li>
+          <li v-else>{{risk_prop}}</li>
         </ul>
       </nav>
       <!--手機menu按鍵-->
@@ -51,40 +51,48 @@
     </div>
   </header>
 </template>
-
 <script>
 import { mapState } from 'vuex'
+import { mapFields } from 'vuex-map-fields'
 export default {
-  data() {
+  data () {
     return {
+      risk_types: ['積極','穩健','保守'],//v-for來動態生成帶有客戶default屬性的options
+      options: '',
+      selectName: '',
       menuBtnActive: false, //這兩個啥意思?
-      navbarShow: false, //這兩個啥意思?
-      name: 'ftsice' 
-    };
+      navbarShow: false //這兩個啥意思?
+    }
   },
   computed: {
-    ...mapState(['isEditable'])
+    ...mapState(['isEditable','username']),
+    ...mapFields(['risk_prop'])
   },
-  props: ["activeNumber"],
-  mounted() {
+  props: ['activeNumber'],
+  mounted () {
     if(this.$route.name !== 'home'){
       this.navbarShow = true
     }
   },
   methods: {
-    toggleMobileNavbar() {
+    toggleMobileNavbar () {
       // console.log('toggleMobileNavbar:')
       this.menuBtnActive === false
         ? (this.menuBtnActive = true)
-        : (this.menuBtnActive = false);
+        : (this.menuBtnActive = false)
       this.navbarShow === false
         ? (this.navbarShow = true)
-        : (this.navbarShow = false);
+        : (this.navbarShow = false)
     },
     hideMobileNavbar() {
-      this.menuBtnActive = false;
-      this.navbarShow = false;
-    },
+      this.menuBtnActive = false
+      this.navbarShow = false
+    }
   },
-};
+  watch: {
+    risk_prop () {
+      console.log('風險屬性:', this.risk_prop)
+    }
+  }
+}
 </script>

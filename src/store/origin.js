@@ -1,5 +1,17 @@
 let data = {
   questionnaire: 0,
+  username: '親愛的EC客戶', 
+  user_id: '',
+  risk_prop: '穩健',
+  fundPool: [
+    //{type: [{marketType: [fundName]}] }
+  ],
+  investmentAmount: [
+    //對應personalPortfolio的投資金額 可由用戶修改
+  ],
+  personalPortfolio: [
+    //個人編輯中的基金組合: {fundName, }
+  ],
   strategyList: [
     {
       value: "3",
@@ -15,8 +27,9 @@ let data = {
     },
   ],
   IdNo: '',
+  isEC: false,
   isLogin: false,
-  isEditable: true
-  
+  isEditable: true,
+  budget: 100000
 }
 export default data

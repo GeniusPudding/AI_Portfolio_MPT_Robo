@@ -22,6 +22,13 @@
 <script>
 import fundList from '../components/fundList'
 export default {
-  components: {fundList}
+  components: {fundList},
+  methods: {
+    setPercentage(val, quantile, isSign) {
+      var num = val ? val : 0
+      var percent = isSign ? `${num.toFixed(quantile)}%` : Number(num.toFixed(quantile))
+      return percent
+    },
+  }
 }
 </script>
