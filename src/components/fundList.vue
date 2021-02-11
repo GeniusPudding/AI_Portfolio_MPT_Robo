@@ -48,11 +48,11 @@
             </select> 
           </li>
           <li data-title="投資比重">
-            <input type="text" disabled="disabled" class="text-center isEdit" />
+            <input type="text" disabled="disabled" class="text-center isEdit" :value="calcPercent()[$index]"/>
             %
           </li>
           <li data-title="投資金額">
-            <input type="number" step="1000" min="5000" class="text-center" />
+            <input type="number" step="1000" min="5000" class="text-center" @blur="calcBudget($event, $index)" v-model.number="investmentAmount[$index]"/>
             元            
           </li>
           <li v-if="isEditable" data-title=""><a href="" class="btn" @click.prevent="deleteFund($index)">刪除</a></li>
@@ -242,8 +242,6 @@ export default {
       this.isEditable = false
     }
     this.initList()
-    this.calPercent()
-
   },
   methods: {
     setPercentage(val, quantile, isSign) {
@@ -300,13 +298,7 @@ export default {
             market: { CustomClassification: "", name: "高收益債券型" },
           }
         },
-        // {fundName:'6509 富蘭克林華美新興趨勢傘型基金之積極回報債券組合基金 累積型 新台幣', amount:20420},
-        // {fundName:'6514 富蘭克林華美全球高收益債券基金 A 累積型 新台幣', amount:78763}
       ]
-    },
-    calPercent () {
-      console.log('this.percent:',this.percent)
-      this.percent = 33
     },
     clearLipperID (index) {
       if (this.personalPortfolio[index].fund.basic.LipperID) this.personalPortfolio[index].fund.basic.LipperID = "";
@@ -334,6 +326,22 @@ export default {
       if (fund.length <= 0) return []
       return fund[0].Funds
     },
+    calcPercent() {
+      var data = [];
+      this.investmentAmount.forEach((obj, key) => {
+        var calcValue = (obj / this.sumEditBudget()) * 100;
+        data[key] = this.setPercentage(calcValue, 0, false);
+      });
+      var tempTotalPercent = data.reduce((a, b) => {
+        return a + Number(b);
+      }, 0);
+      if (tempTotalPercent < 100) {
+        data[data.length - 1] = data[data.length - 1] + (100 - tempTotalPercent);
+      } else if (tempTotalPercent > 100) {
+        data[data.length - 1] = data[data.length - 1] - (tempTotalPercent - 100);
+      }
+      return data;
+    },
     cusBudget () {
       this.budget = Math.floor(this.budget / 1000) * 1000;
       if (this.budget < 50000) this.budget = 50000;
@@ -343,6 +351,21 @@ export default {
           this.investmentAmount[key] = (this.budget * this.setPercentage(obj.weight, 0, false)) / 100;
         });
       });
+    },
+    calcBudget(evt, index) {
+      // console.log("value:", evt.target.value, "index:", index);
+      this.$nextTick(() => {
+        var tempValue = Math.floor(evt.target.value / 1000) * 1000;
+        this.investmentAmount[index] = tempValue;
+        this.sumEditBudget();
+      });
+    },
+    sumEditBudget() {
+      var sum = this.investmentAmount.reduce((a, b) => {
+        return a + Number(b);
+      }, 0);
+      // console.log("sum:", sum);
+      return sum == 0 ? this.budget : sum;
     },
     addFund () {
       // 需同時修改'personalPortfolio', 'investmentAmount' , 看一下後端傳來的資料結構

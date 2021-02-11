@@ -28,7 +28,7 @@ export default {
       var num = val ? val : 0
       var percent = isSign ? `${num.toFixed(quantile)}%` : Number(num.toFixed(quantile))
       return percent
-    },
+    }
   }
 }
 </script>
