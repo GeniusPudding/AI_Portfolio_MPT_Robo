@@ -22,10 +22,12 @@
 <script>
 import fundList from '../components/fundList'
 import { mapFields } from 'vuex-map-fields'
+import { mapState} from 'vuex'
 export default {
   components: {fundList},
   computed: {
-    ...mapFields(['personalPortfolio'])
+    ...mapState(['isCheckingEmpty']),
+    ...mapFields(['personalPortfolio','isCheckingEmpty','investmentAmount'])
   },
   methods: {
     setPercentage (val, quantile, isSign) {
@@ -35,11 +37,23 @@ export default {
     },
     jumpCheck (){
       console.log('jump check this.personalPortfolio:',this.personalPortfolio)
-      this.personalPortfolio = this.personalPortfolio.filter(item=>{
-        console.log('item:',item)
-        return item.fund.basic
+
+      // let emptyIndex = []
+      this.personalPortfolio = this.personalPortfolio.filter((item, index)=>{
+        console.log('item.weight:',item.weight)
+        console.log('item.fund.basic.name:',)
+        if (item.fund.basic.name===''){
+          this.investmentAmount[index] = 0
+          this.isCheckingEmpty = true
+          // emptyIndex.push(index)
+        }
+        return (item.fund.basic.name!=='')
       })
-      alert('wait')
+      // console.log('emptyIndex:',emptyIndex)
+      this.investmentAmount = this.investmentAmount.filter(num=>{
+        return (num!==0)
+      })
+
       this.$nextTick(() => {
         this.$router.push('compare')
       })

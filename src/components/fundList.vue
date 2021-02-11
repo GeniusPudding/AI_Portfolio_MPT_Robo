@@ -13,14 +13,14 @@
       </li>
       <li class="tbody">
         <ol class="tr" v-for="(fundItem, $index) in personalPortfolio" :key="$index">
-          <li data-title="類型">
+          <li v-if="fundItem.fund.basic.name!==''||!isCheckingEmpty" data-title="類型">
             <select  v-model="fundItem.fund.asset_type" @change="clearLipperID($index)">
               <option v-for="option in editAsset"
                :value="option"  
                :key="option.code">{{option.name}}</option>
             </select> 
           </li>
-          <li data-title="市場">
+          <li v-if="fundItem.fund.basic.name!==''||!isCheckingEmpty" data-title="市場">
             <select v-model="fundItem.fund.market"
                 @change="clearLipperID($index)"
                 :disabled="cusMarket(fundItem.fund.asset_type).length == 0">
@@ -32,7 +32,7 @@
                   :key="option.CustomClassification">{{ option.market }}</option>
             </select> 
           </li>
-          <li data-title="基金名稱">
+          <li v-if="fundItem.fund.basic.name!==''||!isCheckingEmpty" data-title="基金名稱">
             <select v-model="fundItem.fund.basic"
                 @change="setLipperID($index)"
                 :disabled="cusFund($index, fundItem.fund.market).length == 0">
@@ -46,15 +46,15 @@
                   :key="option.FundName">{{ `${option.bank_oid} ${option.FundName}` }}</option>
             </select> 
           </li>
-          <li data-title="投資比重">
+          <li v-if="fundItem.fund.basic.name!==''||!isCheckingEmpty" data-title="投資比重">
             <input type="text" disabled="disabled" class="text-center isEdit" :value="calcPercent()[$index]"/>
             %
           </li>
-          <li data-title="投資金額">
+          <li v-if="fundItem.fund.basic.name!==''||!isCheckingEmpty" data-title="投資金額">
             <input type="number" step="1000" :disabled="!isEditable" min="5000" class="text-center" @blur="calcBudget($event, $index)" v-model.number="investmentAmount[$index]"/>
             元            
           </li>
-          <li v-if="isEditable" data-title=""><a href="" class="btn" @click.prevent="deleteFund($index)">刪除</a></li>
+          <li v-if="isEditable&&(fundItem.fund.basic.name!==''||!isCheckingEmpty)" data-title=""><a href="" class="btn" @click.prevent="deleteFund($index)">刪除</a></li>
         </ol>
 
       </li>
@@ -83,7 +83,7 @@ export default {
   components: { Fragment },
   computed: {
     ...mapState(['user_id']),
-    ...mapFields(['isEditable', 'fundPool', 'investmentAmount', 'personalPortfolio', 'budget']),
+    ...mapFields(['isEditable', 'fundPool', 'investmentAmount', 'personalPortfolio', 'budget','isCheckingEmpty']),
     editAsset () {
       if (!this.fundPool) return []
       var asset = this.fundPool.map((obj) => {
@@ -96,8 +96,10 @@ export default {
     console.log('fundlist mounted this.$route.name:', this.$route.name)
     if (this.$route.name === "myportfolio"){
       this.isEditable = true
+      this.isCheckingEmpty = false
       this.initList() 
     } else {
+      this.isCheckingEmpty = true
       console.log('Debug personalPortfolio:', this.personalPortfolio)
       this.isEditable = false
     }
@@ -242,7 +244,7 @@ export default {
         },
         weight: 0,
       });
-      this.investmentAmount.push(1000);
+      this.investmentAmount.push(5000)
     },
     deleteFund (index) {
       // 需同時修改'personalPortfolio', 'investmentAmount'

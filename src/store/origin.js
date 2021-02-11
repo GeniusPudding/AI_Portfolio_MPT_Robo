@@ -29,6 +29,7 @@ let data = {
     isEC: false,
     isLogin: false,
     isEditable: true,
+    isCheckingEmpty: false,
     budget: 100000
 };
 export default data;
