@@ -157,12 +157,9 @@ export default {
             // console.log(openInfo, targetOffset);
           }, 500);
         }
-        /*
-				            例 /index.html?openInfo=q1
-				        */
       }
     },
-    topBtn() {
+    topBtn () {
       $(window)
         .bind("scroll resize", function () {
           var $this = $(this);

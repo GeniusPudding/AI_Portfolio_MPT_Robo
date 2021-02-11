@@ -4,3 +4,6 @@
 /*.js
 /src/mixins/*.js
 /src/main.js
+/src/axios/*.js
+/src/store/origin.js
+/src/components/fundList.vue

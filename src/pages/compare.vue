@@ -60,6 +60,13 @@ export default {
   components: {recommendList, fundList},
   computed: {
     ...mapState(['questionnaire'])
+  },
+   methods: {
+    setPercentage(val, quantile, isSign) {
+      var num = val ? val : 0
+      var percent = isSign ? `${num.toFixed(quantile)}%` : Number(num.toFixed(quantile))
+      return percent
+    }
   }
 }
 </script>

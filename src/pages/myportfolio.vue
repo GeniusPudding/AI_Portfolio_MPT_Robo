@@ -7,7 +7,7 @@
         <fundList></fundList>
         <div class="btnArea">
           <div class="btn">
-            <a href="compare" title="取得建議">取得建議</a>
+            <a href="" @click.prevent="jumpCheck()" title="取得建議">取得建議</a>
           </div>
         </div>
       </div>
@@ -21,13 +21,29 @@
 </template>
 <script>
 import fundList from '../components/fundList'
+import { mapFields } from 'vuex-map-fields'
 export default {
   components: {fundList},
+  computed: {
+    ...mapFields(['personalPortfolio'])
+  },
   methods: {
-    setPercentage(val, quantile, isSign) {
+    setPercentage (val, quantile, isSign) {
       var num = val ? val : 0
       var percent = isSign ? `${num.toFixed(quantile)}%` : Number(num.toFixed(quantile))
       return percent
+    },
+    jumpCheck (){
+      console.log('jump check this.personalPortfolio:',this.personalPortfolio)
+      this.personalPortfolio = this.personalPortfolio.filter(item=>{
+        console.log('item:',item)
+        return item.fund.basic
+      })
+      alert('wait')
+      this.$nextTick(() => {
+        this.$router.push('compare')
+      })
+
     }
   }
 }
