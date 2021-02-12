@@ -59,7 +59,8 @@
 
       </li>
       <li v-if="isEditable" class="more">
-        <a href="" @click.prevent="addFund" class="btn">新增基金</a>
+        <a href="" @click.prevent="addFund" class="btn">新增基金</a>  
+        <a href="" @click.prevent="originFund" class="btn">原始庫存</a>
       </li>
     </ul>
   </div>
@@ -73,6 +74,7 @@ import { Fragment } from 'vue-fragment'
 export default {
   data () {
     return {
+      initPorfolio: [],
       isTesting: false,
       isDelete: false,
       isSubmit: false,
@@ -99,7 +101,6 @@ export default {
       this.isCheckingEmpty = false
       this.initList() 
     } else {
-      this.isCheckingEmpty = true
       console.log('Debug personalPortfolio:', this.personalPortfolio)
       this.isEditable = false
     }
@@ -151,10 +152,12 @@ export default {
         },
       ]
       this.investmentAmount = [10000,15000]
+      this.initPorfolio = [...this.personalPortfolio]
+      
       this.$nextTick(() => {
         // this.personalPortfolio = JSON.parse(JSON.stringify(this.portData || []));
         this.cusBudget();
-      });
+        });
 
     },
     clearLipperID (index) {
@@ -224,6 +227,9 @@ export default {
       }, 0);
       // console.log("sum:", sum);
       return sum == 0 ? this.budget : sum;
+    },
+    originFund () {
+      this.personalPortfolio = this.initPorfolio
     },
     addFund () {
       // 需同時修改'personalPortfolio', 'investmentAmount' , 看一下後端傳來的資料結構

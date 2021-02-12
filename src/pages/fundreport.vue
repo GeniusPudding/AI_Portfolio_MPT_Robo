@@ -10,7 +10,7 @@
         <!-- fix button -->
         <div class="btnArea">
           <div class="btn">
-            <router-link to="/content">返回投組</router-link>
+            <router-link to="/compare">返回投組</router-link>
             <!-- <a href="content" title="返回投組">返回投組</a> -->
           </div>
         </div>
