@@ -5,7 +5,7 @@
     <div id='top'></div>
     <mptHeader></mptHeader>
     <article class='main'>
-      <router-view questionnaire="questionnaire"></router-view>
+      <router-view></router-view>
     </article>
     <mptFooter></mptFooter>
     <fixedRightBtns></fixedRightBtns>
@@ -20,16 +20,13 @@ import mptHeader from './components/mptHeader';
 import mptFooter from './components/mptFooter';
 import fixedRightBtns from './components/buttons/fixedRightBtns';
 import topBtn from './components/buttons/topBtn';
-import front from './mixins/front'
-import newQuestionnaire from './mixins/newQuestionnaire'
-import slickFunction from './mixins/slickFunction'
+
 import $ from 'jquery'
 import 'animate.css'
 import WOW from 'wow.js'
 
 export default {
   name: 'App',
-  mixins: [front, slickFunction, newQuestionnaire],
   components: { mptHeader, mptFooter, topBtn, fixedRightBtns},
   data() {
     return {
@@ -41,7 +38,6 @@ export default {
     ieUseMask: true,
     thisPath: location.protocol + '//' + location.host,
     step: 1,
-    // questionnaire: 0,
     q1: '',
     complete: false,
     planDetails: false,
@@ -54,7 +50,6 @@ export default {
     this.hideIeMask()
     this.showTarget()
     this.topBtn()
-    // this.sameHeight('concept-item-text')
     this.scrollMagic()
 
     $(window).resize(() => {
@@ -63,7 +58,7 @@ export default {
       // this.sameHeight('concept-item-text')
     })
   },
-  methods: {
+  methods: {//改成共用方法
     signature() {
       console.log(
         "%cMade by Captain%c2020/05",
@@ -78,19 +73,6 @@ export default {
     hideMobileNavbar() {
       this.menuBtnActive = false;
       this.navbarShow = false;
-    },
-    sameHeight(name) {
-      let item = $("." + name),
-        itemLeight = item.length,
-        giftItemHeight = [];
-
-      item.removeAttr("style");
-
-      for (let n = 0; n < itemLeight; n++) {
-        giftItemHeight[n] = item.eq(n).innerHeight();
-      }
-      let height = Math.max.apply(null, giftItemHeight);
-      item.css("height", height);
     },
     addNoOpener() {
       // 資安用  target="_blank" 加 rel="nofollow me noopener noreferrer"

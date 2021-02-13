@@ -70,7 +70,7 @@
 //抓後端資料, 只有在myportfolio自訂頁面可以有修改功能, v-for
 import { mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
-import { Fragment } from 'vue-fragment'
+// import { Fragment } from 'vue-fragment'
 export default {
   data () {
     return {
@@ -78,11 +78,9 @@ export default {
       isTesting: false,
       isDelete: false,
       isSubmit: false,
-      percent: 10,
-      fund_types: {'債券':['公債型', '高收益債券型', '新興市場債券型', '投資等級公司債券型'],'股票':[],'其它':[]}
     }
   },
-  components: { Fragment },
+  // components: { Fragment },
   computed: {
     ...mapState(['user_id']),
     ...mapFields(['isEditable', 'fundPool', 'investmentAmount', 'personalPortfolio', 'budget','isCheckingEmpty']),
@@ -105,6 +103,11 @@ export default {
       this.isEditable = false
     }
     
+  },
+  watch: {
+    initPorfolio : function(){
+      console.log('this.initPorfolio:',this.initPorfolio)
+    }
   },
   methods: {
     setPercentage(val, quantile, isSign) {
@@ -152,11 +155,13 @@ export default {
         },
       ]
       this.investmentAmount = [10000,15000]
-      this.initPorfolio = [...this.personalPortfolio]
+      
       
       this.$nextTick(() => {
+        this.initPorfolio = [...this.personalPortfolio]
         // this.personalPortfolio = JSON.parse(JSON.stringify(this.portData || []));
         this.cusBudget();
+        this.isSubmit = false
         });
 
     },
@@ -229,7 +234,9 @@ export default {
       return sum == 0 ? this.budget : sum;
     },
     originFund () {
-      this.personalPortfolio = this.initPorfolio
+      this.$nextTick(() => {
+        this.personalPortfolio = [...this.initPorfolio]
+      })   
     },
     addFund () {
       // 需同時修改'personalPortfolio', 'investmentAmount' , 看一下後端傳來的資料結構

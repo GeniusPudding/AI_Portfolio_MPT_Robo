@@ -13,6 +13,7 @@
             <router-link to="/compare">返回投組</router-link>
             <!-- <a href="content" title="返回投組">返回投組</a> -->
           </div>
+          <saveBtn></saveBtn>
         </div>
       </div>
     </section>
@@ -26,11 +27,8 @@
 <script>
 // import { mapState } from 'vuex'
 import report from '../components/report'
+import saveBtn from '../components/buttons/saveBtn'
 export default {
-  // props: ['questionnaire'],
-  components: {report}
-//   computed: {
-//     ...mapState(['questionnaire'])
-//   }
+  components: {report, saveBtn}
 }
 </script>

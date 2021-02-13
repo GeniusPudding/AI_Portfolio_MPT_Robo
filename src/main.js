@@ -11,6 +11,15 @@ import VueScrollmagic from 'vue-scrollmagic'
 import VueApexCharts from "vue-apexcharts";
 import axios from './axios'
 import VueCookies from "vue-cookies";
+
+import front from './mixins/front'
+import newQuestionnaire from './mixins/newQuestionnaire'
+import slickFunction from './mixins/slickFunction'
+import shared from './mixins/shared'
+Vue.mixin(front)
+Vue.mixin(newQuestionnaire)
+Vue.mixin(slickFunction)
+Vue.mixin(shared)
 Vue.use(VueCookies)
 Vue.use(axios)
 Vue.use(VueApexCharts);
@@ -59,5 +68,5 @@ new Vue({
   router,
   store,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
 })
