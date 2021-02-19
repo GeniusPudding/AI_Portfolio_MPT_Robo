@@ -1,8 +1,11 @@
 let data = {
+    bfNo: 0,
+    Token: '',
     questionnaire: 0,
     username: "親愛的EC客戶",
     user_id: "",
     risk_prop: "穩健",
+    useMail: true,
     fundPool: [
         //{type: [{marketType: [fundName]}] }
     ],

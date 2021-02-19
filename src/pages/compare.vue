@@ -22,8 +22,8 @@
         <div class="report-item-area">
           <p>定期投資報告通知發送設定</p>
           <div class="report-item-btn">
-            <div class="sItem">電子郵件</div>
-            <div class="sItem active">手機簡訊</div>
+            <div class="sItem" :class="{'active': useMail}" @click.prevent="switchSend($event)">電子郵件</div>
+            <div class="sItem" :class="{'active': !useMail}" @click.prevent="switchSend($event)">手機簡訊</div>
           </div>
         </div>
 
@@ -31,16 +31,7 @@
           <div class="btn type6">
             <a href="myportfolio" title="重新自訂投組">重新自訂投組</a>
           </div>
-          <div class="btn">
-            <!-- <a href="" title="儲存建議投組">儲存建議投組</a> -->
-            <a
-              href="javascript:void(0);"
-              title="儲存建議投組"
-              @click="toggleModal('warning')"
-            >
-              儲存建議投組</a
-            >
-          </div>
+          <saveBtn></saveBtn>
         </div>
       </div>
     </section>
@@ -53,19 +44,37 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import {mapFields} from 'vuex-map-fields'
 import recommendList from '../components/recommendList'
 import fundList from '../components/fundList'
+import saveBtn from '../components/buttons/saveBtn'
 export default {
   // props: ['questionnaire'],
-  components: {recommendList, fundList},
+  components: {recommendList, fundList, saveBtn},
   computed: {
-    ...mapState(['questionnaire'])
+    ...mapState(['questionnaire']),
+    ...mapFields(['useMail'])
   },
-   methods: {
-    setPercentage(val, quantile, isSign) {
-      var num = val ? val : 0
-      var percent = isSign ? `${num.toFixed(quantile)}%` : Number(num.toFixed(quantile))
-      return percent
+  methods: {
+    // setPercentage(val, quantile, isSign) {
+    //   var num = val ? val : 0
+    //   var percent = isSign ? `${num.toFixed(quantile)}%` : Number(num.toFixed(quantile))
+    //   return percent
+    // },
+    // toggleModal(name) {
+    //   console.log("toggleModal name:", name);
+    //   this.$refs[name].toggle = !this.$refs[name].toggle;
+    // }
+    switchSend (event) {
+      // targetId = event.currentTarget.id;
+      if(event.target.innerText==='手機簡訊'){
+        this.useMail = false
+      }else if(event.target.innerText==='電子郵件'){
+        this.useMail = true
+      }else{
+        console.debug(event.target.innerText)
+      }
+
     }
   }
 }

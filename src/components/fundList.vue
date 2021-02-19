@@ -13,14 +13,15 @@
       </li>
       <li class="tbody">
         <ol class="tr" v-for="(fundItem, $index) in personalPortfolio" :key="$index">
-          <li v-if="fundItem.fund.basic.name!==''||!isCheckingEmpty" data-title="類型">
+          <Fragment v-if="fundItem.fund.basic.name!==''||!isCheckingEmpty">
+          <li data-title="類型">
             <select  v-model="fundItem.fund.asset_type" @change="clearLipperID($index)">
               <option v-for="option in editAsset"
                :value="option"  
                :key="option.code">{{option.name}}</option>
             </select> 
           </li>
-          <li v-if="fundItem.fund.basic.name!==''||!isCheckingEmpty" data-title="市場">
+          <li data-title="市場">
             <select v-model="fundItem.fund.market"
                 @change="clearLipperID($index)"
                 :disabled="cusMarket(fundItem.fund.asset_type).length == 0">
@@ -32,7 +33,7 @@
                   :key="option.CustomClassification">{{ option.market }}</option>
             </select> 
           </li>
-          <li v-if="fundItem.fund.basic.name!==''||!isCheckingEmpty" data-title="基金名稱">
+          <li data-title="基金名稱">
             <select v-model="fundItem.fund.basic"
                 @change="setLipperID($index)"
                 :disabled="cusFund($index, fundItem.fund.market).length == 0">
@@ -46,15 +47,16 @@
                   :key="option.FundName">{{ `${option.bank_oid} ${option.FundName}` }}</option>
             </select> 
           </li>
-          <li v-if="fundItem.fund.basic.name!==''||!isCheckingEmpty" data-title="投資比重">
+          <li data-title="投資比重">
             <input type="text" disabled="disabled" class="text-center isEdit" :value="calcPercent()[$index]"/>
             %
           </li>
-          <li v-if="fundItem.fund.basic.name!==''||!isCheckingEmpty" data-title="投資金額">
+          <li data-title="投資金額">
             <input type="number" step="1000" :disabled="!isEditable" min="5000" class="text-center" @blur="calcBudget($event, $index)" v-model.number="investmentAmount[$index]"/>
             元            
           </li>
-          <li v-if="isEditable&&(fundItem.fund.basic.name!==''||!isCheckingEmpty)" data-title=""><a href="" class="btn" @click.prevent="deleteFund($index)">刪除</a></li>
+          <li v-if="isEditable" data-title=""><a href="" class="btn" @click.prevent="deleteFund($index)">刪除</a></li>
+          </Fragment>
         </ol>
 
       </li>
@@ -75,11 +77,10 @@ export default {
   data () {
     return {
       initPorfolio: [],
+      initAmount: [],
       isTesting: false,
       isDelete: false,
       isSubmit: false,
-      percent: 10,
-      fund_types: {'債券':['公債型', '高收益債券型', '新興市場債券型', '投資等級公司債券型'],'股票':[],'其它':[]}
     }
   },
   components: { Fragment },
@@ -107,9 +108,11 @@ export default {
     
   },
   methods: {
-    setPercentage(val, quantile, isSign) {
-      return this.$parent.setPercentage(val, quantile, isSign);
-    },
+    // setPercentage (val, quantile, isSign) {
+    //   var num = val ? val : 0
+    //   var percent = isSign ? `${num.toFixed(quantile)}%` : Number(num.toFixed(quantile))
+    //   return percent
+    // },
     async initList () {
       if (this.isSubmit) return;
       this.isSubmit = true;
@@ -151,12 +154,13 @@ export default {
           weight: 60
         },
       ]
-      this.investmentAmount = [10000,15000]
+      this.investmentAmount = [40000,60000]
       this.initPorfolio = [...this.personalPortfolio]
-      
+      this.initAmount = [...this.investmentAmount]
       this.$nextTick(() => {
         // this.personalPortfolio = JSON.parse(JSON.stringify(this.portData || []));
         this.cusBudget();
+        this.isSubmit = false
         });
 
     },
@@ -229,7 +233,8 @@ export default {
       return sum == 0 ? this.budget : sum;
     },
     originFund () {
-      this.personalPortfolio = this.initPorfolio
+      this.personalPortfolio = [...this.initPorfolio]
+      this.investmentAmount = [...this.initAmount]
     },
     addFund () {
       // 需同時修改'personalPortfolio', 'investmentAmount' , 看一下後端傳來的資料結構

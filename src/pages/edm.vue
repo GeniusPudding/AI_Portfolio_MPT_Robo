@@ -31,10 +31,6 @@
 import report from '../components/report'
 import recommendList from '../components/recommendList'
 export default {
-  // props: ['questionnaire'],
   components: { report, recommendList },
-  //   computed: {
-  //     ...mapState(['questionnaire'])
-  //   }
 };
 </script>

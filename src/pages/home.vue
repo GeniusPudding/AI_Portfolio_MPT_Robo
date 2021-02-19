@@ -208,7 +208,11 @@ export default {
     return {
       IdNo: '',
       isSubmit: false,
-      Passwd: ''
+      Passwd: '',
+      username: '',
+      email: '',
+      cellphone: '',
+      client_ip: ''
     }
   },
   components: {
@@ -216,11 +220,19 @@ export default {
   },
   computed: {
     ...mapState(['questionnaire']),
-    ...mapFields(['isLogin', 'isEC', 'user_id']),
+    ...mapFields(['isLogin', 'isEC', 'user_id','BfNo','Token']),
     loginData () {
       return {
         IdNo: this.IdNo,
         Passwd: md5(this.Passwd)
+      }
+    },
+    tasteData () {
+      return {
+        email: this.email,
+        cellphone: this.cellphone,
+        username: this.username,
+        client_ip: this.client_ip
       }
     }
   },
@@ -263,6 +275,8 @@ export default {
         this.isLogin = true
         // this.user_id = ''
         this.isEC = true
+        this.BfNo = login.Result.BfNo
+        this.Token = login.Result.Token
         this.$nextTick(() => {
           console.log('nextTick')
           this.$cookies.set('mptLogin', {

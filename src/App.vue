@@ -20,16 +20,16 @@ import mptHeader from './components/mptHeader';
 import mptFooter from './components/mptFooter';
 import fixedRightBtns from './components/buttons/fixedRightBtns';
 import topBtn from './components/buttons/topBtn';
-import front from './mixins/front'
-import newQuestionnaire from './mixins/newQuestionnaire'
-import slickFunction from './mixins/slickFunction'
+// import front from './mixins/front'
+// import newQuestionnaire from './mixins/newQuestionnaire'
+// import slickFunction from './mixins/slickFunction'
 import $ from 'jquery'
 import 'animate.css'
 import WOW from 'wow.js'
 
 export default {
   name: 'App',
-  mixins: [front, slickFunction, newQuestionnaire],
+  // mixins: [front, slickFunction, newQuestionnaire],
   components: { mptHeader, mptFooter, topBtn, fixedRightBtns},
   data() {
     return {

@@ -30,11 +30,11 @@ export default {
     ...mapFields(['personalPortfolio','isCheckingEmpty','investmentAmount'])
   },
   methods: {
-    setPercentage (val, quantile, isSign) {
-      var num = val ? val : 0
-      var percent = isSign ? `${num.toFixed(quantile)}%` : Number(num.toFixed(quantile))
-      return percent
-    },
+    // setPercentage (val, quantile, isSign) {
+    //   var num = val ? val : 0
+    //   var percent = isSign ? `${num.toFixed(quantile)}%` : Number(num.toFixed(quantile))
+    //   return percent
+    // },
     jumpCheck (){
       console.log('jump check this.personalPortfolio:',this.personalPortfolio)
 
