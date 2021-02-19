@@ -220,7 +220,7 @@ export default {
   },
   computed: {
     ...mapState(['questionnaire']),
-    ...mapFields(['isLogin', 'isEC', 'user_id','BfNo','Token']),
+    ...mapFields(['isLogin', 'isEC', 'user_id', 'BfNo', 'Token']),
     loginData () {
       return {
         IdNo: this.IdNo,
@@ -272,6 +272,7 @@ export default {
         if(login.Rtcode==='success'){
           //需要檢查後端回傳的登入狀態嗎?
         }
+
         this.isLogin = true
         // this.user_id = ''
         this.isEC = true

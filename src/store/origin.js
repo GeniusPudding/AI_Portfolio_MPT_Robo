@@ -1,5 +1,5 @@
 let data = {
-    bfNo: 0,
+    BfNo: 0,
     Token: '',
     questionnaire: 0,
     username: "親愛的EC客戶",

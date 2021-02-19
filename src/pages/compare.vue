@@ -44,12 +44,11 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import {mapFields} from 'vuex-map-fields'
 import recommendList from '../components/recommendList'
 import fundList from '../components/fundList'
 import saveBtn from '../components/buttons/saveBtn'
+import { mapFields } from 'vuex-map-fields'
 export default {
-  // props: ['questionnaire'],
   components: {recommendList, fundList, saveBtn},
   computed: {
     ...mapState(['questionnaire']),
@@ -74,7 +73,6 @@ export default {
       }else{
         console.debug(event.target.innerText)
       }
-
     }
   }
 }
