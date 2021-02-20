@@ -175,7 +175,7 @@
                   <div class="formArea-item-error">請確認您的手機</div>
                 </div>
               </div>
-            </div>            
+            </div>
             <div class="btnArea twoBtn">
               <div class="btn">
                 <a
@@ -190,7 +190,6 @@
                 <a title="搶先體驗" @click="tasteLogin"> 搶先體驗 </a>
               </div>
             </div>
-
           </div>
         </slot>
       </modal>
@@ -200,9 +199,9 @@
 <script>
 import { mapState } from "vuex";
 import { mapFields } from "vuex-map-fields";
-import modal from '../components/modal'
+import modal from "../components/modal";
 import md5 from "blueimp-md5";
-import axios from 'axios'
+import axios from "axios";
 export default {
   data() {
     return {
@@ -211,7 +210,7 @@ export default {
       // Passwd: "",
       username: "",
       email: "",
-      cellphone: "",
+      cellphone: ""
     };
   },
   components: {
@@ -219,11 +218,21 @@ export default {
   },
   computed: {
     ...mapState(["questionnaire"]),
-    ...mapFields(["isLogin", 'isSubmit', "isEC", "user_id", "BfNo", "Token","IdNo", 'Passwd', 'client_ip']),
+    ...mapFields([
+      "isLogin",
+      "isSubmit",
+      "isEC",
+      "user_id",
+      "BfNo",
+      "token",
+      "IdNo",
+      "Passwd",
+      "client_ip"
+    ]),
     loginData() {
       return {
         IdNo: this.IdNo,
-        Passwd: md5(this.Passwd),
+        Passwd: md5(this.Passwd)
       };
     },
     tasteData() {
@@ -231,26 +240,24 @@ export default {
         email: this.email,
         cellphone: this.cellphone,
         username: this.username,
-        client_ip: this.client_ip,
+        client_ip: this.client_ip
       };
-    },
+    }
   },
   mounted() {
-    this.getIP()
+    this.getIP();
   },
   methods: {
-    async getIP(){
-      let res = await fetch(
-        "https://wt.franklin.com.tw/areas/myip/myip.aspx"
-      )
-      this.client_ip = await res.text()
-      console.log('this.client_ip:',this.client_ip)
+    async getIP() {
+      let res = await fetch("https://wt.franklin.com.tw/areas/myip/myip.aspx");
+      this.client_ip = await res.text();
+      console.log("this.client_ip:", this.client_ip);
     },
     // toggleModal(name) {
     //   console.log("test toggleModal:", name);
     //   this.$refs[name].toggle = !this.$refs[name].toggle;
     // },
-    async tasteLogin(){
+    async tasteLogin() {
       if (this.isSubmit) return;
       this.isSubmit = true;
       // var url= 'http://10.20.1.7/www/auth'
@@ -266,19 +273,24 @@ export default {
       //   console.log(JSON.stringify(res.data))
       // })
       try {
-        var login = await this.$api.upload("/auth", JSON.stringify(this.tasteData), {});
-        console.log('taste login:', login)
-        this.isLogin = true
-        this.Token = login.Result.Token
+        var login = await this.$api.postWF09(
+          "/auth",
+          JSON.stringify(this.tasteData),
+          {}
+        );
+        console.log("taste login:", login);
+        this.isLogin = true;
+        this.token = login.Result.token;
+        console.log("this.token:", this.token);
         this.$nextTick(() => {
           this.$cookies.set("mptLogin", {
-            IdNo: 'taste',
-            isLogin: true,
+            IdNo: "taste",
+            isLogin: true
           });
           this.$router.push("myportfolio");
         });
       } catch (error) {
-        console.log('taste login error')
+        console.log("taste login error");
         this.isLogin = false;
         this.$api.handlerErr(error);
       } finally {
@@ -287,12 +299,39 @@ export default {
     },
 
     async ECLogin() {
+      var data = JSON.stringify({
+        IdNo: "D298096421",
+        Passwd: "e267cfcd18461ce938067eca67c59f41"
+      });
+
+      var config = {
+        method: "post",
+        url: "http://10.20.1.7/ec/auth",
+        headers: {
+          "x-ft-idno": "D298096421",
+          "X-ft-clientip": "61.222.58.235",
+          "x-ft-apikey": "c6db7c09-3798-4ded-b851-c806f7066c2d",
+          "Content-Type": "application/json"
+        },
+        data: data
+      };
+
+      axios(config)
+        .then(function(response) {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch(function(error) {
+          console.log('login error:',error);
+        });
+
       const ECheaders = {
         "x-ft-idno": this.loginData.IdNo,
-        "x-ft-clientip": this.client_ip,
-        "x-ft-apikey": "c6db7c09-3798-4ded-b851-c806f7066c2d", // app:4750b422-8dec-4162-a855-5afe9626a4b7, web: c6db7c09-3798-4ded-b851-c806f7066c2d
+        "X-ft-clientip": this.client_ip,
+        "x-ft-apikey": "c6db7c09-3798-4ded-b851-c806f7066c2d",
+        "Content-Type": "application/json"
+        // app:4750b422-8dec-4162-a855-5afe9626a4b7, web: c6db7c09-3798-4ded-b851-c806f7066c2d
       };
-      return this.$api.login("/user/auth/login", this.loginData, ECheaders);
+      return this.$api.postEC("/auth", this.loginData, ECheaders);
     },
     async next() {
       if (this.IdNo === "") {
@@ -319,23 +358,23 @@ export default {
         // this.user_id = ''
         this.isEC = true;
         this.BfNo = login.Result.BfNo;
-        this.Token = login.Result.Token;
+        this.token = login.Result.token;
 
         this.$nextTick(() => {
           this.$cookies.set("mptLogin", {
             IdNo: this.IdNo,
-            isLogin: true,
+            isLogin: true
           });
           this.$router.push("myportfolio");
         });
       } catch (error) {
-        console.log('login error')
+        console.log("login error");
         this.isLogin = false;
         this.$api.handlerErr(error);
       } finally {
         this.isSubmit = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>

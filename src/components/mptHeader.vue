@@ -61,12 +61,17 @@ export default {
       options: '',
       selectName: '',
       menuBtnActive: false, //這兩個啥意思?
-      navbarShow: false //這兩個啥意思?
+      navbarShow: false, //這兩個啥意思?
+      risk_map: {
+        '積極':5,
+        '穩健':4,
+        '保守':3
+      }
     }
   },
   computed: {
     ...mapState(['isEditable','username']),
-    ...mapFields(['risk_prop'])
+    ...mapFields(['risk_prop', 'rr_value' ])
   },
   props: ['activeNumber'],
   mounted () {
@@ -92,6 +97,8 @@ export default {
   watch: {
     risk_prop () {
       console.log('風險屬性:', this.risk_prop)
+      this.rr_value = this.risk_map[risk_prop]
+      console.log('this.rr_value:', this.rr_value)
     }
   }
 }

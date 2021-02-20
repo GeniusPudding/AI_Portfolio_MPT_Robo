@@ -4,10 +4,10 @@ import axios from "axios";
 const ECLoginbaseURL = location.hostname == 'etrade.fraklin.com.tw' ? 'https://etrade.fraklin.com.tw/v2' : 'https://wt.franklin.com.tw:8080/v2'
 const ECbaseURL = 'http://10.20.1.7/ec/'
 export default function $axios(options) {
-    console.log('login options:', options)
+    console.log('EC options:', options)
     return new Promise((resolve, reject) => {
         const instance = axios.create({
-            baseURL: ECLoginbaseURL,
+            baseURL: ECbaseURL,
         });
 
         // request 攔截器

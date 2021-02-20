@@ -73,6 +73,10 @@
 import { mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import { Fragment } from 'vue-fragment'
+import axios from 'axios'
+import md5 from 'blueimp-md5'
+import dayjs from 'dayjs'
+const today = dayjs(new Date()).format('YYYY-MM-DD')
 export default {
   data () {
     return {
@@ -85,7 +89,7 @@ export default {
   },
   components: { Fragment },
   computed: {
-    ...mapState(['user_id', 'BfNo']),
+    ...mapState(['user_id', 'BfNo', 'token','rr_value']),
     ...mapFields(['isEditable', 'fundPool', 'investmentAmount', 'personalPortfolio', 'budget','isCheckingEmpty']),
     editAsset () {
       if (!this.fundPool) return []
@@ -109,21 +113,40 @@ export default {
   },
   methods: {
     async getFundPool(){
-      
-    }
-    // setPercentage (val, quantile, isSign) {
-    //   var num = val ? val : 0
-    //   var percent = isSign ? `${num.toFixed(quantile)}%` : Number(num.toFixed(quantile))
-    //   return percent
-    // },
+      console.log('getFundPool token:',this.token )
+      let headers = {
+        "Authorization": 'Bearer '+this.token
+      }
+      let param = {
+        "rr_value": this.rr_value 
+      }
+      if(this.BfNo!==0){//EC customers
+        return await this.$api.getEC('/fundpool',param,headers)
+      }else{
+        return await this.$api.getWF09('/fundpool',param,headers)
+      }   
+    },
     async initList () {
       if (this.isSubmit) return;
       this.isSubmit = true;
+      console.log("initdList")
+      var pool = await this.getFundPool()
+      
+      var testpool = pool.Result.fundpool
+      console.log("testing fundPool:", testpool)
 
-      var pool = await this.$api.query('/fundpool')
-      console.log("pool:", pool)
-      this.fundPool = pool.Result
-      // var portfolio = await this.$api.query('/portfolio/search', this.user_id)
+      let config = {
+        method: 'get',
+
+        headers:{
+          'Authorization' : md5(`${today} Franklin`)
+        },
+      }
+      var originfundPool = await axios('https://www.jlf.com.tw/api/twb/fundpool',config)
+      this.fundpool = originfundPool.data.Result
+      console.log("origin fundPool:", this.fundPool)
+      // console.log("origin res:", this.fundPool.data.Result)
+      // var portfolio = await this.$api.wf09Get('/portfolio/search', this.user_id)
       // console.log("portfolio:", portfolio)
       // this.personalPortfolio = portfolio.Result;
       this.personalPortfolio = [

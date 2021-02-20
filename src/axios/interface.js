@@ -1,9 +1,16 @@
-import axios from './api'
+import axiosWF09 from './apiTaste'
 import axiosEC from './apiEC'
 
-export const login = (url, data, header) => {
-    console.log('check ECheaders:', header)
-    console.log('check EC data:', data)
+export const getEC = (url, params,header) => {
+    return axiosEC({
+        url: url,
+        method: 'get',
+        headers: header,
+        params: params
+    })
+}
+
+export const postEC = (url, data, header) => {
     return axiosEC({
         url: url,
         method: 'post',
@@ -12,16 +19,17 @@ export const login = (url, data, header) => {
     })
 }
 
-export const query = (url, params) => {
-    return axios({
+export const getWF09 = (url, params, header) => {
+    return axiosWF09({
         url: url,
         method: 'get',
-        params
+        headers: header,
+        params: params
     })
 }
 
-export const upload = (url, data, header) => {
-    return axios({
+export const postWF09 = (url, data, header) => {
+    return axiosWF09({
         url: url,
         method: 'post',
         header: header,
@@ -46,8 +54,9 @@ export const handlerErr = (err) => {
 }
 
 export default {
-    query,
-    upload,
+    getWF09,
+    postWF09,
     handlerErr,
-    login
+    postEC,
+    getEC
 }

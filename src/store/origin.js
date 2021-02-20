@@ -1,11 +1,12 @@
 let data = {
     client_ip: '',
     BfNo: 0,
-    Token: '',
+    token: '',
     questionnaire: 0,
     username: "親愛的EC客戶",
     user_id: "",
     risk_prop: "穩健",
+    rr_value: 3,
     useMail: true,
     fundPool: [
         //{type: [{marketType: [fundName]}] }
