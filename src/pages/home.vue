@@ -202,6 +202,7 @@ import { mapState } from "vuex";
 import { mapFields } from "vuex-map-fields";
 import modal from '../components/modal'
 import md5 from "blueimp-md5";
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -250,8 +251,26 @@ export default {
     //   this.$refs[name].toggle = !this.$refs[name].toggle;
     // },
     async tasteLogin(){
-      var login = await this.$api.upload("/auth/", JSON.stringify(this.tasteData), {});
-      console.log('taste login:', login)
+      var data = JSON.stringify({
+        "username": "林琳琳",
+        "cellphone": "0909090909",
+        "email": "alan860304@gmail.com",
+        "client_ip": this.client_ip
+      })
+      var config = {
+        method: 'post',
+        url: 'http://10.20.1.7/www/auth',
+        headers:{
+          'Content-Type' : 'application/json'
+        },
+        data: data
+      }
+
+      axios(config).then(res=>{
+        console.log(JSON.stringify(res.data))
+      })
+      // var login = await this.$api.upload("/auth/", JSON.stringify(this.tasteData), {});
+      // console.log('taste login:', login)
     },
 
     async ECLogin() {
