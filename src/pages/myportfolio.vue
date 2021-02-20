@@ -43,13 +43,13 @@ export default {
         console.log('item.weight:',item.weight)
         console.log('item.fund.basic.name:',)
         if (item.fund.basic.name===''){
-          this.investmentAmount[index] = 0
+          this.this.investmentAmount[index] = 0
           this.isCheckingEmpty = true
           // emptyIndex.push(index)
         }
         return (item.fund.basic.name!=='')
       })
-      // console.log('emptyIndex:',emptyIndex)
+      console.log('this.investmentAmount:',this.investmentAmount)
       this.investmentAmount = this.investmentAmount.filter(num=>{
         return (num!==0)
       })

@@ -24,8 +24,8 @@ export const upload = (url, data, header) => {
     return axios({
         url: url,
         method: 'post',
-        header,
-        data
+        header: header,
+        data:data
     })
 }
 

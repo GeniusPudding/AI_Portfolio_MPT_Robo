@@ -11,7 +11,7 @@ export default {
     baseURL: baseURL,
     headers: {
         // 'X-Requested-With': 'XMLHttpRequest',
-        // 'Content-Type': 'application/json;charset=UTF-8',
-        Authorization: md5(`${today} Franklin`)
+        'Content-Type': 'application/json',//;charset=UTF-8
+        // Authorization: md5(`${today} Franklin`)
     }
 }

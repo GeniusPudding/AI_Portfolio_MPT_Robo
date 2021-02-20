@@ -219,7 +219,7 @@ export default {
   },
   computed: {
     ...mapState(["questionnaire"]),
-    ...mapFields(["isLogin", "isEC", "user_id", "BfNo", "Token","IdNo", 'Passwd', 'client_ip']),
+    ...mapFields(["isLogin", 'isSubmit', "isEC", "user_id", "BfNo", "Token","IdNo", 'Passwd', 'client_ip']),
     loginData() {
       return {
         IdNo: this.IdNo,
@@ -251,26 +251,39 @@ export default {
     //   this.$refs[name].toggle = !this.$refs[name].toggle;
     // },
     async tasteLogin(){
-      var data = JSON.stringify({
-        "username": "林琳琳",
-        "cellphone": "0909090909",
-        "email": "alan860304@gmail.com",
-        "client_ip": this.client_ip
-      })
-      var config = {
-        method: 'post',
-        url: 'http://10.20.1.7/www/auth',
-        headers:{
-          'Content-Type' : 'application/json'
-        },
-        data: data
-      }
+      if (this.isSubmit) return;
+      this.isSubmit = true;
+      // var url= 'http://10.20.1.7/www/auth'
+      // var config = {
+      //   method: 'post',
 
-      axios(config).then(res=>{
-        console.log(JSON.stringify(res.data))
-      })
-      // var login = await this.$api.upload("/auth/", JSON.stringify(this.tasteData), {});
-      // console.log('taste login:', login)
+      //   headers:{
+      //     'Content-Type' : 'application/json'
+      //   },
+      //   data: JSON.stringify(this.tasteData)
+      // }
+      // axios(url,config).then(res=>{
+      //   console.log(JSON.stringify(res.data))
+      // })
+      try {
+        var login = await this.$api.upload("/auth", JSON.stringify(this.tasteData), {});
+        console.log('taste login:', login)
+        this.isLogin = true
+        this.Token = login.Result.Token
+        this.$nextTick(() => {
+          this.$cookies.set("mptLogin", {
+            IdNo: 'taste',
+            isLogin: true,
+          });
+          this.$router.push("myportfolio");
+        });
+      } catch (error) {
+        console.log('taste login error')
+        this.isLogin = false;
+        this.$api.handlerErr(error);
+      } finally {
+        this.isSubmit = false;
+      }
     },
 
     async ECLogin() {
@@ -309,7 +322,6 @@ export default {
         this.Token = login.Result.Token;
 
         this.$nextTick(() => {
-          console.log("nextTick");
           this.$cookies.set("mptLogin", {
             IdNo: this.IdNo,
             isLogin: true,

@@ -85,7 +85,7 @@ export default {
   },
   components: { Fragment },
   computed: {
-    ...mapState(['user_id']),
+    ...mapState(['user_id', 'BfNo']),
     ...mapFields(['isEditable', 'fundPool', 'investmentAmount', 'personalPortfolio', 'budget','isCheckingEmpty']),
     editAsset () {
       if (!this.fundPool) return []
@@ -108,6 +108,9 @@ export default {
     
   },
   methods: {
+    async getFundPool(){
+      
+    }
     // setPercentage (val, quantile, isSign) {
     //   var num = val ? val : 0
     //   var percent = isSign ? `${num.toFixed(quantile)}%` : Number(num.toFixed(quantile))
@@ -116,9 +119,6 @@ export default {
     async initList () {
       if (this.isSubmit) return;
       this.isSubmit = true;
-      //呼叫GET /api​/twb​/fundpool 取得 基金池, 呼叫GET /api/twb/portfolio/search 取得客戶預設投組
-      // this.personalPortfolio = await this.$api.query('/api/twb/portfolio/search', this.user_id)
-      // this.fundPool = await this.$api.query('/api​/twb​/fundpool')
 
       var pool = await this.$api.query('/fundpool')
       console.log("pool:", pool)
