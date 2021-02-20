@@ -1,4 +1,5 @@
 let data = {
+    client_ip: '',
     BfNo: 0,
     Token: '',
     questionnaire: 0,
@@ -29,6 +30,8 @@ let data = {
         }
     ],
     IdNo: "",
+    Passwd: '',
+    isSubmit: false,
     isEC: false,
     isLogin: false,
     isEditable: true,
