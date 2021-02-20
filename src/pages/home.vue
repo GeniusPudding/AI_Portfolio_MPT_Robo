@@ -250,7 +250,7 @@ export default {
     //   this.$refs[name].toggle = !this.$refs[name].toggle;
     // },
     async tasteLogin(){
-      var login = await this.$api.upload("/auth/", this.tasteData, {});
+      var login = await this.$api.upload("/auth/", JSON.stringify(this.tasteData), {});
       console.log('taste login:', login)
     },
 
