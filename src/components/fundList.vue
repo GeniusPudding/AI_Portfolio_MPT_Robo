@@ -85,6 +85,21 @@ export default {
     ...mapFields(['isEditable', 'fundPool', 'investmentAmount', 'token', 'rr_param',
     'personalPortfolio', 'budget','isCheckingEmpty', 'authorizationHeader',
     'initPorfolio', 'initAmount']),
+    header () {
+      return  {
+        ...this.authorizationHeader,
+        "Content-Type": "application/json",
+        "x-ft-idno": this.IdNo,
+        "x-ft-clientip": this.client_ip,
+        "x-ft-apikey": "c6db7c09-3798-4ded-b851-c806f7066c2d"
+      }
+    },
+    body () {
+      return  {
+        ...this.rr_param,
+        "bfNo": this.BfNo        
+      }
+    },   
     editAsset () {
       if (!this.fundPool) return []
       var asset = this.fundPool.map((obj) => {
@@ -127,18 +142,18 @@ export default {
     },
     async getInitPortfolio () {
       if(this.BfNo!==0){//EC customers
-        let header = {
-          ...this.authorizationHeader,
-          "Content-Type": "application/json",
-          "x-ft-idno": this.IdNo,
-          "x-ft-clientip": this.client_ip,
-          "x-ft-apikey": "c6db7c09-3798-4ded-b851-c806f7066c2d",
-        }
-        let body = {
-          ...this.rr_param,
-          "bfNo": this.BfNo
-        }
-        let response = await this.$api.postEC('/init',body,header)
+        // let header = {
+        //   ...this.authorizationHeader,
+        //   "Content-Type": "application/json",
+        //   "x-ft-idno": this.IdNo,
+        //   "x-ft-clientip": this.client_ip,
+        //   "x-ft-apikey": "c6db7c09-3798-4ded-b851-c806f7066c2d",
+        // }
+        // let body = {
+        //   ...this.rr_param,
+        //   "bfNo": this.BfNo
+        // }
+        let response = await this.$api.postEC('/init',this.body,this.header)
         // console.log('response.Result.init.:',response.Result.init)
         return response.Result.init
       }else{

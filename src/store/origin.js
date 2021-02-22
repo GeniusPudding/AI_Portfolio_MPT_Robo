@@ -21,6 +21,7 @@ let data = {
     personalPortfolio: [
         //個人編輯中的基金組合: {fundName, }
     ],
+    recommendedPortfolio: [],
     strategyList: [{
             value: "3",
             name: "積極型"

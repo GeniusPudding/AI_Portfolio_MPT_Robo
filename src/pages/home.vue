@@ -230,6 +230,15 @@ export default {
       "client_ip",
       'rr_value'
     ]),
+    ECheaders (){
+      return {
+        "x-ft-idno": this.loginData.IdNo,
+        "X-ft-clientip": this.client_ip,
+        "x-ft-apikey": "c6db7c09-3798-4ded-b851-c806f7066c2d",
+        "Content-Type": "application/json"
+        // app:4750b422-8dec-4162-a855-5afe9626a4b7, web: c6db7c09-3798-4ded-b851-c806f7066c2d
+      }
+    },
     loginData() {
       return {
         IdNo: this.IdNo,
@@ -301,39 +310,14 @@ export default {
     },
 
     async ECLogin() {
-      // var data = JSON.stringify({
-      //   IdNo: "D298096421",
-      //   Passwd: "e267cfcd18461ce938067eca67c59f41"
-      // });
-
-      // var config = {
-      //   method: "post",
-      //   url: "http://10.20.1.7/ec/auth",
-      //   headers: {
-      //     "x-ft-idno": "D298096421",
-      //     "X-ft-clientip": "61.222.58.235",
-      //     "x-ft-apikey": "c6db7c09-3798-4ded-b851-c806f7066c2d",
-      //     "Content-Type": "application/json"
-      //   },
-      //   data: data
+      // const ECheaders = {
+      //   "x-ft-idno": this.loginData.IdNo,
+      //   "X-ft-clientip": this.client_ip,
+      //   "x-ft-apikey": "c6db7c09-3798-4ded-b851-c806f7066c2d",
+      //   "Content-Type": "application/json"
+      //   // app:4750b422-8dec-4162-a855-5afe9626a4b7, web: c6db7c09-3798-4ded-b851-c806f7066c2d
       // };
-
-      // axios(config)
-      //   .then(function(response) {
-      //     console.log(JSON.stringify(response.data));
-      //   })
-      //   .catch(function(error) {
-      //     console.log('login error:',error);
-      //   });
-
-      const ECheaders = {
-        "x-ft-idno": this.loginData.IdNo,
-        "X-ft-clientip": this.client_ip,
-        "x-ft-apikey": "c6db7c09-3798-4ded-b851-c806f7066c2d",
-        "Content-Type": "application/json"
-        // app:4750b422-8dec-4162-a855-5afe9626a4b7, web: c6db7c09-3798-4ded-b851-c806f7066c2d
-      };
-      return this.$api.postEC("/auth", this.loginData, ECheaders);
+      return this.$api.postEC("/auth", this.loginData, this.ECheaders);
     },
     async next() {
       if (this.IdNo === "") {

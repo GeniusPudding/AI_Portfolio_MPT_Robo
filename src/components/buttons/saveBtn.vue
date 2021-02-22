@@ -34,14 +34,30 @@
   </Fragment>
 </template>
 <script>
+import { mapState } from "vuex";
 import modal from "../modal";
 import { Fragment } from "vue-fragment";
 export default {
   components: { modal, Fragment },
+  computed: {
+    ...mapState(['authorizationHeader','useMail','BfNo','recommendedPortfolio','personalPortfolio']),
+    body () {
+      return {
+         'bfNo': this.BfNo,
+         'custom_portfolio': this.personalPortfolio,
+         'notify_type': this.useMail ? 'email' : 'cellphone',
+         'recom_portfolio': this.recommendedPortfolio
+      }
+    }
+  },
   methods: {
-      savePortfolio () {
-          //call save API
-          this.toggleModal('warning')
+      async savePortfolio() {
+        if(this.BfNo!==0){//EC customers
+          return await this.$api.postEC('/create',this.body,this.authorizationHeader)
+        }else{
+          return await this.$api.postWF09('/create',this.body,this.authorizationHeader)
+        }
+        this.toggleModal('warning')
       }
   }
 };

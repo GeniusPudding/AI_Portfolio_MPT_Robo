@@ -77,7 +77,7 @@ export default {
         console.debug(event.target.innerText);
       }
     },
-    async savePortfolio() {}
+
   }
 };
 </script>
