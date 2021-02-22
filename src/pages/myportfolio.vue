@@ -41,13 +41,13 @@ export default {
       // let emptyIndex = []
       this.personalPortfolio = this.personalPortfolio.filter((item, index)=>{
         console.log('item.weight:',item.weight)
-        console.log('item.fund.basic.name:',)
-        if (item.fund.basic.name===''){
+        console.log('item.name:',)
+        if (item.name===''){
           this.this.investmentAmount[index] = 0
           this.isCheckingEmpty = true
           // emptyIndex.push(index)
         }
-        return (item.fund.basic.name!=='')
+        return (item.name!=='')
       })
       console.log('this.investmentAmount:',this.investmentAmount)
       this.investmentAmount = this.investmentAmount.filter(num=>{

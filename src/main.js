@@ -41,6 +41,7 @@ router.beforeEach((to, from, next) => {
         // sales_name: "",
         // user_id: "",
         // strategyType: "",
+        token: '',
         IdNo: '',
         isLogin: false,
     };

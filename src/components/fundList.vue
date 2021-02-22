@@ -17,7 +17,7 @@
           <li data-title="類型">
             <select  v-model="fundItem.type" @change="changeFund(fundItem)">
               <option v-for="option in editAsset"
-               :value="option"  
+               :value="option.name"  
                :key="option.code">{{option.name}}</option>
             </select> 
           </li>
@@ -26,10 +26,7 @@
                 @change="changeFund(fundItem)"
                 :disabled="cusMarket(fundItem.type).length == 0">
               <option v-for="option in cusMarket(fundItem.type)" 
-                  :value="{
-                    
-                    name: option.name
-                  }"
+                  :value="option.name"
                   :key="option.name">{{ option.name }}</option>
             </select> 
           </li>
@@ -38,12 +35,7 @@
                 @change="changeFund(fundItem)"
                 :disabled="cusFund(fundItem).length == 0">
               <option v-for="option in cusFund(fundItem)" 
-                  :value="{
-                    currency: option.currency,
-                    rr: option.rr,
-                    name: option.fund.name,
-                    oid: option.fund.id,
-                  }"
+                  :value="option.fund.name"
                   :key="option.fund.id">{{ `${option.fund.name}` }}</option>
             </select> 
           </li>
@@ -85,14 +77,15 @@ export default {
       isTesting: false,
       isDelete: false,
       isSubmit: false,
-      rr_param: {}
+      rr_param: {},
+      authorizationHeader : {}
     }
   },
   components: { Fragment },
   computed: {
-    ...mapState(['user_id', 'BfNo', 'token','rr_value', 'IdNo', 'client_ip']),
-    ...mapFields(['isEditable', 'fundPool', 'investmentAmount', 
-    'personalPortfolio', 'budget','isCheckingEmpty','authorizationHeader']),
+    ...mapState(['user_id', 'BfNo','rr_value', 'IdNo', 'client_ip']),
+    ...mapFields(['isEditable', 'fundPool', 'investmentAmount', 'token', 
+    'personalPortfolio', 'budget','isCheckingEmpty']),
     editAsset () {
       if (!this.fundPool) return []
       var asset = this.fundPool.map((obj) => {
@@ -103,7 +96,11 @@ export default {
   },
   mounted (){
     console.log('fundlist mounted this.$route.name:', this.$route.name)
+    if(this.token===''){
+      this.token =  this.$cookies.get('mptLogin').token
+    }
     this.authorizationHeader = {"Authorization": 'Bearer '+this.token}
+    console.log('authorizationHeader:',this.authorizationHeader)
     this.rr_param = {"rr_value": this.rr_value }
     if (this.$route.name === "myportfolio"){
       this.isEditable = true
@@ -127,8 +124,9 @@ export default {
       if(this.BfNo!==0){//EC customers
         let header = {
           ...this.authorizationHeader,
+          "Content-Type": "application/json",
           "x-ft-idno": this.IdNo,
-          "X-ft-clientip": this.client_ip,
+          "x-ft-clientip": this.client_ip,
           "x-ft-apikey": "c6db7c09-3798-4ded-b851-c806f7066c2d",
         }
         let body = {
@@ -144,9 +142,10 @@ export default {
     },
 
     async initList () {
-      if (this.isSubmit) return;
+      if (this.isSubmit) return
       this.isSubmit = true;
-      console.log("initdList")
+      if (this.fundPool.length !== 0) return
+      console.log("init List")
       var pool = await this.getFundPool()
       
       this.fundPool = pool.Result.fundpool
@@ -196,7 +195,9 @@ export default {
       //     weight: 60
       //   },
       // ]
-      // this.investmentAmount = [40000,60000]
+
+      this.investmentAmount =  this.personalPortfolio.map(fund=>fund.weight*1000)
+      console.log('investmentAmount:Array:', this.investmentAmount)
       this.initPorfolio = [...this.personalPortfolio]
       
       this.$nextTick(() => {
@@ -211,13 +212,13 @@ export default {
       console.log('select fundItem:',fundItem)
     },
     cusMarket (key) {
-      console.log('key:',key)
+      // console.log('key:',key)
       if (!this.fundPool) return [];
       var market = this.fundPool.filter((obj) => {
         return obj.type == key
       })
       // console.log('cusMarket:',market)
-      console.log('cusMarket markets:',market[0].markets)
+      // console.log('cusMarket markets:',market[0].markets)
       if (market.length <= 0) return []
       return market[0].markets
     },

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import data from './origin' // Vuex 原始資料
-
+import createPersistedState from 'vuex-persistedstate'
 // https://github.com/maoberlehner/vuex-map-fields
 import { getField, updateField } from 'vuex-map-fields'
 
@@ -24,5 +24,6 @@ export default new Vuex.Store({
         state[key] = source[key]
       })
     }
-  }
+  },
+  plugins: [createPersistedState()]
 })

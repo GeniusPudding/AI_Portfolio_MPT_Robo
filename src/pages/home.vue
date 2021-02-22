@@ -285,7 +285,8 @@ export default {
         this.$nextTick(() => {
           this.$cookies.set("mptLogin", {
             IdNo: "taste",
-            isLogin: true
+            isLogin: true,
+            token: this.token
           });
           this.$router.push("myportfolio");
         });
@@ -358,12 +359,13 @@ export default {
         // this.user_id = ''
         this.isEC = true;
         this.BfNo = login.Result.BfNo;
-        this.token = login.Result.token;
-
+        this.token = login.Result.Token;
+        console.log('EC token:',this.token)
         this.$nextTick(() => {
           this.$cookies.set("mptLogin", {
             IdNo: this.IdNo,
-            isLogin: true
+            isLogin: true,
+            token: this.token
           });
           this.$router.push("myportfolio");
         });
