@@ -40,8 +40,8 @@ export default {
 
       // let emptyIndex = []
       this.personalPortfolio = this.personalPortfolio.filter((item, index)=>{
-        console.log('item.weight:',item.weight)
-        console.log('item.name:',item.name)
+        // console.log('item.weight:',item.weight)
+        // console.log('item.name:',item.name)
         if (!item.name){
           this.investmentAmount[index] = 0
           this.isCheckingEmpty = true

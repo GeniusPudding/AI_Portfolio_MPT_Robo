@@ -72,20 +72,19 @@ const today = dayjs(new Date()).format('YYYY-MM-DD')
 export default {
   data () {
     return {
-      initPorfolio: [],
-      initAmount: [],
       isTesting: false,
       isDelete: false,
       isSubmit: false,
-      rr_param: {},
-      authorizationHeader : {}
+      // rr_param: {},
+      // authorizationHeader : {}
     }
   },
   components: { Fragment },
   computed: {
     ...mapState(['user_id', 'BfNo','rr_value', 'IdNo', 'client_ip']),
-    ...mapFields(['isEditable', 'fundPool', 'investmentAmount', 'token', 
-    'personalPortfolio', 'budget','isCheckingEmpty']),
+    ...mapFields(['isEditable', 'fundPool', 'investmentAmount', 'token', 'rr_param',
+    'personalPortfolio', 'budget','isCheckingEmpty', 'authorizationHeader',
+    'initPorfolio', 'initAmount']),
     editAsset () {
       if (!this.fundPool) return []
       var asset = this.fundPool.map((obj) => {
@@ -100,17 +99,23 @@ export default {
       this.token =  this.$cookies.get('mptLogin').token
     }
     this.authorizationHeader = {"Authorization": 'Bearer '+this.token}
-    console.log('authorizationHeader:',this.authorizationHeader)
+    // console.log('authorizationHeader:',this.authorizationHeader)
     this.rr_param = {"rr_value": this.rr_value }
     if (this.$route.name === "myportfolio"){
       this.isEditable = true
       this.isCheckingEmpty = false
       this.initList() 
     } else {
-      console.log('Debug personalPortfolio:', this.personalPortfolio)
+      // console.log('Debug personalPortfolio:', this.personalPortfolio)
       this.isEditable = false
     }
     
+  },
+  beforeRouteEnter(to, from ,next){
+    next(vm=>{
+      console.log('beforeRouteEnter fundlist from:',from)
+      console.log('beforeRouteEnter fundlist to:',to)
+    })
   },
   methods: {
     async getFundPool(){
@@ -134,7 +139,7 @@ export default {
           "bfNo": this.BfNo
         }
         let response = await this.$api.postEC('/init',body,header)
-        console.log('response.Result.init.:',response.Result.init)
+        // console.log('response.Result.init.:',response.Result.init)
         return response.Result.init
       }else{
         let response = await this.$api.getWF09('/init',this.rr_param,this.authorizationHeader)
@@ -165,46 +170,11 @@ export default {
       // console.log("origin res:", this.fundPool.data.Result)
       this.personalPortfolio = await this.getInitPortfolio()
       console.log("portfolio:", this.personalPortfolio)
-      // this.personalPortfolio = portfolio;
 
-
-      // this.personalPortfolio = [
-      //   {
-      //     fund: {
-      //       asset_type: { code: "2550", name: "債券型" },
-      //       basic: {
-      //         // LipperID: "60045700",
-      //         bank_oid: "A813",
-      //         name: "富蘭克林坦伯頓全球投資系列-公司債基金 A 月配息 美元",
-      //         oid: "0825",
-      //       },
-      //       market: { CustomClassification: "09", name: "美國為主" },
-      //     },
-      //     weight: 40
-      //   },
-      //   {
-      //     fund: {
-      //       asset_type: { code: "2550", name: "債券型" },
-      //       basic: {
-      //       // LipperID: "60045700",
-      //       bank_oid: "A813",
-      //       name: "富蘭克林坦伯頓全球投資系列-公司債基金 A 月配息 美元",
-      //       oid: "0825",
-      //       },
-      //       market: { CustomClassification: "09", name: "美國為主" },
-      //     },
-      //     weight: 60
-      //   },
-      // ]
-
-      // this.investmentAmount =  this.personalPortfolio.map(fund=>fund.weight*1000)
-      // console.log('investmentAmount:Array:', this.investmentAmount)
       this.cusBudget();
       this.initPorfolio = [...this.personalPortfolio]
       this.initAmount = [...this.investmentAmount]
       this.$nextTick(() => {
-        // this.personalPortfolio = JSON.parse(JSON.stringify(this.portData || []));
-        
         
         this.isSubmit = false
         });
@@ -246,7 +216,7 @@ export default {
       return filteredMarket[0].pool
     },
     calcPercent() {
-      console.log('calcPercent')
+      // console.log('calcPercent')
       var data = [];
       this.investmentAmount.forEach((obj, key) => {
         var calcValue = (obj / this.sumEditBudget()) * 100;
@@ -260,7 +230,7 @@ export default {
       } else if (tempTotalPercent > 100) {
         data[data.length - 1] = data[data.length - 1] - (tempTotalPercent - 100);
       }
-      console.log('calcPercent data:',data)
+      // console.log('calcPercent data:',data)
       return data;
     },
     cusBudget () {
@@ -270,15 +240,12 @@ export default {
         if (this.budget > 30000000) this.budget = 30000000;
         this.$nextTick(() => {
           this.investmentAmount = this.personalPortfolio.map(fund=>this.setPercentage(fund.weight, 0, false)*this.budget/100)
-          // this.personalPortfolio.forEach((obj, key) => {
-          //   this.investmentAmount[key] = (this.budget * this.setPercentage(obj.weight, 0, false)) / 100;
-          // });
         });
       }else{//EC account
         this.budget = 0
         
         this.personalPortfolio.forEach((obj, key) => {
-          console.log('obj.MarketValue:',obj.MarketValue)
+          // console.log('obj.MarketValue:',obj.MarketValue)
           this.investmentAmount[key] = obj.MarketValue
           this.budget += obj.MarketValue
         });
@@ -321,59 +288,17 @@ export default {
     },
     deleteFund (index) {
       // 需同時修改'personalPortfolio', 'investmentAmount'
-      // if (this.personalPortfolio.length <= 3) {
-      //   alert("自訂基金最少為 3 組！");
-      //   return;
-      // }
+      if (this.personalPortfolio.length <= 3) {
+        alert("自訂基金最少為 3 組！")
+        return
+      }
       this.isDelete = true;
-      this.personalPortfolio.splice(index, 1);
-      this.investmentAmount.splice(index, 1);
+      this.personalPortfolio.splice(index, 1)
+      this.investmentAmount.splice(index, 1)
       this.$nextTick(() => {
-        this.isDelete = false;
-      });
-    },
-
-    // async setLipperID (index) {
-    //   if (this.isDelete) return;
-    //   var type = this.personalPortfolio[index].fund.asset_type;
-    //   var market = this.personalPortfolio[index].fund.market;
-    //   var fund = this.personalPortfolio[index].fund.basic;
-    //   var filter1, filter2, filter3;
-
-    //   await new Promise((resolve) => {
-    //     filter1 = this.fundPool.filter((obj) => {
-    //       return obj.code == type.code;
-    //     });
-
-    //     // console.log("filter1:", filter1);
-    //     resolve();
-    //   });
-
-    //   await new Promise((resolve) => {
-    //     if (filter1 && filter1.length > 0) {
-    //       // console.log("market:", market, "fund:", fund);
-    //       filter2 = filter1[0].markets.filter((obj) => {
-    //         return obj.CustomClassification == market.CustomClassification;
-    //       });
-    //       // console.log("filter2:", filter2);
-    //     }
-    //     resolve();
-    //   });
-
-    //   await new Promise((resolve) => {
-    //     if (filter2 && filter2.length > 0) {
-    //       filter3 = filter2[0].Funds.filter((obj) => {
-    //         return obj.bank_oid == fund.bank_oid;
-    //       });
-    //       console.log("filter3:", filter3);
-
-    //       this.$nextTick(() => {
-    //         this.personalPortfolio[index].fund.basic.LipperID = filter3[0].LipperID || "";
-    //       });
-    //     }
-    //     resolve();
-    //   });
-    // }
+        this.isDelete = false
+      })
+    }
 
   }
 }

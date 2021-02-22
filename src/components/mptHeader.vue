@@ -22,17 +22,17 @@
           <div class="logo-text">富蘭克林‧國民的基金</div>
         </a>
       </div>
-      <nav class="navBar" v-if="navbarShow" :class="{ show: navbarShow }">
+      <nav class="navBar" v-if="$route.name !== 'home'" :class="{ show: navbarShow }">
         <ul>
           <li>Hi, {{username}} 您的風險屬性</li>
           <li v-if="isEditable">
-            <select v-model="risk_prop">
-              <option selected="selected">穩健</option>
+            <select v-model="risk_map[rr_value]">
               <option>積極</option>
+              <option>穩健</option>
               <option>保守</option>
             </select>
           </li>
-          <li v-else>{{risk_prop}}</li>
+          <li v-else>{{risk_map[rr_value]}}</li>
         </ul>
       </nav>
       <!--手機menu按鍵-->
@@ -57,24 +57,25 @@ import { mapFields } from 'vuex-map-fields'
 export default {
   data () {
     return {
-      risk_types: ['積極','穩健','保守'],//v-for來動態生成帶有客戶default屬性的options
       options: '',
       selectName: '',
       menuBtnActive: false, //這兩個啥意思?
       navbarShow: false, //這兩個啥意思?
       risk_map: {
-        '積極':5,
-        '穩健':4,
-        '保守':3
+        5:'積極',
+        4:'穩健',
+        3:'保守'
       }
     }
   },
   computed: {
     ...mapState(['isEditable','username']),
-    ...mapFields(['risk_prop', 'rr_value' ])
+    ...mapFields(['risk_prop', 'rr_value' ,'rr_param'])
   },
   props: ['activeNumber'],
+
   mounted () {
+    console.log('header mounted $route:',this.$route.name)
     if(this.$route.name !== 'home'){
       this.navbarShow = true
     }
@@ -95,11 +96,7 @@ export default {
     }
   },
   watch: {
-    risk_prop () {
-      console.log('風險屬性:', this.risk_prop)
-      this.rr_value = this.risk_map[risk_prop]
-      console.log('this.rr_value:', this.rr_value)
-    }
+
   }
 }
 </script>

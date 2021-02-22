@@ -227,7 +227,8 @@ export default {
       "token",
       "IdNo",
       "Passwd",
-      "client_ip"
+      "client_ip",
+      'rr_value'
     ]),
     loginData() {
       return {
@@ -360,6 +361,7 @@ export default {
         this.isEC = true;
         this.BfNo = login.Result.BfNo;
         this.token = login.Result.Token;
+        this.rr_value = login.Result.RiskType;
         console.log('EC token:',this.token)
         this.$nextTick(() => {
           this.$cookies.set("mptLogin", {

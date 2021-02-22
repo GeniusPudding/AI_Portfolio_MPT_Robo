@@ -31,16 +31,16 @@ export default {
   components: {report, saveBtn},
   computed: {
     ...mapState(['user_id', 'BfNo','rr_value', 'IdNo', 'client_ip'])
-  }
-  // methods: {
-  //   async getResults(){//DEBUGH
-  //     if(this.BfNo!==0){//EC customers
-  //       return await this.$api.getEC('/backrest',this.rr_param,this.authorizationHeader)
-  //     }else{
-  //       return await this.$api.getWF09('/backrest',this.rr_param,this.authorizationHeader)
-  //     }
-  //   }
+  },
+  methods: {
+    async getResults(){//DEBUGH
+      if(this.BfNo!==0){//EC customers
+        return await this.$api.getEC('/backrest',this.rr_param,this.authorizationHeader)
+      }else{
+        return await this.$api.getWF09('/backrest',this.rr_param,this.authorizationHeader)
+      }
+    }
 
-  // }
+  }
 }
 </script>

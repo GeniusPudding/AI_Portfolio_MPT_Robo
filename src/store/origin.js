@@ -1,17 +1,20 @@
 let data = {
     client_ip: '',
+    recommendedSource: 'tv',
     BfNo: 0,
     token: '',
     questionnaire: 0,
     username: "親愛的EC客戶",
     user_id: "",
-    risk_prop: "穩健",
     rr_value: 3,
+    rr_param: {"rr_value": 3},
     useMail: true,
-    // authorizationHeader: {},
+    authorizationHeader: {},
     fundPool: [
         //{type: [{marketType: [fundName]}] }
     ],
+    initPorfolio: [],
+    initAmount: [],
     investmentAmount: [
         //對應personalPortfolio的投資金額 可由用戶修改
     ],

@@ -32,7 +32,7 @@ export const postWF09 = (url, data, header) => {
     return axiosWF09({
         url: url,
         method: 'post',
-        header: header,
+        headers: header,
         data:data
     })
 }

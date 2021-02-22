@@ -7,50 +7,18 @@
           <li>市場</li>
           <li>基金名稱</li>
           <li>投資比重</li>
-          <li>投資金額</li>
         </ol>
       </li>
       <li class="tbody">
-        <ol class="tr">
-          <li data-title="類型">債券</li>
-          <li data-title="市場">高收益債券型</li>
+        <ol class="tr" v-for="(fundItem, $index) in personalPortfolio" :key="$index">
+          <li data-title="類型">{{fundItem.type}}</li>
+          <li data-title="市場">{{fundItem.market}}</li>
           <li data-title="基金名稱">
             <p>
-              6509 富蘭克林華美新興趨勢傘型基金之積極回報債券組合基金 累積型
-              新台幣
+              {{`${fundItem.fund_id} ${fundItem.name}`}}
             </p>
           </li>
-          <li data-title="投資比重">5%</li>
-          <li data-title="投資金額">5,000</li>
-        </ol>
-        <ol class="tr">
-          <li data-title="類型">債券</li>
-          <li data-title="市場">公債型</li>
-          <li data-title="基金名稱">
-            <p>
-              A873 富蘭克林坦伯頓全球投資系列-全球債券總報酬基金 A 累積型 美元
-            </p>
-          </li>
-          <li data-title="投資比重">40%</li>
-          <li data-title="投資金額">40,000</li>
-        </ol>
-        <ol class="tr">
-          <li data-title="類型">股票</li>
-          <li data-title="市場">全球股票型</li>
-          <li data-title="基金名稱">
-            <p>A829 富蘭克林坦伯頓全球投資系列-成長(歐元)基金 A 累積型 歐元</p>
-          </li>
-          <li data-title="投資比重">43%</li>
-          <li data-title="投資金額">43,000</li>
-        </ol>
-        <ol class="tr">
-          <li data-title="類型">股票</li>
-          <li data-title="市場">健康醫療股票型</li>
-          <li data-title="基金名稱">
-            <p>6529 富蘭克林華美全球醫療保健基金 累積型 新台幣</p>
-          </li>
-          <li data-title="投資比重">12%</li>
-          <li data-title="投資金額">12,000</li>
+          <li data-title="投資比重">{{fundItem.weight}}</li>         
         </ol>
       </li>
     </ul>
@@ -61,9 +29,36 @@ import { mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 export default {
   computed: {
-    ...mapState(['user_id', 'BfNo','rr_value', 'IdNo', 'client_ip']),
-    ...mapFields(['isEditable', 'fundPool', 'investmentAmount', 'token',
-    'personalPortfolio', 'budget','isCheckingEmpty']),
+    ...mapState([ 'BfNo', 'rr_param', 'recommendedSource']),
+    ...mapFields(['personalPortfolio', 'authorizationHeader']),
   },
+  async mounted(){
+    console.log('recom authorizationHeader:',this.authorizationHeader)
+    console.log('recom personalPortfolio:',this.personalPortfolio)
+
+    let sources = await this.getRecommendedList()
+    console.log('getRecommendedList res:',sources)
+    this.personalPortfolio = sources[this.recommendedSource].portfolio
+    console.log('getRecommendedList personalPortfolio:',this.personalPortfolio)
+  },
+  methods:{
+    async getRecommendedList(){
+      let fund_list = this.personalPortfolio.map(fund=>fund.fund_id)
+      console.log('fund_list:',fund_list)
+      let body = {
+        ...this.rr_param,
+        "fund_list":fund_list
+      }
+      let res
+      if(this.BfNo!==0){//EC customers
+        res = await this.$api.postEC('/recom',body,this.authorizationHeader)
+
+      }else{
+        console.log('check authorizationHeader:',this.authorizationHeader)
+        res = await this.$api.postWF09('/recom',body,this.authorizationHeader)
+      }
+      return  res.Result
+    }
+  }
 }
 </script>>
