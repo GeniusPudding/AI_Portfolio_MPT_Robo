@@ -8,6 +8,7 @@ let data = {
     risk_prop: "穩健",
     rr_value: 3,
     useMail: true,
+    authorizationHeader: {},
     fundPool: [
         //{type: [{marketType: [fundName]}] }
     ],

@@ -13,38 +13,38 @@
       </li>
       <li class="tbody">
         <ol class="tr" v-for="(fundItem, $index) in personalPortfolio" :key="$index">
-          <Fragment v-if="fundItem.fund.basic.name!==''||!isCheckingEmpty">
+          <Fragment v-if="fundItem.name!==''||!isCheckingEmpty">
           <li data-title="類型">
-            <select  v-model="fundItem.fund.asset_type" @change="clearLipperID($index)">
+            <select  v-model="fundItem.type" @change="changeFund(fundItem)">
               <option v-for="option in editAsset"
                :value="option"  
                :key="option.code">{{option.name}}</option>
             </select> 
           </li>
           <li data-title="市場">
-            <select v-model="fundItem.fund.market"
-                @change="clearLipperID($index)"
-                :disabled="cusMarket(fundItem.fund.asset_type).length == 0">
-              <option v-for="option in cusMarket(fundItem.fund.asset_type)" 
+            <select v-model="fundItem.market"
+                @change="changeFund(fundItem)"
+                :disabled="cusMarket(fundItem.type).length == 0">
+              <option v-for="option in cusMarket(fundItem.type)" 
                   :value="{
-                    CustomClassification: option.CustomClassification,
-                    name: option.market
+                    
+                    name: option.name
                   }"
-                  :key="option.CustomClassification">{{ option.market }}</option>
+                  :key="option.name">{{ option.name }}</option>
             </select> 
           </li>
           <li data-title="基金名稱">
-            <select v-model="fundItem.fund.basic"
-                @change="setLipperID($index)"
-                :disabled="cusFund($index, fundItem.fund.market).length == 0">
-              <option v-for="option in cusFund($index, fundItem.fund.market)" 
+            <select v-model="fundItem.name"
+                @change="changeFund(fundItem)"
+                :disabled="cusFund(fundItem).length == 0">
+              <option v-for="option in cusFund(fundItem)" 
                   :value="{
-                    name: option.FundName,
-                    LipperID: option.LipperID,
-                    oid: option.OID,
-                    bank_oid: option.bank_oid
+                    currency: option.currency,
+                    rr: option.rr,
+                    name: option.fund.name,
+                    oid: option.fund.id,
                   }"
-                  :key="option.FundName">{{ `${option.bank_oid} ${option.FundName}` }}</option>
+                  :key="option.fund.id">{{ `${option.fund.name}` }}</option>
             </select> 
           </li>
           <li data-title="投資比重">
@@ -85,22 +85,26 @@ export default {
       isTesting: false,
       isDelete: false,
       isSubmit: false,
+      rr_param: {}
     }
   },
   components: { Fragment },
   computed: {
-    ...mapState(['user_id', 'BfNo', 'token','rr_value']),
-    ...mapFields(['isEditable', 'fundPool', 'investmentAmount', 'personalPortfolio', 'budget','isCheckingEmpty']),
+    ...mapState(['user_id', 'BfNo', 'token','rr_value', 'IdNo', 'client_ip']),
+    ...mapFields(['isEditable', 'fundPool', 'investmentAmount', 
+    'personalPortfolio', 'budget','isCheckingEmpty','authorizationHeader']),
     editAsset () {
       if (!this.fundPool) return []
       var asset = this.fundPool.map((obj) => {
-        return { code: obj.Code, name: obj.Name }
+        return { code: obj.code, name: obj.type }
       })
       return asset
     }
   },
   mounted (){
     console.log('fundlist mounted this.$route.name:', this.$route.name)
+    this.authorizationHeader = {"Authorization": 'Bearer '+this.token}
+    this.rr_param = {"rr_value": this.rr_value }
     if (this.$route.name === "myportfolio"){
       this.isEditable = true
       this.isCheckingEmpty = false
@@ -113,108 +117,133 @@ export default {
   },
   methods: {
     async getFundPool(){
-      console.log('getFundPool token:',this.token )
-      let headers = {
-        "Authorization": 'Bearer '+this.token
-      }
-      let param = {
-        "rr_value": this.rr_value 
-      }
       if(this.BfNo!==0){//EC customers
-        return await this.$api.getEC('/fundpool',param,headers)
+        return await this.$api.getEC('/fundpool',this.rr_param,this.authorizationHeader)
       }else{
-        return await this.$api.getWF09('/fundpool',param,headers)
+        return await this.$api.getWF09('/fundpool',this.rr_param,this.authorizationHeader)
       }   
     },
+    async getInitPortfolio () {
+      if(this.BfNo!==0){//EC customers
+        let header = {
+          ...this.authorizationHeader,
+          "x-ft-idno": this.IdNo,
+          "X-ft-clientip": this.client_ip,
+          "x-ft-apikey": "c6db7c09-3798-4ded-b851-c806f7066c2d",
+        }
+        let body = {
+          ...this.rr_param,
+          "bfNo": this.BfNo
+        }
+        let response = await this.$api.postEC('/init',body,header)
+        return response.Result.init.portfolio
+      }else{
+        let response = await this.$api.getWF09('/init',this.rr_param,this.authorizationHeader)
+        return response.Result.init.portfolio
+      }  
+    },
+
     async initList () {
       if (this.isSubmit) return;
       this.isSubmit = true;
       console.log("initdList")
       var pool = await this.getFundPool()
       
-      var testpool = pool.Result.fundpool
-      console.log("testing fundPool:", testpool)
+      this.fundPool = pool.Result.fundpool
+      console.log("testing fundPool:", this.fundPool)
 
-      let config = {
-        method: 'get',
+      // let config = {
+      //   method: 'get',
 
-        headers:{
-          'Authorization' : md5(`${today} Franklin`)
-        },
-      }
-      var originfundPool = await axios('https://www.jlf.com.tw/api/twb/fundpool',config)
-      this.fundpool = originfundPool.data.Result
-      console.log("origin fundPool:", this.fundPool)
+      //   headers:{
+      //     'Authorization' : md5(`${today} Franklin`)
+      //   },
+      // }
+      // var originfundPool = await axios('https://www.jlf.com.tw/api/twb/fundpool',config)
+      // this.fundPool = originfundPool//.data.Result
+      // console.log("origin fundPool:", originfundPool)
       // console.log("origin res:", this.fundPool.data.Result)
-      // var portfolio = await this.$api.wf09Get('/portfolio/search', this.user_id)
-      // console.log("portfolio:", portfolio)
-      // this.personalPortfolio = portfolio.Result;
-      this.personalPortfolio = [
-        {
-          fund: {
-            asset_type: { code: "02", name: "債券" },
-            basic: {
-              LipperID: "60045700",
-              bank_oid: "A813",
-              name: "富蘭克林坦伯頓全球投資系列-公司債基金 A 月配息 美元",
-              oid: "0825",
-            },
-            market: { CustomClassification: "09", name: "高收益債券型" },
-          },
-          weight: 40
-        },
-        {
-          fund: {
-            asset_type: { code: "02", name: "債券" },
-            basic: {
-            LipperID: "60045700",
-            bank_oid: "A813",
-            name: "富蘭克林坦伯頓全球投資系列-公司債基金 A 月配息 美元",
-            oid: "0825",
-            },
-            market: { CustomClassification: "09", name: "高收益債券型" },
-          },
-          weight: 60
-        },
-      ]
-      this.investmentAmount = [40000,60000]
+      this.personalPortfolio = await this.getInitPortfolio()
+      console.log("portfolio:", this.personalPortfolio)
+      // this.personalPortfolio = portfolio;
+
+
+      // this.personalPortfolio = [
+      //   {
+      //     fund: {
+      //       asset_type: { code: "2550", name: "債券型" },
+      //       basic: {
+      //         // LipperID: "60045700",
+      //         bank_oid: "A813",
+      //         name: "富蘭克林坦伯頓全球投資系列-公司債基金 A 月配息 美元",
+      //         oid: "0825",
+      //       },
+      //       market: { CustomClassification: "09", name: "美國為主" },
+      //     },
+      //     weight: 40
+      //   },
+      //   {
+      //     fund: {
+      //       asset_type: { code: "2550", name: "債券型" },
+      //       basic: {
+      //       // LipperID: "60045700",
+      //       bank_oid: "A813",
+      //       name: "富蘭克林坦伯頓全球投資系列-公司債基金 A 月配息 美元",
+      //       oid: "0825",
+      //       },
+      //       market: { CustomClassification: "09", name: "美國為主" },
+      //     },
+      //     weight: 60
+      //   },
+      // ]
+      // this.investmentAmount = [40000,60000]
       this.initPorfolio = [...this.personalPortfolio]
-      this.initAmount = [...this.investmentAmount]
+      
       this.$nextTick(() => {
         // this.personalPortfolio = JSON.parse(JSON.stringify(this.portData || []));
         this.cusBudget();
+        this.initAmount = [...this.investmentAmount]
         this.isSubmit = false
         });
 
     },
-    clearLipperID (index) {
-      if (this.personalPortfolio[index].fund.basic.LipperID) this.personalPortfolio[index].fund.basic.LipperID = "";
+    changeFund (fundItem) {
+      console.log('select fundItem:',fundItem)
     },
     cusMarket (key) {
+      console.log('key:',key)
       if (!this.fundPool) return [];
       var market = this.fundPool.filter((obj) => {
-        return obj.Code == key.code
+        return obj.type == key
       })
+      // console.log('cusMarket:',market)
+      console.log('cusMarket markets:',market[0].markets)
       if (market.length <= 0) return []
-      return market[0].Markets
+      return market[0].markets
     },
-    cusFund (index, key) {
+    cusFund (fundItem) {
+      var key = fundItem.market
+      console.log('key:',key)
       if (!this.fundPool || !key) return []
       
-      var type = this.personalPortfolio[index].fund.asset_type.code
+      var type = fundItem.type
       var market = this.fundPool.filter((obj) => {
-        return obj.Code == type
+        return obj.type == type
       })[0]
-      var fund = []
+      console.log('market:',market)
+      var filteredMarket = []
       if (market) {
-        fund = market.Markets.filter((obj) => {
-          return obj.CustomClassification == key.CustomClassification
+        filteredMarket = market.markets.filter((obj) => {
+          return obj.name == key
         })
-      }
-      if (fund.length <= 0) return []
-      return fund[0].Funds
+      } 
+      console.log('filteredMarket:',filteredMarket)
+      console.log('filteredMarket[0].pool:',filteredMarket[0].pool)
+      if (filteredMarket.length <= 0) return []
+      return filteredMarket[0].pool
     },
     calcPercent() {
+      console.log('calcPercent')
       var data = [];
       this.investmentAmount.forEach((obj, key) => {
         var calcValue = (obj / this.sumEditBudget()) * 100;
@@ -228,6 +257,7 @@ export default {
       } else if (tempTotalPercent > 100) {
         data[data.length - 1] = data[data.length - 1] - (tempTotalPercent - 100);
       }
+      console.log('calcPercent data:',data)
       return data;
     },
     cusBudget () {
@@ -266,16 +296,10 @@ export default {
         return;
       }
       this.personalPortfolio.push({
-        fund: {
-          asset_type: { code: "", name: "" },
-          basic: {
-            LipperID: "",
-            bank_oid: "",
-            name: "",
-            oid: "",
-          },
-          market: { CustomClassification: "", name: "" },
-        },
+        fund_id: '',
+        market: '',
+        name:　'',
+        type: '',
         weight: 0,
       });
       this.investmentAmount.push(5000)
@@ -294,47 +318,47 @@ export default {
       });
     },
 
-    async setLipperID (index) {
-      if (this.isDelete) return;
-      var type = this.personalPortfolio[index].fund.asset_type;
-      var market = this.personalPortfolio[index].fund.market;
-      var fund = this.personalPortfolio[index].fund.basic;
-      var filter1, filter2, filter3;
+    // async setLipperID (index) {
+    //   if (this.isDelete) return;
+    //   var type = this.personalPortfolio[index].fund.asset_type;
+    //   var market = this.personalPortfolio[index].fund.market;
+    //   var fund = this.personalPortfolio[index].fund.basic;
+    //   var filter1, filter2, filter3;
 
-      await new Promise((resolve) => {
-        filter1 = this.fundPool.filter((obj) => {
-          return obj.Code == type.code;
-        });
+    //   await new Promise((resolve) => {
+    //     filter1 = this.fundPool.filter((obj) => {
+    //       return obj.code == type.code;
+    //     });
 
-        // console.log("filter1:", filter1);
-        resolve();
-      });
+    //     // console.log("filter1:", filter1);
+    //     resolve();
+    //   });
 
-      await new Promise((resolve) => {
-        if (filter1 && filter1.length > 0) {
-          // console.log("market:", market, "fund:", fund);
-          filter2 = filter1[0].Markets.filter((obj) => {
-            return obj.CustomClassification == market.CustomClassification;
-          });
-          // console.log("filter2:", filter2);
-        }
-        resolve();
-      });
+    //   await new Promise((resolve) => {
+    //     if (filter1 && filter1.length > 0) {
+    //       // console.log("market:", market, "fund:", fund);
+    //       filter2 = filter1[0].markets.filter((obj) => {
+    //         return obj.CustomClassification == market.CustomClassification;
+    //       });
+    //       // console.log("filter2:", filter2);
+    //     }
+    //     resolve();
+    //   });
 
-      await new Promise((resolve) => {
-        if (filter2 && filter2.length > 0) {
-          filter3 = filter2[0].Funds.filter((obj) => {
-            return obj.bank_oid == fund.bank_oid;
-          });
-          console.log("filter3:", filter3);
+    //   await new Promise((resolve) => {
+    //     if (filter2 && filter2.length > 0) {
+    //       filter3 = filter2[0].Funds.filter((obj) => {
+    //         return obj.bank_oid == fund.bank_oid;
+    //       });
+    //       console.log("filter3:", filter3);
 
-          this.$nextTick(() => {
-            this.personalPortfolio[index].fund.basic.LipperID = filter3[0].LipperID || "";
-          });
-        }
-        resolve();
-      });
-    }
+    //       this.$nextTick(() => {
+    //         this.personalPortfolio[index].fund.basic.LipperID = filter3[0].LipperID || "";
+    //       });
+    //     }
+    //     resolve();
+    //   });
+    // }
 
   }
 }
