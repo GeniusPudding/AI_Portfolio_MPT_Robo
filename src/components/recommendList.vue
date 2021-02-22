@@ -56,3 +56,14 @@
     </ul>
   </div>
 </template>
+<script>
+import { mapState } from 'vuex'
+import { mapFields } from 'vuex-map-fields'
+export default {
+  computed: {
+    ...mapState(['user_id', 'BfNo','rr_value', 'IdNo', 'client_ip']),
+    ...mapFields(['isEditable', 'fundPool', 'investmentAmount', 'token',
+    'personalPortfolio', 'budget','isCheckingEmpty']),
+  },
+}
+</script>>

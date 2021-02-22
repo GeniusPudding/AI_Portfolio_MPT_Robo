@@ -134,7 +134,8 @@ export default {
           "bfNo": this.BfNo
         }
         let response = await this.$api.postEC('/init',body,header)
-        return response.Result.init.portfolio
+        console.log('response.Result.init.:',response.Result.init)
+        return response.Result.init
       }else{
         let response = await this.$api.getWF09('/init',this.rr_param,this.authorizationHeader)
         return response.Result.init.portfolio
@@ -196,14 +197,15 @@ export default {
       //   },
       // ]
 
-      this.investmentAmount =  this.personalPortfolio.map(fund=>fund.weight*1000)
-      console.log('investmentAmount:Array:', this.investmentAmount)
+      // this.investmentAmount =  this.personalPortfolio.map(fund=>fund.weight*1000)
+      // console.log('investmentAmount:Array:', this.investmentAmount)
+      this.cusBudget();
       this.initPorfolio = [...this.personalPortfolio]
-      
+      this.initAmount = [...this.investmentAmount]
       this.$nextTick(() => {
         // this.personalPortfolio = JSON.parse(JSON.stringify(this.portData || []));
-        this.cusBudget();
-        this.initAmount = [...this.investmentAmount]
+        
+        
         this.isSubmit = false
         });
 
@@ -224,22 +226,22 @@ export default {
     },
     cusFund (fundItem) {
       var key = fundItem.market
-      console.log('key:',key)
+      // console.log('key:',key)
       if (!this.fundPool || !key) return []
       
       var type = fundItem.type
       var market = this.fundPool.filter((obj) => {
         return obj.type == type
       })[0]
-      console.log('market:',market)
+      // console.log('market:',market)
       var filteredMarket = []
       if (market) {
         filteredMarket = market.markets.filter((obj) => {
           return obj.name == key
         })
       } 
-      console.log('filteredMarket:',filteredMarket)
-      console.log('filteredMarket[0].pool:',filteredMarket[0].pool)
+      // console.log('filteredMarket:',filteredMarket)
+      // console.log('filteredMarket[0].pool:',filteredMarket[0].pool)
       if (filteredMarket.length <= 0) return []
       return filteredMarket[0].pool
     },
@@ -262,14 +264,26 @@ export default {
       return data;
     },
     cusBudget () {
-      this.budget = Math.floor(this.budget / 1000) * 1000;
-      if (this.budget < 50000) this.budget = 50000;
-      if (this.budget > 30000000) this.budget = 30000000;
-      this.$nextTick(() => {
-        this.personalPortfolio.forEach((obj, key) => {
-          this.investmentAmount[key] = (this.budget * this.setPercentage(obj.weight, 0, false)) / 100;
+      if(this.BfNo===0){
+        this.budget = Math.floor(this.budget / 1000) * 1000;
+        if (this.budget < 50000) this.budget = 50000;
+        if (this.budget > 30000000) this.budget = 30000000;
+        this.$nextTick(() => {
+          this.investmentAmount = this.personalPortfolio.map(fund=>this.setPercentage(fund.weight, 0, false)*this.budget/100)
+          // this.personalPortfolio.forEach((obj, key) => {
+          //   this.investmentAmount[key] = (this.budget * this.setPercentage(obj.weight, 0, false)) / 100;
+          // });
         });
-      });
+      }else{//EC account
+        this.budget = 0
+        
+        this.personalPortfolio.forEach((obj, key) => {
+          console.log('obj.MarketValue:',obj.MarketValue)
+          this.investmentAmount[key] = obj.MarketValue
+          this.budget += obj.MarketValue
+        });
+      }
+
     },
     calcBudget(evt, index) {
       // console.log("value:", evt.target.value, "index:", index);
@@ -301,7 +315,7 @@ export default {
         market: '',
         name:　'',
         type: '',
-        weight: 0,
+        // weight: 0,
       });
       this.investmentAmount.push(5000)
     },
