@@ -261,6 +261,10 @@ export default {
           this.investmentAmount[key] = obj.MarketValue
           this.budget += obj.MarketValue
         });
+        this.personalPortfolio.forEach((obj, key) => {
+          obj.weight = this.calcPercent()[key]
+          console.log('obj.weight:',obj.weight)
+        });
       }
 
     },

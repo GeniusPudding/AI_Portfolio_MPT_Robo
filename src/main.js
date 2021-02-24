@@ -12,6 +12,7 @@ import VueApexCharts from "vue-apexcharts"
 import axios from './axios'
 import VueCookies from 'vue-cookies'
 import sharedFunction from './mixins/sharedFunction'
+import VueCurrencyFilter from 'vue-currency-filter'
 // import front from './mixins/front'
 // import newQuestionnaire from './mixins/newQuestionnaire'
 // import slickFunction from './mixins/slickFunction'
@@ -20,6 +21,14 @@ import sharedFunction from './mixins/sharedFunction'
 // Vue.mixin(newQuestionnaire)
 // Vue.mixin(slickFunction)
 // Vue.mixin(shared)
+Vue.use(VueCurrencyFilter,{
+    symbol : '$',
+    thousandsSeparator: ',',
+    fractionCount: 0,
+    fractionSeparator: '.',
+    symbolPosition: 'front',
+    symbolSpacing: true
+})
 Vue.mixin(sharedFunction)
 Vue.use(VueCookies)
 Vue.use(axios)

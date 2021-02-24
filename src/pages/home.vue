@@ -208,7 +208,7 @@ export default {
       // IdNo: "",
       // isSubmit: false,
       // Passwd: "",
-      username: "",
+      // username: "",
       email: "",
       cellphone: ""
     };
@@ -228,7 +228,8 @@ export default {
       "IdNo",
       "Passwd",
       "client_ip",
-      'rr_value'
+      'rr_value',
+      'username'
     ]),
     ECheaders (){
       return {

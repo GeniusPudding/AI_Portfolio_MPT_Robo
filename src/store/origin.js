@@ -35,7 +35,7 @@ let data = {
             name: "保守型"
         }
     ],
-    IdNo: "",
+    IdNo: "", //EC帳號
     Passwd: '',
     isSubmit: false,
     isEC: false,

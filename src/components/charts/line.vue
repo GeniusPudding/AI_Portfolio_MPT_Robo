@@ -1,50 +1,52 @@
 <template>
   <div class="LineChart">
-    <apexchart :type="chartOptions.chart.type"
-               :height="chartOptions.chart.height"
-               :options="chartOptions"
-               :series="series"></apexchart>
+    <apexchart
+      :type="chartOptions.chart.type"
+      :height="chartOptions.chart.height"
+      :options="chartOptions"
+      :series="series"
+    ></apexchart>
   </div>
 </template>
 
 <script>
-import VueApexCharts from 'vue-apexcharts'
+import VueApexCharts from "vue-apexcharts";
 export default {
-  name: 'LineChart',
-  props: ['seriesData', 'titleY', 'height', 'tick'],
+  name: "LineChart",
+  props: ["seriesData", "titleY", "height", "tick"],
   components: {
     apexchart: VueApexCharts
   },
-  data () {
-    return {}
+  data() {
+    return {};
   },
   computed: {
     // ...mapState(['resultOneData']),
-    series () {
-      return this.seriesData ? this.seriesData : []
+    series() {
+      return this.seriesData ? this.seriesData : [];
     },
-    chartOptions () {
+    chartOptions() {
       var title = {
-        text: this.titleY ? this.titleY : '',
+        text: this.titleY ? this.titleY : "",
         rotate: 90,
         offsetX: 0,
         style: {
-          fontSize: '14px',
-          fontFamily: '微軟正黑體',
+          fontSize: "14px",
+          fontFamily: "微軟正黑體",
           fontWeight: 500,
-          cssClass: 'apexcharts-yaxis-title'
+          cssClass: "apexcharts-yaxis-title"
         }
-      }
+      };
       return {
         // 左上標題
         // title: {
         //   text: null,
         // },
         // 線圖顏色順序
-        colors: ['#7cb5ec', '#444349'],
+        colors: ["#7cb5ec", "#444349"],
         chart: {
           height: this.height ? this.height : 500, // 圖表高度
-          type: 'line', // 圖表類型
+          type: "line", // 圖表類型
           // 圖表縮放功能
           zoom: {
             enabled: false
@@ -56,13 +58,13 @@ export default {
         },
         // 線圖粗細
         stroke: {
-          curve: 'straight',
+          curve: "straight",
           width: 1.5
         },
         // 背景半透明交錯
         grid: {
           row: {
-            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
             opacity: 0.5
           }
         },
@@ -71,7 +73,7 @@ export default {
           markers: {
             width: 50,
             height: 5,
-            strokeColor: '#fff',
+            strokeColor: "#fff",
             radius: 12
           },
           itemMargin: {
@@ -80,7 +82,7 @@ export default {
           }
         },
         xaxis: {
-          type: 'datetime'
+          type: "datetime"
         },
         yaxis: {
           title,
@@ -88,29 +90,29 @@ export default {
           // min: 5000,
           // max: 35000,
           labels: {
-            formatter: (value) => {
-              if (value) return `${value.toFixed(2)}%`
-              return value
+            formatter: value => {
+              if (value) return `${value.toFixed(2)}%`;
+              return value;
             },
             style: {
               colors: [],
-              fontSize: '12px',
-              fontFamily: '微軟正黑體',
+              fontSize: "12px",
+              fontFamily: "微軟正黑體",
               fontWeight: 400,
-              cssClass: 'apexcharts-yaxis-label'
+              cssClass: "apexcharts-yaxis-label"
             }
           }
         },
         tooltip: {
           items: {
-            display: 'inline-block'
+            display: "inline-block"
           },
           x: {
-            format: 'yyyy/MM/dd'
+            format: "yyyy/MM/dd"
           }
         }
-      }
+      };
     }
   }
-}
+};
 </script>

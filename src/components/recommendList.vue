@@ -30,7 +30,7 @@ import { mapFields } from 'vuex-map-fields'
 export default {
   computed: {
     ...mapState([ 'BfNo', 'rr_param', 'recommendedSource','personalPortfolio']),
-    ...mapFields([,'recommendedPortfolio' ,'authorizationHeader']),
+    ...mapFields(['recommendedPortfolio', 'authorizationHeader']),
     body(){
       let fund_list = this.personalPortfolio.map(fund=>fund.fund_id)
       console.log('fund_list:',fund_list)
