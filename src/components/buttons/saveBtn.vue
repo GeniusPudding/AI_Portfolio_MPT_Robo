@@ -53,9 +53,9 @@ export default {
   methods: {
       async savePortfolio() {
         if(this.BfNo!==0){//EC customers
-          return await this.$api.postEC('/create',this.body,this.authorizationHeader)
+          await this.$api.postEC('/create',this.body,this.authorizationHeader)
         }else{
-          return await this.$api.postWF09('/create',this.body,this.authorizationHeader)
+          await this.$api.postWF09('/create',this.body,this.authorizationHeader)
         }
         this.toggleModal('warning')
       }

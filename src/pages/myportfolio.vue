@@ -4,7 +4,7 @@
     <section class="item combination">
       <div class="container">
         <h2 class="tit-type2" title="您的基金組合">您的基金組合</h2>
-        <fundList></fundList>
+        <fundList isEditableProp></fundList>
         <div class="btnArea">
           <div class="btn">
             <a href="" @click.prevent="jumpCheck()" title="取得建議">取得建議</a>

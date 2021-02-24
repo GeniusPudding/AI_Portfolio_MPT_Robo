@@ -13,6 +13,7 @@
       </li>
       <li class="tbody">
         <ol class="tr" v-for="(fundItem, $index) in personalPortfolio" :key="$index">
+          <Fragment v-if="isEditableProp">
           <Fragment v-if="fundItem.name!==''||!isCheckingEmpty">
           <li data-title="類型">
             <select  v-model="fundItem.type" @change="changeFund(fundItem)">
@@ -43,16 +44,28 @@
             <input type="text" disabled="disabled" class="text-center isEdit" :value="calcPercent()[$index]"/>
             %
           </li>
+          
           <li data-title="投資金額">
-            <input type="number" step="1000" :disabled="!isEditable" min="5000" class="text-center" @blur="calcBudget($event, $index)" v-model.number="investmentAmount[$index]"/>
+            <input type="number" step="1000" min="5000" class="text-center" @blur="calcBudget($event, $index)" v-model.number="investmentAmount[$index]"/>
             元            
           </li>
-          <li v-if="isEditable" data-title=""><a href="" class="btn" @click.prevent="deleteFund($index)">刪除</a></li>
+          <li data-title=""><a href="" class="btn" @click.prevent="deleteFund($index)">刪除</a></li>
+          </Fragment>
+          </Fragment>
+          <Fragment v-else>
+          <li data-title="類型">{{fundItem.type}}</li>
+          <li data-title="市場">{{fundItem.market}}</li>
+          <li data-title="基金名稱">
+            <p>
+              {{`${fundItem.fund_id} ${fundItem.name}`}}
+            </p>  
+          <li data-title="投資比重">{{calcPercent()[$index]}}</li>
+          <li data-title="投資金額">{{Math.round(investmentAmount[$index])}}元</li>
           </Fragment>
         </ol>
 
       </li>
-      <li v-if="isEditable" class="more">
+      <li v-if="isEditableProp" class="more">
         <a href="" @click.prevent="addFund" class="btn">新增基金</a>  
         <a href="" @click.prevent="originFund" class="btn">原始庫存</a>
       </li>
@@ -70,6 +83,9 @@ import md5 from 'blueimp-md5'
 import dayjs from 'dayjs'
 const today = dayjs(new Date()).format('YYYY-MM-DD')
 export default {
+  props: {
+    isEditableProp : Boolean
+  },
   data () {
     return {
       isTesting: false,
@@ -109,6 +125,7 @@ export default {
     }
   },
   mounted (){
+    this.isEditable = this.isEditableProp
     console.log('fundlist mounted this.$route.name:', this.$route.name)
     if(this.token===''){
       this.token =  this.$cookies.get('mptLogin').token
@@ -117,20 +134,12 @@ export default {
     // console.log('authorizationHeader:',this.authorizationHeader)
     this.rr_param = {"rr_value": this.rr_value }
     if (this.$route.name === "myportfolio"){
-      this.isEditable = true
       this.isCheckingEmpty = false
       this.initList() 
     } else {
-      // console.log('Debug personalPortfolio:', this.personalPortfolio)
-      this.isEditable = false
+      console.log('Debug personalPortfolio:', this.personalPortfolio)
     }
     
-  },
-  beforeRouteEnter(to, from ,next){
-    next(vm=>{
-      console.log('beforeRouteEnter fundlist from:',from)
-      console.log('beforeRouteEnter fundlist to:',to)
-    })
   },
   methods: {
     async getFundPool(){
@@ -142,17 +151,6 @@ export default {
     },
     async getInitPortfolio () {
       if(this.BfNo!==0){//EC customers
-        // let header = {
-        //   ...this.authorizationHeader,
-        //   "Content-Type": "application/json",
-        //   "x-ft-idno": this.IdNo,
-        //   "x-ft-clientip": this.client_ip,
-        //   "x-ft-apikey": "c6db7c09-3798-4ded-b851-c806f7066c2d",
-        // }
-        // let body = {
-        //   ...this.rr_param,
-        //   "bfNo": this.BfNo
-        // }
         let response = await this.$api.postEC('/init',this.body,this.header)
         // console.log('response.Result.init.:',response.Result.init)
         return response.Result.init
@@ -161,7 +159,6 @@ export default {
         return response.Result.init.portfolio
       }  
     },
-
     async initList () {
       if (this.isSubmit) return
       this.isSubmit = true;
@@ -279,7 +276,6 @@ export default {
       var sum = this.investmentAmount.reduce((a, b) => {
         return a + Number(b);
       }, 0);
-      // console.log("sum:", sum);
       return sum == 0 ? this.budget : sum;
     },
     originFund () {
@@ -287,7 +283,6 @@ export default {
       this.investmentAmount = [...this.initAmount]
     },
     addFund () {
-      // 需同時修改'personalPortfolio', 'investmentAmount' , 看一下後端傳來的資料結構
       if (this.personalPortfolio.length >= 5) {
         alert("自訂基金最多為 5 組！");
         return;
@@ -302,11 +297,6 @@ export default {
       this.investmentAmount.push(5000)
     },
     deleteFund (index) {
-      // 需同時修改'personalPortfolio', 'investmentAmount'
-      if (this.personalPortfolio.length <= 3) {
-        alert("自訂基金最少為 3 組！")
-        return
-      }
       this.isDelete = true;
       this.personalPortfolio.splice(index, 1)
       this.investmentAmount.splice(index, 1)

@@ -26,7 +26,7 @@
         <ul>
           <li>Hi, {{username}} 您的風險屬性</li>
           <li v-if="isEditable">
-            <select v-model="risk_map[rr_value]">
+            <select v-model="risk_map[rr_value]" @change="changeRR($event)">
               <option>積極</option>
               <option>穩健</option>
               <option>保守</option>
@@ -65,6 +65,11 @@ export default {
         5:'積極',
         4:'穩健',
         3:'保守'
+      },
+      risk_inv_map: {
+        '積極':5,
+        '穩健':4,
+        '保守':3
       }
     }
   },
@@ -81,6 +86,15 @@ export default {
     }
   },
   methods: {
+    changeRR (event) {
+      console.log('changeRR:',event.target.value)
+      this.rr_value = this.risk_inv_map[event.target.value]
+      console.log('changeRR value:',this.rr_value)
+      this.$nextTick(() => {
+        this.rr_param = {"rr_value": this.rr_value}
+        console.log('action rr_param:',this.rr_param)
+      })
+    },
     toggleMobileNavbar () {
       // console.log('toggleMobileNavbar:')
       this.menuBtnActive === false
@@ -95,8 +109,5 @@ export default {
       this.navbarShow = false
     }
   },
-  watch: {
-
-  }
 }
 </script>
