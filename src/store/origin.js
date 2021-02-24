@@ -1,6 +1,6 @@
 let data = {
     client_ip: '',
-    recommendedSource: 'tv',
+    recommendedSource: 'tv',//tv or mpt
     BfNo: 0,
     token: '',
     questionnaire: 0,
