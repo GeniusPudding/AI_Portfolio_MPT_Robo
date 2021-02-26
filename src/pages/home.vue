@@ -202,13 +202,8 @@
               </div>
             </div>
           </div>
-          
         </slot>
-
-
       </modal>
-
-
     </div>
   </section>
 </template>
@@ -244,17 +239,17 @@ export default {
       "IdNo",
       "Passwd",
       "client_ip",
-      'rr_value',
-      'username'
+      "rr_value",
+      "username"
     ]),
-    ECheaders (){
+    ECheaders() {
       return {
         "x-ft-idno": this.loginData.IdNo,
         "X-ft-clientip": this.client_ip,
         "x-ft-apikey": "c6db7c09-3798-4ded-b851-c806f7066c2d",
         "Content-Type": "application/json"
         // app:4750b422-8dec-4162-a855-5afe9626a4b7, web: c6db7c09-3798-4ded-b851-c806f7066c2d
-      }
+      };
     },
     loginData() {
       return {
@@ -275,9 +270,9 @@ export default {
     this.getIP();
   },
   methods: {
-    openTaste () {
-      this.toggleModal('member')
-      this.toggleModal('tasteModal')
+    openTaste() {
+      this.toggleModal("member");
+      this.toggleModal("tasteModal");
     },
     async getIP() {
       let res = await fetch("https://wt.franklin.com.tw/areas/myip/myip.aspx");
@@ -367,7 +362,7 @@ export default {
         this.BfNo = login.Result.BfNo;
         this.token = login.Result.Token;
         this.rr_value = login.Result.RiskType;
-        console.log('EC token:',this.token)
+        console.log("EC token:", this.token);
         this.$nextTick(() => {
           this.$cookies.set("mptLogin", {
             IdNo: this.IdNo,
