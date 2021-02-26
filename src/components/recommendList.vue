@@ -1,5 +1,6 @@
 <template>
-  <div class="fund-item-area">
+  <loading v-if="!isLoaded" />
+  <div v-else class="fund-item-area">
     <ul class="noselect">
       <li class="thead">
         <ol class="tr">
@@ -27,10 +28,12 @@
 <script>
 import { mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
+import loading from './includes/loading'
 export default {
+  components: {loading},
   computed: {
-    ...mapState([ 'BfNo', 'rr_param', 'recommendedSource','personalPortfolio']),
-    ...mapFields(['recommendedPortfolio', 'authorizationHeader']),
+    ...mapState(['BfNo', 'rr_param', 'recommendedSource','personalPortfolio']),
+    ...mapFields(['isLoaded', 'recommendedPortfolio', 'authorizationHeader']),
     body(){
       let fund_list = this.personalPortfolio.map(fund=>fund.fund_id)
       console.log('fund_list:',fund_list)
@@ -57,15 +60,21 @@ export default {
       //   ...this.rr_param,
       //   "fund_list":fund_list
       // }
-      let res
-      if(this.BfNo!==0){//EC customers
-        res = await this.$api.postEC('/recom',this.body,this.authorizationHeader)
+      try {
+        let res
+        if(this.BfNo!==0){//EC customers
+          res = await this.$api.postEC('/recom',this.body,this.authorizationHeader)
 
-      }else{
-        console.log('check authorizationHeader:',this.authorizationHeader)
-        res = await this.$api.postWF09('/recom',this.body,this.authorizationHeader)
+        }else{
+          console.log('check authorizationHeader:',this.authorizationHeader)
+          res = await this.$api.postWF09('/recom',this.body,this.authorizationHeader)
+        }
+        return  res.Result
+      } catch (error) {
+        this.$api.handlerErr(error);
+      } finally {
+        this.isLoaded = true;
       }
-      return  res.Result
     }
   }
 }

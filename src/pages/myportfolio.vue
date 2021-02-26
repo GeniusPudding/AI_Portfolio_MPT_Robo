@@ -27,7 +27,7 @@ export default {
   components: {fundList},
   computed: {
     ...mapState(['isCheckingEmpty']),
-    ...mapFields(['personalPortfolio','isCheckingEmpty','investmentAmount'])
+    ...mapFields(['isLoaded','personalPortfolio','isCheckingEmpty','investmentAmount'])
   },
   methods: {
     // setPercentage (val, quantile, isSign) {
@@ -36,6 +36,7 @@ export default {
     //   return percent
     // },
     jumpCheck (){
+      if(!this.isLoaded) return
       console.log('jump check this.personalPortfolio:',this.personalPortfolio)
 
       // let emptyIndex = []
@@ -55,6 +56,7 @@ export default {
       })
 
       this.$nextTick(() => {
+        this.isLoaded = false
         this.$router.push('compare')
       })
 

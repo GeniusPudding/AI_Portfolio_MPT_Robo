@@ -1,4 +1,5 @@
 let data = {
+    isLoaded: false,
     client_ip: '',
     recommendedSource: 'tv',//tv or mpt
     BfNo: 0,

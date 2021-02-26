@@ -2,7 +2,7 @@
   <Fragment>
     <modal ref="warning" :can-close="true" class="md">
       <slot slot="infoArea">
-        <div class="alertModal">
+        <div class="alertModal step1">
           <div class="alertModal-icon">
             <!-- <i class="fas fa-exclamation-circle"></i> -->
             <i class="far fa-calendar-check"></i>

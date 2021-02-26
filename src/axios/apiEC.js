@@ -1,8 +1,9 @@
 /* eslint-disable */
 import axios from "axios";
 
-const ECLoginbaseURL = location.hostname == 'etrade.fraklin.com.tw' ? 'https://etrade.fraklin.com.tw/v2' : 'https://wt.franklin.com.tw:8080/v2'
-const ECbaseURL = 'http://10.20.1.7/ec/'
+// const ECLoginbaseURL = location.hostname == 'etrade.fraklin.com.tw' ? 'https://etrade.fraklin.com.tw/v2' : 'https://wt.franklin.com.tw:8080/v2'
+const ECbaseURL = location.hostname == 'localhost' 
+    ? 'http://10.20.1.7/ec/' : 'http:/210.65.139.185/ec/'
 export default function $axios(options) {
     console.log('EC options:', options)
     return new Promise((resolve, reject) => {

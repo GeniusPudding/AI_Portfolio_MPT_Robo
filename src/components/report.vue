@@ -1,5 +1,6 @@
 <template>
-  <div class="fundrpt-item-area">
+  <loading v-if="!isLoaded" />
+  <div v-else class="fundrpt-item-area">
     <article>
       <h3 title="基金投資組合成長圖">基金投資組合成長圖</h3>
       <lineChart :seriesData="lineChartData"></lineChart>
@@ -54,12 +55,14 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import { mapFields } from 'vuex-map-fields'
 import lineChart from "./charts/line";
 import barChart from "./charts/bar";
 import tdNum from "./tdNum";
 import portfolioAnalysis from "./report/portfolioAnalysis";
 import portfolioPerformance from "./report/portfolioPerformance";
 import monthlyPerformance from "./report/monthlyPerformance";
+import loading from "./includes/loading.vue";
 export default {
   data() {
     return {
@@ -82,7 +85,8 @@ export default {
     barChart,
     portfolioAnalysis,
     portfolioPerformance,
-    monthlyPerformance
+    monthlyPerformance,
+    loading
   },
   computed: {
     ...mapState([
@@ -91,6 +95,7 @@ export default {
       "recommendedPortfolio",
       "personalPortfolio"
     ]),
+    ...mapFields(["isLoaded"]),
     body() {
       return {
         custom_portfolio: this.personalPortfolio,
@@ -126,18 +131,18 @@ export default {
     console.log("this.customReturns:", this.customReturns);
     console.log("this.recomReturns:", this.recomReturns);
 
-    let fundLine = []
-    let fundLine2 = []
-    let fundBar = []
-    let fundBar2 = []
-    let daily, daily2, yearly, yearly2
+    let fundLine = [];
+    let fundLine2 = [];
+    let fundBar = [];
+    let fundBar2 = [];
+    let daily, daily2, yearly, yearly2;
     await new Promise(resolve => {
-      daily = this.recomReturns.daily.cum_roi
-      daily2 = this.customReturns.daily.cum_roi
-      yearly = this.recomReturns.yearly.roi
-      yearly2 = this.customReturns.yearly.roi
-      resolve()
-    })
+      daily = this.recomReturns.daily.cum_roi;
+      daily2 = this.customReturns.daily.cum_roi;
+      yearly = this.recomReturns.yearly.roi;
+      yearly2 = this.customReturns.yearly.roi;
+      resolve();
+    });
     await new Promise(resolve => {
       Object.keys(daily).forEach(obj => {
         fundLine.push({
@@ -157,19 +162,19 @@ export default {
         fundBar.push({
           x: obj,
           y: yearly[obj]
-        })
-      })
+        });
+      });
       Object.keys(yearly2).forEach(obj => {
         fundBar2.push({
           x: obj,
           y: yearly2[obj]
-        })
-      })
+        });
+      });
 
-      resolve()
-    })
+      resolve();
+    });
 
-    let lineSeries, barSeries
+    let lineSeries, barSeries;
     await new Promise(resolve => {
       lineSeries = [
         {
@@ -180,7 +185,7 @@ export default {
           name: "自訂投資組合",
           data: fundLine2
         }
-      ]
+      ];
       barSeries = [
         {
           name: "推薦投資組合",
@@ -190,11 +195,12 @@ export default {
           name: "自訂投資組合",
           data: fundBar2
         }
-      ]
-      resolve()
-    })
-    this.lineChartData = lineSeries
-    this.barChartData = barSeries
+      ];
+      resolve();
+    });
+    this.lineChartData = lineSeries;
+    this.barChartData = barSeries;
+    this.isLoaded = true;
   },
   methods: {
     percentFormat(floatNum) {
@@ -204,20 +210,25 @@ export default {
       return floatNum ? Math.round(floatNum * 100) / 100 : "";
     },
     async getResults() {
-      //DEBUG
-      if (this.BfNo !== 0) {
-        //EC customers
-        return await this.$api.postEC(
-          "/backtest",
-          this.body,
-          this.authorizationHeader
-        );
-      } else {
-        return await this.$api.postWF09(
-          "/backtest",
-          this.body,
-          this.authorizationHeader
-        );
+      try {
+        if (this.BfNo !== 0) {
+          //EC customers
+          return await this.$api.postEC(
+            "/backtest",
+            this.body,
+            this.authorizationHeader
+          );
+        } else {
+          return await this.$api.postWF09(
+            "/backtest",
+            this.body,
+            this.authorizationHeader
+          );
+        }
+      } catch (error) {
+        this.$api.handlerErr(error);
+      } finally {
+        this.isLoaded = true;
       }
     }
   }

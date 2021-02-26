@@ -28,6 +28,5 @@ import report from '../components/report'
 import saveBtn from '../components/buttons/saveBtn'
 export default {
   components: {report, saveBtn},
-
 }
 </script>

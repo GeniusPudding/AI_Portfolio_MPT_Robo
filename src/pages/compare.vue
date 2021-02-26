@@ -14,8 +14,9 @@
       <div class="container">
         <h2 class="tit-type2" title="建議的投組清單">建議的投組清單</h2>
         <div class="btn reportbtn">
-          <router-link to="/fundreport">理財健檢報告</router-link>
+          <!-- <router-link to="/fundreport">理財健檢報告</router-link> -->
           <!-- <a href="fundreport">理財健檢報告</a> -->
+          <a href="" @click.prevent="goReport()" title="理財健檢報告">理財健檢報告</a>
         </div>
         <recommendList></recommendList>
 
@@ -64,7 +65,7 @@ export default {
   components: { recommendList, fundList, saveBtn },
   computed: {
     ...mapState(["questionnaire"]),
-    ...mapFields(["useMail"])
+    ...mapFields(["useMail", 'isLoaded'])
   },
   methods: {
     switchSend(event) {
@@ -77,7 +78,11 @@ export default {
         console.debug(event.target.innerText);
       }
     },
-
+   goReport (){
+      if(!this.isLoaded) return
+      this.isLoaded = false
+      this.$router.push('fundreport')
+    }
   }
 };
 </script>
