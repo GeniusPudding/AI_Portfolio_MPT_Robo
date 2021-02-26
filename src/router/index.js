@@ -9,6 +9,7 @@ import edm from '@/pages/edm'
 Vue.use(Router)
 
 export default new Router({
+  base:  process.env.NODE_ENV == "development" ? "" : "/dist/", //Areas/MPT_ROBO/
   mode: 'history',
   scrollBehavior (to, from, savedPosition) {
     return { x: 0, y: 0 }

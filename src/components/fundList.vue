@@ -100,7 +100,7 @@ export default {
     ...mapState(['user_id', 'BfNo','rr_value', 'IdNo', 'client_ip']),
     ...mapFields(['isEditable', 'fundPool', 'investmentAmount', 'token', 'rr_param',
     'personalPortfolio', 'budget','isCheckingEmpty', 'authorizationHeader',
-    'initPorfolio', 'initAmount']),
+    'initPorfolio', 'initAmount', 'recommendedSource']),
     header () {
       return  {
         ...this.authorizationHeader,
@@ -140,6 +140,19 @@ export default {
       console.log('Debug personalPortfolio:', this.personalPortfolio)
     }
     
+  },
+  watch: {
+    '$store.state.personalPortfolio': function() {
+      let p = this.$store.state.personalPortfolio
+      console.log('this.$store.state.personalPortfolio:',p)
+      if(p.length>2){
+        this.recommendedSource = 'mpt'
+        console.log('personalPortfolio MPT')  
+      }else{
+        this.recommendedSource = 'tv'
+        console.log('personalPortfolio TV')  
+      } 
+    }
   },
   methods: {
     async getFundPool(){

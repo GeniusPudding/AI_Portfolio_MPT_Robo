@@ -125,6 +125,26 @@
               <!-- 一般狀態 end -->
             </div>
             <h3>沒有富蘭克林理財帳戶!?</h3>
+            <div class="btnArea twoBtn">
+              <div class="btn">
+                <a
+                  href="https://etrade.franklin.com.tw/Open/Entrance"
+                  target="_blank"
+                  title="立即開戶"
+                >
+                  立即開戶
+                </a>
+              </div>
+              <div class="btn type2">
+                <a title="搶先體驗" @click="openTaste"> 搶先體驗 </a>
+              </div>
+            </div>
+          </div>
+        </slot>
+      </modal>
+      <modal ref="tasteModal" :can-close="true" class="md">
+        <slot slot="infoArea">
+          <div class="alertModal step1">
             <h3>尚未開戶，體驗版</h3>
             <div>
               <!-- 一般狀態 start -->
@@ -176,23 +196,19 @@
                 </div>
               </div>
             </div>
-            <div class="btnArea twoBtn">
-              <div class="btn">
-                <a
-                  href="https://etrade.franklin.com.tw/Open/Entrance"
-                  target="_blank"
-                  title="立即開戶"
-                >
-                  立即開戶
-                </a>
-              </div>
+            <div class="btnArea">
               <div class="btn type2">
-                <a title="搶先體驗" @click="tasteLogin"> 搶先體驗 </a>
+                <a title="前往體驗" @click="tasteLogin"> 前往體驗 </a>
               </div>
             </div>
           </div>
+          
         </slot>
+
+
       </modal>
+
+
     </div>
   </section>
 </template>
@@ -201,7 +217,7 @@ import { mapState } from "vuex";
 import { mapFields } from "vuex-map-fields";
 import modal from "../components/modal";
 import md5 from "blueimp-md5";
-import axios from "axios";
+// import axios from "axios";
 export default {
   data() {
     return {
@@ -259,6 +275,10 @@ export default {
     this.getIP();
   },
   methods: {
+    openTaste () {
+      this.toggleModal('member')
+      this.toggleModal('tasteModal')
+    },
     async getIP() {
       let res = await fetch("https://wt.franklin.com.tw/areas/myip/myip.aspx");
       this.client_ip = await res.text();

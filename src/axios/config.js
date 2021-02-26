@@ -1,6 +1,11 @@
 import md5 from 'blueimp-md5'
 import dayjs from 'dayjs'
 
+
+
+console.log('location.pathname:',location.pathname)
+console.log('location.hostname:',location.hostname)
+
 // var folder = location.pathname == '/' ? '/twb/' : location.pathname 
 // API doc: https://www.jlf.com.tw/api/twb/apidocs/#/
 // const baseURL = 'https://www.jlf.com.tw/api/twb/'
