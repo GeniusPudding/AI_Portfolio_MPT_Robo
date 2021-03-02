@@ -212,7 +212,7 @@ import { mapState } from "vuex";
 import { mapFields } from "vuex-map-fields";
 import modal from "../components/modal";
 import md5 from "blueimp-md5";
-// import axios from "axios";
+import axios from "axios";
 export default {
   data() {
     return {
@@ -333,6 +333,16 @@ export default {
       //   "Content-Type": "application/json"
       //   // app:4750b422-8dec-4162-a855-5afe9626a4b7, web: c6db7c09-3798-4ded-b851-c806f7066c2d
       // };
+      const ECbaseURL = location.hostname == 'localhost'
+    ? 'http://10.20.1.7/ec/' : 'http://210.65.139.185/ec/'
+      var config = {
+        method: 'post',
+        headers:this.ECheaders,
+        data: JSON.stringify(this.loginData)
+      }
+      axios(ECbaseURL+'auth',config).then(res=>{
+        console.log(JSON.stringify(res.data))
+      })
       return this.$api.postEC("/auth", this.loginData, this.ECheaders);
     },
     async next() {

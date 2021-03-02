@@ -49,7 +49,7 @@ export default {
     this.hideIeMask()
     this.showTarget()
     this.topBtn()
-    this.scrollMagic()
+    // this.scrollMagic()
 
     $(window).resize(() => {
       this.windowWidth = $(window).innerWidth()
@@ -174,134 +174,134 @@ export default {
     },
 
     //-------------------------------------scrollMagic
-    scrollMagic() {
-      // init controller
-      var controller = new this.$scrollmagic.Controller();
+    // scrollMagic() {
+    //   // init controller
+    //   var controller = new this.$scrollmagic.Controller();
 
-      // banner --------------------------------------------------
-      var bannerTimeLine = new TimelineMax();
+    //   // banner --------------------------------------------------
+    //   var bannerTimeLine = new TimelineMax();
 
-      this.$scrollmagic.scene({
-        triggerElement: ".banner",
-        offset: 0,
-      })
-        .setTween(bannerTimeLine)
-        .addTo(controller);
+    //   this.$scrollmagic.scene({
+    //     triggerElement: ".banner",
+    //     offset: 0,
+    //   })
+    //     .setTween(bannerTimeLine)
+    //     .addTo(controller);
 
-        bannerTimeLine
-        .add(
-          TweenMax.from(".banner-content", 0.5, {
-            y: 100,
-            opacity: 0,
-          })
-        )
-        .add(
-          TweenMax.from(".banner-kv", 0.5, {
-            // y: 100,
-            opacity: 0,
-          })
-        )
-        .add(
-          TweenMax.from(".banner-content .btn", 0.5, {
-            y: 100,
-            opacity: 0,
-          })
-        );
+    //     bannerTimeLine
+    //     .add(
+    //       TweenMax.from(".banner-content", 0.5, {
+    //         y: 100,
+    //         opacity: 0,
+    //       })
+    //     )
+    //     .add(
+    //       TweenMax.from(".banner-kv", 0.5, {
+    //         // y: 100,
+    //         opacity: 0,
+    //       })
+    //     )
+    //     .add(
+    //       TweenMax.from(".banner-content .btn", 0.5, {
+    //         y: 100,
+    //         opacity: 0,
+    //       })
+    //     );
 
-      TweenMax.fromTo(
-        ".banner-content .btn i",
-        1,
-        {
-          y: -10,
-          opacity: 0,
-        },
-        {
-          y: 5,
-          ease: Linear.easeNone,
-          repeat: -1,
-          opacity: 1,
-        }
-      );
+    //   TweenMax.fromTo(
+    //     ".banner-content .btn i",
+    //     1,
+    //     {
+    //       y: -10,
+    //       opacity: 0,
+    //     },
+    //     {
+    //       y: 5,
+    //       ease: Linear.easeNone,
+    //       repeat: -1,
+    //       opacity: 1,
+    //     }
+    //   );
 
-      // 特色 --------------------------------------------------
-      var featuresTimeLine = new TimelineMax();
+    //   // 特色 --------------------------------------------------
+    //   var featuresTimeLine = new TimelineMax();
 
-      this.$scrollmagic.scene({
-        triggerElement: ".features",
-        offset: -300,
-      })
-        .setTween(featuresTimeLine)
-        // .addIndicators({name: "1 (duration: 0)"})
-        .addTo(controller);
+    //   this.$scrollmagic.scene({
+    //     triggerElement: ".features",
+    //     offset: -300,
+    //   })
+    //     .setTween(featuresTimeLine)
+    //     // .addIndicators({name: "1 (duration: 0)"})
+    //     .addTo(controller);
 
-      featuresTimeLine
-        .add(
-          TweenMax.from(".features-content-robot", 0.3, {
-            x: -50,
-            opacity: 0,
-          })
-        )
-        .add(
-          TweenMax.from(".features .tit-type1", 0.4, {
-            y: 100,
-            opacity: 0,
-          })
-        )
-        .add(
-          TweenMax.from(".features-item:eq(0)", 0.2, {
-            y: 100,
-            opacity: 0,
-          })
-        )
-        .add(
-          TweenMax.from(".features-item:eq(1)", 0.2, {
-            y: 100,
-            opacity: 0,
-          })
-        )
-        .add(
-          TweenMax.from(".features-item:eq(2)", 0.2, {
-            y: 100,
-            opacity: 0,
-          })
-        )
-        .add(
-          TweenMax.from(".features-item:eq(3)", 0.2, {
-            y: 100,
-            opacity: 0,
-          })
-        );
+    //   featuresTimeLine
+    //     .add(
+    //       TweenMax.from(".features-content-robot", 0.3, {
+    //         x: -50,
+    //         opacity: 0,
+    //       })
+    //     )
+    //     .add(
+    //       TweenMax.from(".features .tit-type1", 0.4, {
+    //         y: 100,
+    //         opacity: 0,
+    //       })
+    //     )
+    //     .add(
+    //       TweenMax.from(".features-item:eq(0)", 0.2, {
+    //         y: 100,
+    //         opacity: 0,
+    //       })
+    //     )
+    //     .add(
+    //       TweenMax.from(".features-item:eq(1)", 0.2, {
+    //         y: 100,
+    //         opacity: 0,
+    //       })
+    //     )
+    //     .add(
+    //       TweenMax.from(".features-item:eq(2)", 0.2, {
+    //         y: 100,
+    //         opacity: 0,
+    //       })
+    //     )
+    //     .add(
+    //       TweenMax.from(".features-item:eq(3)", 0.2, {
+    //         y: 100,
+    //         opacity: 0,
+    //       })
+    //     );
 
-      // 立即親身體驗 --------------------------------------------------
-      var experienceTimeLine = new TimelineMax();
-      this.$scrollmagic.scene({
-        triggerElement: ".experience",
-        offset: -100,
-      })
-        .setTween(experienceTimeLine)
-        // .addIndicators({name: "1 (duration: 0)"})
-        .addTo(controller);
+    //   // 立即親身體驗 --------------------------------------------------
+    //   var experienceTimeLine = new TimelineMax();
+    //   this.$scrollmagic.scene({
+    //     triggerElement: ".experience",
+    //     offset: -100,
+    //   })
+    //     .setTween(experienceTimeLine)
+    //     // .addIndicators({name: "1 (duration: 0)"})
+    //     .addTo(controller);
 
-      experienceTimeLine
-        .add(
-          TweenMax.from(".experience-robot", 0.4, {
-            x: -50,
-            opacity: 0,
-          })
-        )
-        .add(
-          TweenMax.from(".experience .tit-type1", 0.4, {
-            y: 100,
-            opacity: 0,
-          })
-        )
-        .add(
-          TweenMax.from(".experience-step", 0.4, {
-            y: 100,
-            opacity: 0,
-          })
-        );
-    },
+    //   experienceTimeLine
+    //     .add(
+    //       TweenMax.from(".experience-robot", 0.4, {
+    //         x: -50,
+    //         opacity: 0,
+    //       })
+    //     )
+    //     .add(
+    //       TweenMax.from(".experience .tit-type1", 0.4, {
+    //         y: 100,
+    //         opacity: 0,
+    //       })
+    //     )
+    //     .add(
+    //       TweenMax.from(".experience-step", 0.4, {
+    //         y: 100,
+    //         opacity: 0,
+    //       })
+    //     );
+    // },
 
     //-------------------------------------送出問卷
     sendQuestionnaire() {
