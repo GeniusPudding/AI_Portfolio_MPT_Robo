@@ -30,6 +30,7 @@
     "vue-apexcharts": "^1.6.0",
     "vue-cookie": "^1.1.4",
     "vue-cookies": "^1.7.4",
+    "vue-currency-filter": "^5.2.0",
     "vue-fragment": "^1.5.1",
     "vue-router": "^3.0.1",
     "vue-scrollmagic": "^1.2.0",

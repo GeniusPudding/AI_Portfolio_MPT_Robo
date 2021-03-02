@@ -1,4 +1,4 @@
-<template>
+ <template>
   <article class="main">
     <div id="combination"></div>
     <section class="item combination">
