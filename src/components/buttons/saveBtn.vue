@@ -13,7 +13,7 @@
           </p>
           <div class="btnArea">
             <div class="btn">
-              <a href="/" title="返回首頁">
+              <a href="/home" title="返回首頁">
                 返回首頁 <i class="fas fa-angle-right"></i>
               </a>
             </div>
