@@ -9,12 +9,16 @@ import myportfolio from '@/pages/myportfolio'
 Vue.use(Router)
 
 export default new Router({
-  // base: process.env.NODE_ENV === 'development' ? '' : '/home/dist', // Areas/MPT_ROBO/
+  base: process.env.NODE_ENV === 'development' ? '' : '/home/', // Areas/MPT_ROBO/
   mode: 'history',
   scrollBehavior (to, from, savedPosition) {
     return { x: 0, y: 0 }
   },
   routes: [
+    {
+      path: '*',
+      redirect: '/home'
+    },
     {
       path: '/',
       name: 'home',
