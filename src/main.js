@@ -56,6 +56,8 @@ router.beforeEach((to, from, next) => {
     };
     console.log('before route cookie:', cookie)
     console.log('before route to.name:', to.name)
+    console.log('before route to:', to)
+    console.log('before route from:', from)
         // 登入頁先重置資料
     if (to.name == "home") {
         Vue.$cookies.remove("mptLogin");
