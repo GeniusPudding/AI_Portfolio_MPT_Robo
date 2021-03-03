@@ -289,6 +289,7 @@ export default {
       return market[0].markets;
     },
     cusFund(fundItem) {
+      var defaultName = fundItem.name 
       var key = fundItem.market;
       // console.log('key:',key)
       if (!this.fundPool || !key) return [];
@@ -308,7 +309,7 @@ export default {
       // console.log('filteredMarket[0].pool:',filteredMarket[0].pool)
       if (filteredMarket.length <= 0) return [];
       let rrPool = filteredMarket[0].pool.filter(obj => {
-          return obj.rr == this.rr_value;
+          return obj.rr <= this.rr_value || obj.fund.name == defaultName // except for matched rr value, add the one in the storage
       })
       console.log('rrPool:',rrPool)
       return rrPool
