@@ -209,13 +209,15 @@ export default {
         //EC customers
         return await this.$api.getEC(
           "/fundpool",
-          this.rr_param,
+          { rr_value: 5 }, // get all and filtered when generate options
+          // this.rr_param,
           this.authorizationHeader
         );
       } else {
         return await this.$api.getWF09(
           "/fundpool",
-          this.rr_param,
+          { rr_value: 5 }, // get all and filtered when generate options
+          // this.rr_param,
           this.authorizationHeader
         );
       }
@@ -305,7 +307,12 @@ export default {
       // console.log('filteredMarket:',filteredMarket)
       // console.log('filteredMarket[0].pool:',filteredMarket[0].pool)
       if (filteredMarket.length <= 0) return [];
-      return filteredMarket[0].pool;
+
+      //filtered the pool by rr_value
+      return filteredMarket[0].pool.filter(obj => {
+          return obj.rr == this.rr_value
+      })
+      // return filteredMarket[0].pool;
     },
     calcPercent() {
       // console.log('calcPercent')
