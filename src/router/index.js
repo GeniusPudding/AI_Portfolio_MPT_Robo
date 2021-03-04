@@ -10,7 +10,7 @@ Vue.use(Router)
 
 export default new Router({
   base: process.env.NODE_ENV === 'development' ? '' : '/home/', // Areas/MPT_ROBO/
-  mode: 'history',
+  mode: 'hash',
   scrollBehavior (to, from, savedPosition) {
     return { x: 0, y: 0 }
   },
