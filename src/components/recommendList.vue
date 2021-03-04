@@ -7,7 +7,7 @@
           <li>類型</li>
           <li>市場</li>
           <li>基金名稱</li>
-          <li>投資比重</li>
+          <li>投資比重(%)</li>
         </ol>
       </li>
       <li class="tbody">
@@ -19,7 +19,7 @@
               {{`${fundItem.fund_id} ${fundItem.name}`}}
             </p>
           </li>
-          <li data-title="投資比重">{{Math.round(fundItem.weight)}}</li>         
+          <li data-title="投資比重(%)">{{Math.round(fundItem.weight)}}</li>         
         </ol>
       </li>
     </ul>

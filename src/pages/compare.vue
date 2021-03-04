@@ -42,7 +42,7 @@
 
         <div class="btnArea twoBtn" v-show="questionnaire == 0">
           <div class="btn type6">
-            <a href="myportfolio" title="重新自訂投組">重新自訂投組</a>
+            <a href="#/myportfolio" title="重新自訂投組">重新自訂投組</a>
           </div>
           <saveBtn></saveBtn>
         </div>

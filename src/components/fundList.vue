@@ -58,14 +58,13 @@
                   >
                 </select>
               </li>
-              <li data-title="投資比重">
+              <li data-title="投資比重(%)">
                 <input
                   type="text"
                   disabled="disabled"
                   class="text-center isEdit"
                   :value="calcPercent()[$index]"
                 />
-                %
               </li>
 
               <li data-title="投資金額">
@@ -201,6 +200,9 @@ export default {
         this.recommendedSource = "tv";
         console.log("personalPortfolio TV");
       }
+    },
+    "this.rr_value": function() {
+      console.log('rr_value:',this.rr_value)
     }
   },
   methods: {
