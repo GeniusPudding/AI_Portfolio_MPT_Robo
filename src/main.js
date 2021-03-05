@@ -1,18 +1,21 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue'
-import App from './App'
-import router from './router'
-import store from './store'
-import VueScrollTo from 'vue-scrollto'
-import HighchartsVue from 'highcharts-vue'
-import ElementUI from 'element-ui'
+import Vue from "vue";
+
+import ElementUI from "element-ui";
+import HighchartsVue from "highcharts-vue";
 // import VueScrollmagic from 'vue-scrollmagic'
-import VueApexCharts from "vue-apexcharts"
-import axios from './axios'
-import VueCookies from 'vue-cookies'
-import sharedFunction from './mixins/sharedFunction'
-import VueCurrencyFilter from 'vue-currency-filter'
+import VueApexCharts from "vue-apexcharts";
+import VueCookies from "vue-cookies";
+import VueCurrencyFilter from "vue-currency-filter";
+import VueScrollTo from "vue-scrollto";
+
+import App from "./App";
+import axios from "./axios";
+import sharedFunction from "./mixins/sharedFunction";
+import router from "./router";
+import store from "./store";
+
 // import front from './mixins/front'
 // import newQuestionnaire from './mixins/newQuestionnaire'
 // import slickFunction from './mixins/slickFunction'
@@ -21,6 +24,7 @@ import VueCurrencyFilter from 'vue-currency-filter'
 // Vue.mixin(newQuestionnaire)
 // Vue.mixin(slickFunction)
 // Vue.mixin(shared)
+
 Vue.use(VueCurrencyFilter,{
     symbol : '$',
     thousandsSeparator: ',',

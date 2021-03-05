@@ -40,19 +40,33 @@ import { Fragment } from "vue-fragment";
 export default {
   components: { modal, Fragment },
   computed: {
-    ...mapState(['authorizationHeader','useMail','BfNo','recommendedPortfolio','personalPortfolio']),
+    ...mapState(['authorizationHeader','useMail','BfNo','recommendedPortfolio','personalPortfolio','client_ip','rr_value']),
     body () {
-      return {
-         'bfNo': this.BfNo,
-         'custom_portfolio': this.personalPortfolio,
-         'notify_type': this.useMail ? 'email' : 'cellphone',
-         'recom_portfolio': this.recommendedPortfolio
+      if (this.BfNo!==0){
+        return {
+          'client_ip': this.client_ip,
+          'bfNo': this.BfNo,
+          'custom_portfolio': this.personalPortfolio,
+          'notify_type': this.useMail ? 'email' : 'cellphone',
+          'recom_portfolio': this.recommendedPortfolio,
+          'rr_value': this.rr_value
+        }
+      }else{
+        return {
+          'custom_portfolio': this.personalPortfolio,
+          'notify_type': this.useMail ? 'email' : 'cellphone',
+          'recom_portfolio': this.recommendedPortfolio,
+          'rr_value': this.rr_value
+        }
       }
+
     }
   },
   methods: {
       async savePortfolio() {
         if(this.BfNo!==0){//EC customers
+          console.log('this.client_ip:',this.client_ip)
+          console.log('this.body EC:',this.body)
           await this.$api.postEC('/create',this.body,this.authorizationHeader)
         }else{
           await this.$api.postWF09('/create',this.body,this.authorizationHeader)

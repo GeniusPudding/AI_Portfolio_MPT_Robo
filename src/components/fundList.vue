@@ -21,7 +21,10 @@
           <Fragment v-if="isEditableProp">
             <Fragment v-if="fundItem.name !== '' || !isCheckingEmpty">
               <li data-title="類型">
-                <select v-model="fundItem.type" @change="changeFund(fundItem)">
+                <select
+                  @change="changeFund($event, $index)" 
+                  v-model="fundItem.type"
+                >
                   <option
                     v-for="option in editAsset"
                     :value="option.name"
@@ -32,8 +35,8 @@
               </li>
               <li data-title="市場">
                 <select
+                  @change="changeFund($event, $index)"
                   v-model="fundItem.market"
-                  @change="changeFund(fundItem)"
                   :disabled="cusMarket(fundItem.type).length == 0"
                 >
                   <option
@@ -47,7 +50,7 @@
               <li data-title="基金名稱">
                 <select
                   v-model="fundItem.name"
-                  @change="changeFund(fundItem)"
+                  @change="changeFund($event, $index)"
                   :disabled="cusFund(fundItem).length == 0"
                 >
                   <option
@@ -125,6 +128,7 @@ export default {
   },
   data() {
     return {
+      fundID_map: {}, // name to fund_id
       isTesting: false,
       isDelete: false
       // isSubmit: false,
@@ -228,7 +232,7 @@ export default {
       if (this.BfNo !== 0) {
         //EC customers
         let response = await this.$api.postEC("/init", this.body, this.header);
-        // console.log('response.Result.init.:',response.Result.init)
+        console.log('response.Result.init:',response.Result.init)
         return response.Result.init;
       } else {
         // let response = await this.$api.getWF09(
@@ -266,7 +270,7 @@ export default {
         this.personalPortfolio = await this.getInitPortfolio();
         console.log("portfolio:", this.personalPortfolio);
 
-        this.cusBudget();
+        this.initBudget();
         this.initPorfolio = [...this.personalPortfolio];
         this.initAmount = [...this.investmentAmount];
       } catch (error) {
@@ -277,8 +281,17 @@ export default {
         this.isLoaded = true;
       }
     },
-    changeFund(fundItem) {
-      console.log("select fundItem:", fundItem);
+    changeFund(event, index) {
+      console.log("changeFund event:", event)
+      console.log("changeFund index:", index)
+      let name =  event.target.value
+      console.log("changeFund event.target.value:",name);
+      if(this.fundID_map[name]){
+        console.log("fundID_map :", this.fundID_map[name])
+        this.personalPortfolio[index].fund_id = this.fundID_map[name]
+      }
+
+      console.log("select fundItem.fund:", fundItem);
     },
     cusMarket(key) {
       // console.log('key:',key)
@@ -312,9 +325,13 @@ export default {
       // console.log('filteredMarket[0].pool:',filteredMarket[0].pool)
       if (filteredMarket.length <= 0) return [];
       let rrPool = filteredMarket[0].pool.filter(obj => {
+          if(!this.fundID_map[obj.fund.name]){
+            this.fundID_map[obj.fund.name] = obj.fund.id
+          }  
+
           return obj.rr <= this.rr_value || obj.fund.name == defaultName // except for matched rr value, add the one in the storage
       })
-      console.log('rrPool:',rrPool)
+      // console.log('rrPool:',rrPool)
       return rrPool
       // return filteredMarket[0].pool;
     },
@@ -322,23 +339,27 @@ export default {
       // console.log('calcPercent')
       var data = [];
       this.investmentAmount.forEach((obj, key) => {
-        var calcValue = (obj / this.sumEditBudget()) * 100;
-        data[key] = this.setPercentage(calcValue, 0, false);
-      });
+        var calcValue = (obj / this.sumEditBudget()) * 100
+        data[key] = this.setPercentage(calcValue, 0, false)
+      })
       var tempTotalPercent = data.reduce((a, b) => {
-        return a + Number(b);
+        return a + Number(b)
       }, 0);
       if (tempTotalPercent < 100) {
         data[data.length - 1] =
-          data[data.length - 1] + (100 - tempTotalPercent);
+          data[data.length - 1] + (100 - tempTotalPercent)
       } else if (tempTotalPercent > 100) {
         data[data.length - 1] =
-          data[data.length - 1] - (tempTotalPercent - 100);
+          data[data.length - 1] - (tempTotalPercent - 100)
       }
-      // console.log('calcPercent data:',data)
-      return data;
+      console.log('calcPercent data:',data)
+      data.forEach((obj,key)=>{
+        console.log('data weight:',obj)
+        this.personalPortfolio[key].weight = obj
+      })
+      return data
     },
-    cusBudget() {
+    initBudget() {
       if (this.BfNo === 0) {
         this.budget = Math.floor(this.budget / 1000) * 1000;
         if (this.budget < 50000) this.budget = 50000;
@@ -354,22 +375,24 @@ export default {
         this.budget = 0;
 
         this.personalPortfolio.forEach((obj, key) => {
-          // console.log('obj.MarketValue:',obj.MarketValue)
-          this.investmentAmount[key] = obj.MarketValue;
-          this.budget += obj.MarketValue;
-        });
-        this.personalPortfolio.forEach((obj, key) => {
-          obj.weight = this.calcPercent()[key];
-          console.log("obj.weight:", obj.weight);
-        });
+          this.investmentAmount[key] = obj.MarketValue
+          this.budget += obj.MarketValue
+        })
+        this.calcPercent()
+        // this.personalPortfolio.forEach((obj, key) => {
+        //   obj.weight = this.calcPercent()[key];
+        //   console.log("obj.weight:", obj.weight);
+        // });
       }
     },
     calcBudget(evt, index) {
-      // console.log("value:", evt.target.value, "index:", index);
+      console.log("calcBudget:",evt)
       this.$nextTick(() => {
-        var tempValue = Math.floor(evt.target.value / 1000) * 1000;
-        this.investmentAmount[index] = tempValue;
-        this.sumEditBudget();
+        var tempValue = Math.floor(evt.target.value / 1000) * 1000
+        console.log('tempValue:',tempValue)
+        this.personalPortfolio[index].MarketValue = tempValue
+        this.investmentAmount[index] = tempValue
+        this.sumEditBudget()
       });
     },
     sumEditBudget() {
@@ -388,11 +411,12 @@ export default {
         return;
       }
       this.personalPortfolio.push({
+        MarketValue: 0,
         fund_id: "",
         market: "",
         name: "",
-        type: ""
-        // weight: 0,
+        type: "",
+        weight: 0
       });
       this.investmentAmount.push(5000);
     },

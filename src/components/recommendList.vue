@@ -49,7 +49,8 @@ export default {
 
     let sources = await this.getRecommendedList()
     console.log('getRecommendedList res:',sources)
-    this.recommendedPortfolio = sources[this.recommendedSource].portfolio
+    // this.recommendedPortfolio = sources[this.recommendedSource].portfolio
+    this.recommendedPortfolio = sources.recom.portfolio
     console.log('getRecommendedList Portfolio:',this.recommendedPortfolio)
   },
   methods:{

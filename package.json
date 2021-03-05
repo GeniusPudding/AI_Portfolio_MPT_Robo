@@ -35,6 +35,7 @@
     "vue-router": "^3.0.1",
     "vue-scrollmagic": "^1.2.0",
     "vue-scrollto": "^2.20.0",
+    "vuelidate": "^0.7.6",
     "vuex": "^3.6.2",
     "vuex-map-fields": "^1.4.1",
     "vuex-persistedstate": "^4.0.0-beta.3",
