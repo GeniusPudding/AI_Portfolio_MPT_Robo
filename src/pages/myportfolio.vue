@@ -37,6 +37,10 @@ export default {
     // },
     jumpCheck (){
       if(!this.isLoaded) return
+      if(this.personalPortfolio.length==0){
+        alert('請至少新增一檔基金!')
+        return
+      }
       console.log('jump check this.personalPortfolio:',this.personalPortfolio)
 
       // let emptyIndex = []

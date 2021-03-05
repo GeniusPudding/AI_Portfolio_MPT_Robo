@@ -231,12 +231,13 @@ export default {
         // console.log('response.Result.init.:',response.Result.init)
         return response.Result.init;
       } else {
-        let response = await this.$api.getWF09(
-          "/init",
-          this.rr_param,
-          this.authorizationHeader
-        );
-        return response.Result.init.portfolio;
+        // let response = await this.$api.getWF09(
+        //   "/init",
+        //   this.rr_param,
+        //   this.authorizationHeader
+        // );
+        // return response.Result.init.portfolio;
+        return []
       }
     },
     async initList() {

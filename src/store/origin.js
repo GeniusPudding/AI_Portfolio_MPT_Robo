@@ -5,7 +5,7 @@ let data = {
     BfNo: 0,
     token: '',
     questionnaire: 0,
-    username: "親愛的EC客戶",
+    username: "",
     user_id: "",
     rr_value: 3,
     rr_param: {"rr_value": 3},
