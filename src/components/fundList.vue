@@ -349,8 +349,9 @@ export default {
         data[data.length - 1] =
           data[data.length - 1] + (100 - tempTotalPercent)
       } else if (tempTotalPercent > 100) {
-        data[data.length - 1] =
-          data[data.length - 1] - (tempTotalPercent - 100)
+        let maxIndex = data.indexOf(Math.max(...data))
+        data[maxIndex] =
+          data[maxIndex] - (tempTotalPercent - 100)
       }
       console.log('calcPercent data:',data)
       data.forEach((obj,key)=>{
