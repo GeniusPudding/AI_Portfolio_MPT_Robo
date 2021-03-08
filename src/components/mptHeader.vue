@@ -90,10 +90,10 @@ export default {
       console.log('changeRR:',event.target.value)
       this.rr_value = this.risk_inv_map[event.target.value]
       console.log('changeRR value:',this.rr_value)
-      this.$nextTick(() => {
-        this.rr_param = {"rr_value": this.rr_value}
-        console.log('action rr_param:',this.rr_param)
-      })
+      // this.$nextTick(() => {
+      this.rr_param = {"rr_value": this.rr_value}
+      console.log('action rr_param:',this.rr_param)
+      // })
     },
     toggleMobileNavbar () {
       // console.log('toggleMobileNavbar:')
