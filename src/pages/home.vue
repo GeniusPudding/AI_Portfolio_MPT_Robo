@@ -108,7 +108,7 @@
                 </div>
               </div> -->
                 <div class="btnArea">
-                  <a href="">忘記密碼?</a>
+                  <a href="https://etrade.franklin.com.tw/Home/GetLoginPwdHint">忘記密碼?</a>
                   <div class="btn">
                     <a
                       href=""

@@ -97,7 +97,7 @@
               </p>
             </li>
 
-            <li data-title="投資比重">{{ calcPercent()[$index] }}</li>
+            <li data-title="投資比重(%)">{{ calcPercent()[$index] }}</li>
             <li data-title="投資金額">
               {{ Math.round(investmentAmount[$index]) }}元
             </li>
