@@ -55,7 +55,7 @@
       <modal ref="member" :can-close="true" class="md">
         <slot slot="infoArea">
           <div class="alertModal step1">
-            <h3>富蘭克林理財帳戶請登入</h3>
+            <h3>富蘭克林國民E帳戶請登入</h3>
             <div>
               <!-- 一般狀態 start -->
               <div class="formArea wow fadeInUp">
@@ -124,7 +124,7 @@
               </div>
               <!-- 一般狀態 end -->
             </div>
-            <h3>沒有富蘭克林理財帳戶!?</h3>
+            <h3>沒有富蘭克林國民E帳戶!?</h3>
             <div class="btnArea twoBtn">
               <div class="btn">
                 <a

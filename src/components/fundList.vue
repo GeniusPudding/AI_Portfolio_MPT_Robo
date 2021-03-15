@@ -7,7 +7,7 @@
           <li>類型</li>
           <li>市場</li>
           <li>基金名稱</li>
-          <li>投資比重</li>
+          <li>投資比重(%)</li>
           <li>投資金額</li>
           <li>&ensp;</li>
         </ol>
@@ -77,7 +77,7 @@
                   min="5000"
                   class="text-center"
                   @blur="calcBudget($event, $index)"
-                  v-model.number="investmentAmount[$index]"
+                  v-model.number="Math.round(investmentAmount[$index])"
                 />
                 元
               </li>
@@ -407,8 +407,8 @@ export default {
       this.investmentAmount = [...this.initAmount];
     },
     addFund() {
-      if (this.personalPortfolio.length >= 5) {
-        alert("自訂基金最多為 5 組！");
+      if (this.personalPortfolio.length >= 10) {
+        alert("自訂基金最多為 10 組！");
         return;
       }
       this.personalPortfolio.push({
