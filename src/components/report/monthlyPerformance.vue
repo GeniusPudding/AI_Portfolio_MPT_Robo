@@ -17,8 +17,6 @@
           <th>Nov</th>
           <th>Dec</th>
           <th>Total</th>
-          <!---->
-          <th>Balance</th>
         </tr>
       </thead>
       <tbody>

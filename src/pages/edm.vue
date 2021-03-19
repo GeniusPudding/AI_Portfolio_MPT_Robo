@@ -30,7 +30,14 @@
 // import { mapState } from 'vuex'
 import report from '../components/report'
 import recommendList from '../components/recommendList'
+import { mapFields } from "vuex-map-fields"
 export default {
   components: { report, recommendList },
+  computed: {
+    ...mapFields(["useMail", 'isLoaded'])
+  },
+  mounted(){
+    this.isLoaded = false
+  }
 };
 </script>

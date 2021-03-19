@@ -19,7 +19,7 @@
             <tr data-v-6ee2785f=''  v-for="(fundItem, $index) in funds" :key="$index">
               <td data-v-6ee2785f='' class='text-center'>{{fundItem.fund_id}}</td>
               <td data-v-6ee2785f='' class='text-left'>{{fundItem.fund_name}}</td>
-              <tdNum data-v-6ee2785f='' :content="fundItem['Stdev(%)']" :numFormat="numFormat"></tdNum>
+              <tdNum data-v-6ee2785f='' :content="fundItem['Volatility(%)']" :numFormat="numFormat"></tdNum>
               <tdNum data-v-6ee2785f='' :content="fundItem.max_year_return" :numFormat="numFormat"></tdNum>
               <tdNum data-v-6ee2785f='' :content="fundItem.min_year_return" :numFormat="numFormat"></tdNum>
               <tdNum data-v-6ee2785f='' :content="fundItem['Max.Drawdown(%)']" :numFormat="numFormat"></tdNum>
