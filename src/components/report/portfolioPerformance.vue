@@ -45,13 +45,13 @@
           <!---->
         </tr>
         <tr>
-          <td>波動率Stdev</td>
+          <td>波動率Volatility</td>
           <tdNum
-            :content="recomTotalPerf['Stdev(%)']"
+            :content="recomTotalPerf['Volatility(%)']"
             :numFormat="percentFormat"
           ></tdNum>
           <tdNum
-            :content="customTotalPerf['Stdev(%)']"
+            :content="customTotalPerf['Volatility(%)']"
             :numFormat="percentFormat"
           ></tdNum>
           <!---->
