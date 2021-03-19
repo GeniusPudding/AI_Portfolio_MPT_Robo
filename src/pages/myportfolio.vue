@@ -7,7 +7,7 @@
         <fundList isEditableProp></fundList>
         <div class="btnArea">
           <div class="btn">
-            <a href="" @click.prevent="jumpCheck()" title="取得建議">取得建議</a>
+            <a href="" @click.prevent="jumpCheck()"  :class="{ balloon: isEmptyPortfolio }" balloon-data="Step 2 : 取得富蘭克林最新投資建議。" title="取得建議">取得建議</a>
           </div>
         </div>
       </div>
@@ -27,7 +27,10 @@ export default {
   components: {fundList},
   computed: {
     ...mapState(['isCheckingEmpty']),
-    ...mapFields(['isLoaded','personalPortfolio','isCheckingEmpty','investmentAmount'])
+    ...mapFields(['isLoaded','personalPortfolio','isCheckingEmpty','investmentAmount']),
+    isEmptyPortfolio(){
+      return this.personalPortfolio.length == 0
+    }
   },
   methods: {
     // setPercentage (val, quantile, isSign) {

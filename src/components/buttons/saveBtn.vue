@@ -7,7 +7,7 @@
             <!-- <i class="fas fa-exclamation-circle"></i> -->
             <i class="far fa-calendar-check"></i>
           </div>
-          <p>
+          <p style="font-size: 18px">
             已將建議您的投組儲存，將透過簡訊/email
             定期發送投資報告連結至您的手機號碼/信箱，如欲取消訂閱，請於連結中點選取消訂閱。謝謝
           </p>

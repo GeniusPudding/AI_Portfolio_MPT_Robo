@@ -60,7 +60,7 @@
               <!-- 一般狀態 start -->
               <div class="formArea wow fadeInUp">
                 <!-- 有錯誤時[.formArea-item]加[.error] -->
-                <div class="formArea-item">
+                <div class="formArea-item" :class="{ error: inputAccountNameNull }">
                   <div class="formArea-item-tit">
                     <label for="id"> 帳號 </label>
                   </div>
@@ -75,10 +75,10 @@
                     />
                   </div>
                   <div class="formArea-item-error">
-                    請確認您的帳號或身分證字號
+                    請輸入您的帳號或身分證字號
                   </div>
                 </div>
-                <div class="formArea-item">
+                <div class="formArea-item" :class="{ error: inputPasswordNull }">
                   <div class="formArea-item-tit">
                     <label for="password"> 密碼 </label>
                   </div>
@@ -92,7 +92,7 @@
                       placeholder="請輸密碼"
                     />
                   </div>
-                  <div class="formArea-item-error">請確認您的密碼</div>
+                  <div class="formArea-item-error">請輸入您的密碼</div>
                 </div>
                 <!-- <div class='formArea-item'>
                 <div class='formArea-item-tit'>
@@ -150,7 +150,7 @@
             <div>
               <!-- 一般狀態 start -->
               <div class="formArea wow fadeInUp">
-                <div class="formArea-item">
+                <div class="formArea-item" :class="{ error: inputTasteNameNull }">
                   <div class="formArea-item-tit">
                     <label for="name"> 姓名 </label>
                   </div>
@@ -163,9 +163,9 @@
                       placeholder="請輸入您的姓名"
                     />
                   </div>
-                  <div class="formArea-item-error">請確認您的姓名</div>
+                  <div class="formArea-item-error">請輸入您的姓名</div>
                 </div>
-                <div class="formArea-item">
+                <div class="formArea-item" :class="{ error: invalidEmail }">
                   <div class="formArea-item-tit">
                     <label for="email"> Email </label>
                   </div>
@@ -173,14 +173,14 @@
                     <input
                       type="email"
                       name=""
-                      v-model="email"
+                      v-model="vmodelEmail"
                       id="email"
                       placeholder="請輸入您的Email"
                     />
                   </div>
-                  <div class="formArea-item-error">請確認您的Email</div>
+                  <div class="formArea-item-error">請確認您的Email格式</div>
                 </div>
-                <div class="formArea-item">
+                <div class="formArea-item" :class="{ error: invalidPhone }">
                   <div class="formArea-item-tit">
                     <label for="phone"> 手機 </label>
                   </div>
@@ -188,12 +188,12 @@
                     <input
                       type="tel"
                       name=""
-                      v-model="cellphone"
+                      v-model="vmodelCellphone"
                       id="phone"
                       placeholder="請輸入您的手機號碼"
                     />
                   </div>
-                  <div class="formArea-item-error">請確認您的手機</div>
+                  <div class="formArea-item-error">請確認您的手機號碼格式</div>
                 </div>
               </div>
             </div>
@@ -224,8 +224,11 @@ export default {
       // isSubmit: false,
       // Passwd: "",
       // username: "",
-      email: "",
-      cellphone: ""
+      vmodelEmail: "",
+      vmodelCellphone: "",
+      inputAccountNameNull: true,
+      inputPasswordNull: true,
+      inputTasteNameNull: true,
     };
   },
   components: {
@@ -263,17 +266,79 @@ export default {
     },
     tasteData() {
       return {
-        email: this.email,
-        cellphone: this.cellphone,
+        email: this.vmodelEmail,
+        cellphone: this.vmodelCellphone,
         username: this.username,
         client_ip: this.client_ip
       };
+    },
+    invalidEmail(){
+      return !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.vmodelEmail)
+    },
+    invalidPhone(){
+      return !/09[0-9]{8}$/.test(this.vmodelCellphone)
     }
   },
   mounted() {
     this.getIP();
+    if (this.IdNo){
+      this.inputAccountNameNull = false
+    }
+    if (this.Passwd){
+      this.inputPasswordNull = false
+    }
+    if (this.username){
+      this.inputTasteNameNull = false
+    }
+  },
+  watch:{
+    "IdNo": function() {
+      if (this.IdNo && this.inputAccountNameNull){
+        this.switchAccountNameNull()
+      }else if(!this.IdNo && !this.inputAccountNameNull){
+        this.switchAccountNameNull()
+      }
+    },
+    "Passwd": function() {
+      if (this.Passwd && this.inputPasswordNull){
+        this.switchPasswordNull()
+      }else if(!this.Passwd && !this.inputPasswordNull){
+        this.switchPasswordNull()
+      }
+    },
+    "username": function() {
+      if (this.username && this.inputTasteNameNull){
+        this.switchTasteNameNull()
+      }else if(!this.username && !this.inputTasteNameNull){
+        this.switchTasteNameNull()
+      }
+    },
+    // "IdNo": function() {
+    //   if (this.IdNo && this.inputAccountNameNull){
+    //     this.switchAccountNameNull()
+    //   }else if(!this.IdNo && !this.inputAccountNameNull){
+    //     this.switchAccountNameNull()
+    //   }
+    // },
+    // "IdNo": function() {
+    //   if (this.IdNo && this.inputAccountNameNull){
+    //     this.switchAccountNameNull()
+    //   }else if(!this.IdNo && !this.inputAccountNameNull){
+    //     this.switchAccountNameNull()
+    //   }
+    // }
+
   },
   methods: {
+    switchAccountNameNull(){
+      this.inputAccountNameNull = !this.inputAccountNameNull
+    },
+    switchPasswordNull(){
+      this.inputPasswordNull = !this.inputPasswordNull
+    },
+    switchTasteNameNull(){
+      this.inputTasteNameNull = !this.inputTasteNameNull
+    },
     openTaste() {
       this.toggleModal("member");
       this.toggleModal("tasteModal");
@@ -291,8 +356,9 @@ export default {
     //   this.$refs[name].toggle = !this.$refs[name].toggle;
     // },
     async tasteLogin() {
-      if (this.isSubmit) return;
-      this.isSubmit = true;
+      if ( this.inputTasteNameNull || this.invalidEmail || this.invalidPhone) return
+      if (this.isSubmit) return
+      this.isSubmit = true
       // var url= 'http://10.20.1.7/www/auth'
       // var config = {
       //   method: 'post',
@@ -324,7 +390,7 @@ export default {
           this.$router.push("myportfolio");
         });
       } catch (error) {
-        console.log("taste login error");
+        console.log("taste login error:",error);
         this.isLogin = false;
         this.$api.handlerErr(error);
       } finally {
@@ -343,14 +409,7 @@ export default {
       return this.$api.postEC("/auth", this.loginData, this.ECheaders);
     },
     async next() {
-      if (this.IdNo === "") {
-        alert("請輸入帳號");
-        return;
-      }
-      if (this.Passwd === "") {
-        alert("請輸入密碼");
-        return;
-      }
+      if (this.inputAccountNameNull || this.inputPasswordNull ) return
 
       if (this.isSubmit) return;
       this.isSubmit = true;

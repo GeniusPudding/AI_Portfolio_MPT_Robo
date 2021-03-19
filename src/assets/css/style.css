@@ -767,7 +767,7 @@ select {
       .btn a.balloon:before, .btn a.balloon:after,
       .btn button.balloon:before,
       .btn button.balloon:after {
-        bottom: 100%;
+        top: 110%;
         left: 50%;
         -webkit-transform: translate(-50%, 0);
         -ms-transform: translate(-50%, 0);
@@ -786,7 +786,7 @@ select {
         border-radius: 4px;
         color: white;
         content: attr(balloon-data);
-        margin-bottom: 12px;
+        margin-top: 8px;
         padding: 10px;
         width: 170px;
         line-height: 1.5;
@@ -795,7 +795,7 @@ select {
       .btn button.balloon:before {
         content: "";
         margin-bottom: 4px;
-        border-top: solid 8px rgba(17, 17, 17, 0.9);
+        border-bottom: solid 8px rgba(17, 17, 17, 0.9);
         border-left: solid 8px transparent;
         border-right: solid 8px transparent; }
 

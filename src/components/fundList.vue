@@ -105,7 +105,7 @@
         </ol>
       </li>
       <li v-if="isEditableProp" class="more">
-        <a href="" @click.prevent="addFund" class="btn">新增基金</a>
+        <a href="" @click.prevent="addFund" class="btn" :class="{ balloon: isEmptyPortfolio }" balloon-data="Step 1 : 根據您的庫存設定您的基金組合。">新增基金</a>
         <a href="" @click.prevent="originFund" class="btn">原始庫存</a>
       </li>
     </ul>
@@ -154,6 +154,9 @@ export default {
       "recommendedSource",
       "isLoaded"
     ]),
+    isEmptyPortfolio(){
+      return this.personalPortfolio.length == 0
+    },
     header() {
       return {
         ...this.authorizationHeader,
@@ -407,6 +410,7 @@ export default {
       this.investmentAmount = [...this.initAmount];
     },
     addFund() {
+      console.log('add')
       if (this.personalPortfolio.length >= 10) {
         alert("自訂基金最多為 10 組！");
         return;
