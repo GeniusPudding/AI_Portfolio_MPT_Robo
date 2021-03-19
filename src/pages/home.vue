@@ -55,7 +55,7 @@
       <modal ref="member" :can-close="true" class="md">
         <slot slot="infoArea">
           <div class="alertModal step1">
-            <h3>富蘭克林國民E帳戶請登入</h3>
+            <h3>富蘭克林 國民E帳戶 登入</h3>
             <div>
               <!-- 一般狀態 start -->
               <div class="formArea wow fadeInUp">
@@ -124,11 +124,12 @@
               </div>
               <!-- 一般狀態 end -->
             </div>
-            <h3>沒有富蘭克林國民E帳戶!?</h3>
+            <hr>
+            <h3>沒有國民E帳戶!?</h3>
             <div class="btnArea twoBtn">
               <div class="btn">
                 <a
-                  href="https://etrade.franklin.com.tw/Open/Entrance"
+                  href="https://etrade.franklin.com.tw/Open/OpenOnlineAuthenticated"
                   target="_blank"
                   title="立即開戶"
                 >
@@ -145,7 +146,7 @@
       <modal ref="tasteModal" :can-close="true" class="md">
         <slot slot="infoArea">
           <div class="alertModal step1">
-            <h3>尚未開戶，體驗版</h3>
+            <h3>理財健檢報告將透過您留存的聯絡方式寄送給您。</h3>
             <div>
               <!-- 一般狀態 start -->
               <div class="formArea wow fadeInUp">
@@ -196,7 +197,10 @@
                 </div>
               </div>
             </div>
-            <div class="btnArea">
+            <div class="btnArea twoBtn">
+              <div class="btn">
+                <a title="返回" @click="openTaste"> 返回 </a>
+              </div>
               <div class="btn type2">
                 <a title="前往體驗" @click="tasteLogin"> 前往體驗 </a>
               </div>
