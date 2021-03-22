@@ -104,13 +104,13 @@ export default {
     }
   },
   async mounted() {
-    console.log("authorizationHeader:", this.authorizationHeader);
+    // console.log("authorizationHeader:", this.authorizationHeader);
     let res = await this.getResults();
-    console.log("getResults:", res);
-    console.log(
-      "res.Result.custom.performance:",
-      res.Result.custom.performance
-    );
+    // console.log("getResults:", res);
+    // console.log(
+    //   "res.Result.custom.performance:",
+    //   res.Result.custom.performance
+    // );
     let customPromise, recomPromise;
     await new Promise(resolve => {
       customPromise = res.Result.custom;
@@ -118,58 +118,73 @@ export default {
 
       resolve();
     });
-    console.log("customPromise:", customPromise);
-    console.log("recomPromise:", recomPromise);
-    this.customData = customPromise;
-    this.recomData = recomPromise;
-    this.customTotalPerf = customPromise.performance[0];
-    this.recomTotalPerf = recomPromise.performance[0];
-    this.customComponents = customPromise.performance.slice(1);
-    this.recomComponents = recomPromise.performance.slice(1);
-    this.customReturns = customPromise.returns;
-    this.recomReturns = recomPromise.returns;
-    console.log("this.customReturns:", this.customReturns);
-    console.log("this.recomReturns:", this.recomReturns);
+    // console.log("customPromise:", customPromise);
+    // console.log("recomPromise:", recomPromise);
 
-    let fundLine = [];
-    let fundLine2 = [];
-    let fundBar = [];
-    let fundBar2 = [];
-    let daily, daily2, yearly, yearly2;
+    this.customData = customPromise;
+    if (!customPromise.performance){
+      this.customData.performance = [{},{},{},{},{},{}]
+    }
+    if (!customPromise.returns){
+      this.customData.returns = {daily:{}, monthly:{}, yearly:{}}
+    }
+    this.recomData = recomPromise
+    this.customTotalPerf = customPromise.performance[0]
+    this.recomTotalPerf = recomPromise.performance[0]
+    this.customComponents = customPromise.performance.slice(1)
+    this.recomComponents = recomPromise.performance.slice(1)
+    this.customReturns = customPromise.returns
+    this.recomReturns = recomPromise.returns
+    // console.log("this.customReturns:", this.customReturns)
+    // console.log("this.recomReturns:", this.recomReturns)
+    // console.log("this.customComponents:", this.customComponents)
+    let fundLine = []
+    let fundLine2 = []
+    let fundBar = []
+    let fundBar2 = []
+    let daily, daily2, yearly, yearly2
     await new Promise(resolve => {
-      daily = this.recomReturns.daily.cum_roi;
-      daily2 = this.customReturns.daily.cum_roi;
-      yearly = this.recomReturns.yearly.roi;
-      yearly2 = this.customReturns.yearly.roi;
-      resolve();
-    });
+      daily = this.recomReturns.daily.cum_roi
+      daily2 = this.customReturns.daily.cum_roi
+      yearly = this.recomReturns.yearly.roi
+      yearly2 = this.customReturns.yearly.roi
+      resolve()
+    })
     await new Promise(resolve => {
+
       Object.keys(daily).forEach(obj => {
         fundLine.push({
           x: obj,
           y: daily[obj]
-        });
-      });
-      Object.keys(daily2).forEach(obj => {
-        fundLine2.push({
-          x: obj,
-          y: daily2[obj]
-        });
-      });
-      // console.log("fundLine:", fundLine);
+        })
+      })
+
+      if(daily2){
+        Object.keys(daily2).forEach(obj => {
+          fundLine2.push({
+            x: obj,
+            y: daily2[obj]
+          })
+        })
+      }
+
+      // console.log("fundLine:", fundLine)
 
       Object.keys(yearly).forEach(obj => {
         fundBar.push({
           x: obj,
           y: yearly[obj]
-        });
-      });
-      Object.keys(yearly2).forEach(obj => {
-        fundBar2.push({
-          x: obj,
-          y: yearly2[obj]
-        });
-      });
+        })
+      })
+
+      if(yearly2){
+        Object.keys(yearly2).forEach(obj => {
+          fundBar2.push({
+            x: obj,
+            y: yearly2[obj]
+          })
+        })
+      }
 
       resolve();
     });

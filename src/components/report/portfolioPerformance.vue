@@ -13,23 +13,24 @@
         <tr>
           <td>日期區間Period</td>
           <td>
-            {{ recomTotalPerf.start_date }} - {{ recomTotalPerf.end_date }}
+            {{ recomTotalPerf.start_date + ' - ' +  recomTotalPerf.end_date}} 
           </td>
           <td>
-            {{ customTotalPerf.start_date }} - {{ customTotalPerf.end_date }}
+            {{ customTotalPerf.start_date ? customTotalPerf.start_date + ' - ' +  customTotalPerf.end_date : null}} 
           </td>
           <!-- Jan 2020 - Jan 2021 -->
         </tr>
         <tr>
           <td>期初投資餘額Start Balance</td>
           <td>{{ recomTotalPerf.Start_Balance | currency }}</td>
-          <td>{{ customTotalPerf.Start_Balance | currency }}</td>
+          <td v-if="customTotalPerf.Start_Balance">{{customTotalPerf.Start_Balance | currency}}</td>
+          
           <!---->
         </tr>
         <tr>
           <td>期末餘額End Balance</td>
           <td>{{ recomTotalPerf.End_Balance | currency }}</td>
-          <td>{{ customTotalPerf.End_Balance | currency }}</td>
+          <td v-if="customTotalPerf.End_Balance">{{customTotalPerf.End_Balance | currency}}</td>
           <!---->
         </tr>
         <tr>
@@ -47,11 +48,11 @@
         <tr>
           <td>波動率Volatility</td>
           <tdNum
-            :content="recomTotalPerf['Volatility(%)']"
+            :content="recomTotalPerf['Stdev(%)']"
             :numFormat="percentFormat"
           ></tdNum>
           <tdNum
-            :content="customTotalPerf['Volatility(%)']"
+            :content="customTotalPerf['Stdev(%)']"
             :numFormat="percentFormat"
           ></tdNum>
           <!---->
