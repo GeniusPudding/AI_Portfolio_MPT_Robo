@@ -66,7 +66,7 @@
                   type="text"
                   disabled="disabled"
                   class="text-center isEdit"
-                  :value="calcPercent()[$index]"
+                  :value="calcPercent($index)"
                 />
               </li>
 
@@ -97,9 +97,9 @@
               </p>
             </li>
 
-            <li data-title="投資比重(%)">{{ calcPercent()[$index] }}</li>
+            <li data-title="投資比重(%)">{{ calcPercent($index)}}</li>
             <li data-title="投資金額">
-              {{ Math.round(investmentAmount[$index]) }}元
+              {{ showFundAmount($index) }}元
             </li>
           </Fragment>
         </ol>
@@ -284,6 +284,16 @@ export default {
         this.isLoaded = true;
       }
     },
+    showFundAmount(index){
+      const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'TWD',
+        minimumFractionDigits: 0
+      })
+      let fcur = formatter.format(Math.round(this.investmentAmount[index])) 
+      console.log('fcur:',fcur)
+      return fcur
+    },
     changeFund(event, index) {
       console.log("changeFund event:", event)
       console.log("changeFund index:", index)
@@ -338,7 +348,7 @@ export default {
       return rrPool
       // return filteredMarket[0].pool;
     },
-    calcPercent() {
+    calcPercent(index) {
       // console.log('calcPercent')
       var data = [];
       this.investmentAmount.forEach((obj, key) => {
@@ -356,12 +366,12 @@ export default {
         data[maxIndex] =
           data[maxIndex] - (tempTotalPercent - 100)
       }
-      console.log('calcPercent data:',data)
+      // console.log('calcPercent data:',data)
       data.forEach((obj,key)=>{
-        console.log('data weight:',obj)
+        // console.log('data weight:',obj)
         this.personalPortfolio[key].weight = obj
       })
-      return data
+      return data[index] + '%'
     },
     initBudget() {
       if (this.BfNo === 0) {

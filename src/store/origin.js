@@ -9,7 +9,7 @@ let data = {
     user_id: "",
     rr_value: 3,
     rr_param: {"rr_value": 3},
-    useMail: true,
+    useMail: false,
     authorizationHeader: {},
     fundPool: [
         //{type: [{marketType: [fundName]}] }

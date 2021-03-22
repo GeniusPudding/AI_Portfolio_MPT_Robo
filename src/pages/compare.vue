@@ -23,13 +23,13 @@
         <div class="report-item-area">
           <p>定期投資報告通知發送設定</p>
           <div class="report-item-btn">
-            <div
+            <!-- <div
               class="sItem"
               :class="{ active: useMail }"
               @click.prevent="switchSend($event)"
             >
               電子郵件
-            </div>
+            </div> -->
             <div
               class="sItem"
               :class="{ active: !useMail }"
