@@ -3,6 +3,7 @@ let data = {
     client_ip: '',
     recommendedSource: 'tv',//tv or mpt
     BfNo: 0,
+    Gid: '',
     token: '',
     questionnaire: 0,
     username: "",

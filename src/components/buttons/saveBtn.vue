@@ -40,17 +40,31 @@ import { Fragment } from "vue-fragment";
 export default {
   components: { modal, Fragment },
   computed: {
-    ...mapState(['authorizationHeader','useMail','BfNo','recommendedPortfolio','personalPortfolio','client_ip','rr_value']),
+    ...mapState(['authorizationHeader','useMail','BfNo','recommendedPortfolio','personalPortfolio','client_ip','rr_value','Gid']),
     body () {
       if (this.BfNo!==0){
-        return {
-          'client_ip': this.client_ip,
-          'bfNo': this.BfNo,
-          'custom_portfolio': this.personalPortfolio,
-          'notify_type': this.useMail ? 'email' : 'cellphone',
-          'recom_portfolio': this.recommendedPortfolio,
-          'rr_value': this.rr_value
+        if (!this.useMail){
+          return {
+            'client_ip': this.client_ip,
+            'bfNo': this.BfNo,
+            'Gid' : this.Gid,
+            'custom_portfolio': this.personalPortfolio,
+            'notify_type': this.useMail ? 'email' : 'cellphone',
+            'recom_portfolio': this.recommendedPortfolio,
+            'rr_value': this.rr_value
+          }
+
+        }else{
+          return {
+            'client_ip': this.client_ip,
+            'bfNo': this.BfNo,
+            'custom_portfolio': this.personalPortfolio,
+            'notify_type': this.useMail ? 'email' : 'cellphone',
+            'recom_portfolio': this.recommendedPortfolio,
+            'rr_value': this.rr_value
+          }
         }
+
       }else{
         return {
           'custom_portfolio': this.personalPortfolio,

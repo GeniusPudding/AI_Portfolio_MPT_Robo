@@ -247,7 +247,8 @@ export default {
       "Passwd",
       "client_ip",
       "rr_value",
-      "username"
+      "username",
+      "Gid"
     ]),
     ECheaders() {
       return {
@@ -422,27 +423,28 @@ export default {
           //需要檢查後端回傳的登入狀態嗎?
         }
 
-        this.isLogin = true;
+        this.isLogin = true
         // this.user_id = ''
-        this.isEC = true;
-        this.BfNo = login.Result.BfNo;
-        this.token = login.Result.Token;
-        this.rr_value = login.Result.RiskType;
-        console.log("EC token:", this.token);
+        this.isEC = true
+        this.BfNo = login.Result.BfNo
+        this.Gid = login.Result.Gid
+        this.token = login.Result.Token
+        this.rr_value = login.Result.RiskType
+        console.log("EC token:", this.token)
         this.$nextTick(() => {
           this.$cookies.set("mptLogin", {
             IdNo: this.IdNo,
             isLogin: true,
             token: this.token
-          });
+          })
           this.$router.push("myportfolio");
-        });
+        })
       } catch (error) {
-        console.log("login error");
-        this.isLogin = false;
-        this.$api.handlerErr(error);
+        console.log("login error")
+        this.isLogin = false
+        this.$api.handlerErr(error)
       } finally {
-        this.isSubmit = false;
+        this.isSubmit = false
       }
     }
   }
