@@ -37,10 +37,10 @@
                 <select
                   @change="changeFund($event, $index)"
                   v-model="fundItem.market"
-                  :disabled="cusMarket(fundItem.type).length == 0"
+                  :disabled="cusMarket(fundItem).length == 0"
                 >
                   <option
-                    v-for="option in cusMarket(fundItem.type)"
+                    v-for="option in cusMarket(fundItem)"
                     :value="option.name"
                     :key="option.name"
                     >{{ option.name }}</option
@@ -296,26 +296,46 @@ export default {
     },
     changeFund(event, index) {
       console.log("changeFund event:", event)
-      console.log("changeFund index:", index)
+      // console.log("changeFund index:", index)
       let name =  event.target.value
-      console.log("changeFund event.target.value:",name);
+      // console.log("changeFund event.target.value:",name);
       if(this.fundID_map[name]){
         console.log("fundID_map :", this.fundID_map[name])
         this.personalPortfolio[index].fund_id = this.fundID_map[name]
       }
 
-      console.log("select fundItem.fund:", fundItem);
+      // console.log("select fundItem.fund:", fundItem);
     },
-    cusMarket(key) {
-      // console.log('key:',key)
+    cusMarket(fundItem) {
+      let defaultName = fundItem.name 
+      let type = fundItem.type
+      console.log('fundItem:',fundItem)
+      console.log('fundItem.market:',fundItem.market)
       if (!this.fundPool) return [];
-      var market = this.fundPool.filter(obj => {
-        return obj.type == key;
-      });
-      // console.log('cusMarket:',market)
-      // console.log('cusMarket markets:',market[0].markets)
-      if (market.length <= 0) return [];
-      return market[0].markets;
+      var marketType = this.fundPool.filter(obj => {
+        return obj.type == type;
+      })[0]
+      if (marketType.length <= 0) return [];
+      console.log('cusMarket:',marketType)
+      console.log('cusMarket markets:',marketType.markets)
+      let rrMarket = marketType.markets.filter(
+        obj => obj.pool.some(
+          fundobj => {
+            return fundobj.rr <= this.rr_value || fundobj.fund.name == defaultName
+          }
+        )
+
+      )
+
+      // return marketType.markets;
+      return rrMarket
+      // let rrPool = filteredMarket[0].pool.filter(obj => {
+      //     if(!this.fundID_map[obj.fund.name]){
+      //       this.fundID_map[obj.fund.name] = obj.fund.id
+      //     }  
+
+      //     return obj.rr <= this.rr_value || obj.fund.name == defaultName // except for matched rr value, add the one that already in the storage
+      // })
     },
     cusFund(fundItem) {
       var defaultName = fundItem.name 
@@ -324,13 +344,14 @@ export default {
       if (!this.fundPool || !key) return [];
 
       var type = fundItem.type;
-      var market = this.fundPool.filter(obj => {
+      var marketType = this.fundPool.filter(obj => {
         return obj.type == type;
-      })[0];
-      // console.log('market:',market)
+      })[0]
+
+      // console.log('marketType:',marketType)
       var filteredMarket = [];
-      if (market) {
-        filteredMarket = market.markets.filter(obj => {
+      if (marketType) {
+        filteredMarket = marketType.markets.filter(obj => {
           return obj.name == key;
         });
       }
