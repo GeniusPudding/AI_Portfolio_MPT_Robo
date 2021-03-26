@@ -33,7 +33,7 @@
             <a
               href="javascript:void(0);"
               title="立即進行資產檢測"
-              @click="toggleModal('member')"
+              @click="initModal"
             >
               立即進行資產檢測 <i class="fas fa-angle-right"></i>
             </a>
@@ -137,7 +137,7 @@
                 </a>
               </div>
               <div class="btn type2">
-                <a title="搶先體驗" @click="openTaste"> 搶先體驗 </a>
+                <a title="搶先體驗" @click="switchTaste"> 搶先體驗 </a>
               </div>
             </div>
           </div>
@@ -187,7 +187,7 @@
                   <div class="formArea-item-input">
                     <input
                       type="tel"
-                      name=""
+                      name=""          
                       v-model="vmodelCellphone"
                       id="phone"
                       placeholder="請輸入您的手機號碼"
@@ -199,7 +199,7 @@
             </div>
             <div class="btnArea twoBtn">
               <div class="btn">
-                <a title="返回" @click="openTaste"> 返回 </a>
+                <a title="返回" @click="switchTaste"> 返回 </a>
               </div>
               <div class="btn type2">
                 <a title="前往體驗" @click="tasteLogin"> 前往體驗 </a>
@@ -216,20 +216,27 @@ import { mapState } from "vuex";
 import { mapFields } from "vuex-map-fields";
 import modal from "../components/modal";
 import md5 from "blueimp-md5";
+import { required, minLength, between } from 'vuelidate/lib/validators'
 // import axios from "axios";
 export default {
   data() {
     return {
-      // IdNo: "",
-      // isSubmit: false,
-      // Passwd: "",
-      // username: "",
+
       vmodelEmail: "",
       vmodelCellphone: "",
-      inputAccountNameNull: true,
-      inputPasswordNull: true,
-      inputTasteNameNull: true,
+      inputAccountNameNull: false,
+      inputPasswordNull: false,
+      inputTasteNameNull: false,
+      firstTyped: [false,false,false,false,false], // record five
+      invalidEmail: false,
+      invalidPhone: false
     };
+  },
+validations: {
+    username: {
+      required,
+      minLength: minLength(4)
+    },
   },
   components: {
     modal
@@ -273,64 +280,79 @@ export default {
         client_ip: this.client_ip
       };
     },
-    invalidEmail(){
-      return !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.vmodelEmail)
-    },
-    invalidPhone(){
-      return !/09[0-9]{8}$/.test(this.vmodelCellphone)
-    }
+    // invalidEmail(){
+    //   return !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.vmodelEmail)
+    // },
+    // invalidPhone(){
+    //   return this.firstTyped[4] ? (!/09[0-9]{8}$/.test(this.vmodelCellphone)) : false
+    //  }
   },
   mounted() {
     this.getIP();
-    if (this.IdNo){
-      this.inputAccountNameNull = false
-    }
-    if (this.Passwd){
-      this.inputPasswordNull = false
-    }
-    if (this.username){
-      this.inputTasteNameNull = false
-    }
+    // if (this.IdNo){
+    //   this.inputAccountNameNull = false
+    // }
+    // if (this.Passwd){
+    //   this.inputPasswordNull = false
+    // }
+    // if (this.username){
+    //   this.inputTasteNameNull = false
+    // }
   },
   watch:{
-    "IdNo": function() {
+    IdNo: function() {
+      if (!this.firstTyped[0]){
+        this.firstTyped[0] = true
+        return
+      }
       if (this.IdNo && this.inputAccountNameNull){
         this.switchAccountNameNull()
       }else if(!this.IdNo && !this.inputAccountNameNull){
         this.switchAccountNameNull()
       }
     },
-    "Passwd": function() {
+    Passwd: function() {
+      if (!this.firstTyped[1]){
+        this.firstTyped[1] = true
+        return
+      }
       if (this.Passwd && this.inputPasswordNull){
         this.switchPasswordNull()
       }else if(!this.Passwd && !this.inputPasswordNull){
         this.switchPasswordNull()
       }
     },
-    "username": function() {
+    username: function() {
+      if (!this.firstTyped[2]){
+        this.firstTyped[2] = true
+        return
+      }
+      console.log('watching username after fisrtTyped')
       if (this.username && this.inputTasteNameNull){
         this.switchTasteNameNull()
       }else if(!this.username && !this.inputTasteNameNull){
         this.switchTasteNameNull()
       }
     },
-    // "IdNo": function() {
-    //   if (this.IdNo && this.inputAccountNameNull){
-    //     this.switchAccountNameNull()
-    //   }else if(!this.IdNo && !this.inputAccountNameNull){
-    //     this.switchAccountNameNull()
-    //   }
-    // },
-    // "IdNo": function() {
-    //   if (this.IdNo && this.inputAccountNameNull){
-    //     this.switchAccountNameNull()
-    //   }else if(!this.IdNo && !this.inputAccountNameNull){
-    //     this.switchAccountNameNull()
-    //   }
-    // }
+    vmodelEmail: function() {
+      if (!this.firstTyped[3]){
+        this.firstTyped[3] = true
+      }
+      this.invalidEmail = !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.vmodelEmail)
+    },
+    vmodelCellphone: function() {
+      if (!this.firstTyped[4]){
+        this.firstTyped[4] = true
+      }
+      this.invalidPhone =  !/09[0-9]{8}$/.test(this.vmodelCellphone)
+    }
 
   },
   methods: {
+    firstType(index){
+      this.firstTyped[index] = true
+      console.log('firstTyped:',firstTyped)
+    },
     switchAccountNameNull(){
       this.inputAccountNameNull = !this.inputAccountNameNull
     },
@@ -340,7 +362,22 @@ export default {
     switchTasteNameNull(){
       this.inputTasteNameNull = !this.inputTasteNameNull
     },
-    openTaste() {
+    initObserveInput(){
+      this.inputAccountNameNull = false
+      this.inputPasswordNull = false
+      this.inputTasteNameNull = false
+      this.invalidEmail = false
+      this.invalidPhone = false
+      this.firstTyped = [false,false,false,false,false]
+    },
+    initModal () {
+      this.initObserveInput()
+      console.log('initModal firstTyped:',this.firstTyped)
+      this.toggleModal('member')
+    },
+    switchTaste() {
+      this.initObserveInput()
+
       this.toggleModal("member");
       this.toggleModal("tasteModal");
     },
@@ -352,12 +389,17 @@ export default {
       }
       console.log("this.client_ip:", this.client_ip);
     },
-    // toggleModal(name) {
-    //   console.log("test toggleModal:", name);
-    //   this.$refs[name].toggle = !this.$refs[name].toggle;
-    // },
+
     async tasteLogin() {
       if ( this.inputTasteNameNull || this.invalidEmail || this.invalidPhone) return
+      if (!this.username || !this.vmodelEmail || !this.vmodelCellphone){
+        //if login without any input && no brower's auto-save info
+        this.inputTasteNameNull = !this.username
+        this.invalidEmail = !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.vmodelEmail)
+        this.invalidPhone = !/09[0-9]{8}$/.test(this.vmodelCellphone)
+        return
+      }
+
       if (this.isSubmit) return
       this.isSubmit = true
       // var url= 'http://10.20.1.7/www/auth'
@@ -411,7 +453,12 @@ export default {
     },
     async next() {
       if (this.inputAccountNameNull || this.inputPasswordNull ) return
-
+      if (!this.IdNo || !this.Passwd){
+        //if login without any input && no brower's auto-save info
+        this.inputAccountNameNull = !this.IdNo
+        this.inputPasswordNull = !this.Passwd
+        return
+      }
       if (this.isSubmit) return;
       this.isSubmit = true;
       console.log("trying login");
