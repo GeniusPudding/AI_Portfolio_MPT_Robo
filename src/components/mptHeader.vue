@@ -27,9 +27,12 @@
           <li>Hi, {{username}} 您的風險屬性</li>
           <li v-if="isEditable">
             <select v-model="rr_value" @change="changeRR($event)">
-              <option>5</option>
-              <option>4</option>
-              <option>3</option>
+              <option
+                    v-for="option in rist_list"
+                    :value="option.val"
+                    :key="option.val"
+              >{{ `${option.risk}` }}</option>
+
             </select>
           </li>
           <li v-else>{{risk_map[rr_value]}}</li>
@@ -61,6 +64,9 @@ export default {
       selectName: '',
       menuBtnActive: false, //這兩個啥意思?
       navbarShow: false, //這兩個啥意思?
+      rist_list: [{risk:'積極',val:5},
+        {risk:'穩健',val:4},{risk:'保守',val:3}],
+
       risk_map: {
         5:'積極',
         4:'穩健',
@@ -87,12 +93,7 @@ export default {
   },
   methods: {
     changeRR (event) {
-      console.log('changeRR:',event.target)
-      
-      this.rr_value = event.target.value//this.risk_inv_map[event.target.value]
       console.log('changeRR value:',this.rr_value)
-
-      this.$forceUpdate()// why?
       this.rr_param = {"rr_value": this.rr_value}
       console.log('action rr_param:',this.rr_param)
     },
