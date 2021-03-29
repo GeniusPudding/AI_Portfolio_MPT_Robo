@@ -155,6 +155,7 @@ export default {
       "isLoaded"
     ]),
     isEmptyPortfolio(){
+      console.log('isEmptyPortfolio personalPortfolio:',this.personalPortfolio)
       return this.personalPortfolio.length == 0
     },
     header() {
@@ -197,17 +198,17 @@ export default {
     }
   },
   watch: {
-    "$store.state.personalPortfolio": function() {
-      let p = this.$store.state.personalPortfolio;
-      console.log("this.$store.state.personalPortfolio:", p);
-      if (p.length > 2) {
-        this.recommendedSource = "mpt";
-        console.log("personalPortfolio MPT");
-      } else {
-        this.recommendedSource = "tv";
-        console.log("personalPortfolio TV");
-      }
-    },
+    // "$store.state.personalPortfolio": function() {
+    //   let p = this.$store.state.personalPortfolio;
+    //   console.log("this.$store.state.personalPortfolio:", p);
+    //   if (p.length > 2) {
+    //     this.recommendedSource = "mpt";
+    //     console.log("personalPortfolio MPT");
+    //   } else {
+    //     this.recommendedSource = "tv";
+    //     console.log("personalPortfolio TV");
+    //   }
+    // },
     "this.rr_value": function() {
       console.log('rr_value:',this.rr_value)
     }
@@ -309,15 +310,18 @@ export default {
     cusMarket(fundItem) {
       let defaultName = fundItem.name 
       let type = fundItem.type
-      // console.log('fundItem:',fundItem)
-      // console.log('fundItem.market:',fundItem.market)
+      console.log('fundItem:',fundItem)
+      console.log('this.fundPool:',this.fundPool)
+      console.log('fundItem.type:',fundItem.type)
       if (!this.fundPool) return [];
       var marketType = this.fundPool.filter(obj => {
+        console.log('obj type:',obj.type)
         return obj.type == type;
-      })[0]
-      if (marketType.length <= 0) return [];
-      // console.log('cusMarket:',marketType)
-      // console.log('cusMarket markets:',marketType.markets)
+      })
+      if (marketType.length <= 0) return []
+      console.log('cusMarket:',marketType)
+      marketType = marketType[0]
+      
       let rrMarket = marketType.markets.filter(
         obj => obj.pool.some(
           fundobj => {
@@ -355,7 +359,7 @@ export default {
           return obj.name == key;
         });
       }
-      // console.log('filteredMarket:',filteredMarket)
+      console.log('filteredMarket:',filteredMarket)
       // console.log('filteredMarket[0].pool:',filteredMarket[0].pool)
       if (filteredMarket.length <= 0) return [];
       let rrPool = filteredMarket[0].pool.filter(obj => {
@@ -365,7 +369,7 @@ export default {
 
           return obj.rr <= this.rr_value || obj.fund.name == defaultName // except for matched rr value, add the one in the storage
       })
-      // console.log('rrPool:',rrPool)
+      console.log('rrPool:',rrPool)
       return rrPool
       // return filteredMarket[0].pool;
     },
@@ -440,12 +444,16 @@ export default {
       this.personalPortfolio = [...this.initPorfolio];
       this.investmentAmount = [...this.initAmount];
     },
-    addFund() {
-      console.log('add')
-      if (this.personalPortfolio.length >= 10) {
+    async addFund() {
+      console.log('add this.personalPortfolio.__ob__:',this.personalPortfolio.__ob__)
+      let testPP =  JSON.parse(JSON.stringify(this.personalPortfolio))
+      console.log('testPP:',testPP)
+      if (testPP.length >= 10) {
+        console.log('testPP.length:',testPP.length)
         alert("自訂基金最多為 10 組！");
         return;
       }
+      console.log('test alert')
       this.personalPortfolio.push({
         MarketValue: 0,
         fund_id: "",
@@ -454,7 +462,9 @@ export default {
         type: "",
         weight: 0
       });
+      console.log('test push')
       this.investmentAmount.push(5000);
+      console.log('test push2')
     },
     deleteFund(index) {
       this.isDelete = true;
