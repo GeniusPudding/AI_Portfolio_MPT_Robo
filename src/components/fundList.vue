@@ -291,7 +291,7 @@ export default {
         minimumFractionDigits: 0
       })
       let fcur = formatter.format(Math.round(this.investmentAmount[index])) 
-      console.log('fcur:',fcur)
+      // console.log('fcur:',fcur)
       return fcur
     },
     changeFund(event, index) {

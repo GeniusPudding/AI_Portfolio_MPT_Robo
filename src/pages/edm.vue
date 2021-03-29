@@ -4,9 +4,9 @@
     <section class="item combination">
       <div class="container">
         <h2 class="tit-type2" title="建議的投組清單">建議的投組清單</h2>  
-        <recommendList :edmData="edmResponse"></recommendList> 
+        <recommendList></recommendList> 
         <h2 class="tit-type2" title="理財健檢報告">理財健檢報告</h2>
-        <report :edmData="edmResponse"></report>
+        <report></report>
 
         <!-- fix button -->
         <div class="btnArea twoBtn">
@@ -48,10 +48,13 @@ export default {
   methods: {
     async getEDMResults() {
       try {
-        return await this.$api.getEC(
+        let pid = await this.$api.getEC(
           "/edm",
           { port_id: this.$route.query.PID},
         )
+        console.log('debug pid:',pid)
+        return pid
+
       } catch (error) {
         this.$api.handlerErr(error);
       } finally {

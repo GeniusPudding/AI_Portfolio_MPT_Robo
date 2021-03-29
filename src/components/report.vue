@@ -64,7 +64,6 @@ import portfolioPerformance from "./report/portfolioPerformance";
 import monthlyPerformance from "./report/monthlyPerformance";
 import loading from "./includes/loading.vue";
 export default {
-  props: ["edmData"],
   data() {
     return {
       customData: {},
@@ -105,12 +104,13 @@ export default {
     }
   },
   async mounted() {
-
-    console.log("edmData:", this.edmData);
+    console.log("EDM mounted this.$route.name:", this.$route.name);
     console.log("recommendedPortfolio:", this.recommendedPortfolio);
     console.log("personalPortfolio:", this.personalPortfolio);
-    let res = this.edmData ? this.edmData : await this.getResults()
+    let res = this.$route.name == 'edm' ? await this.$parent.getEDMResults() : await this.getResults()
     console.log("getResults:", res);
+    var parsedobj = JSON.parse(JSON.stringify(res))
+    console.log('parsedobj res:',parsedobj)
     // console.log(
     //   "res.Result.custom.performance:",
     //   res.Result.custom.performance
