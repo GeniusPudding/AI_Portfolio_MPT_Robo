@@ -30,6 +30,7 @@ import { mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import loading from './includes/loading'
 export default {
+  props: ["edmData"],
   components: {loading},
   computed: {
     ...mapState(['BfNo', 'rr_param', 'recommendedSource','personalPortfolio']),
@@ -47,10 +48,9 @@ export default {
     console.log('recom authorizationHeader:',this.authorizationHeader)
     console.log('recom personalPortfolio:',this.personalPortfolio)
 
-    let sources = await this.getRecommendedList()
-    console.log('getRecommendedList res:',sources)
-    // this.recommendedPortfolio = sources[this.recommendedSource].portfolio
-    this.recommendedPortfolio = sources.recom.portfolio
+    let sources = this.edmData ? this.edmData.Result.recom.portfolio : await this.getRecommendedList()
+
+    this.recommendedPortfolio = this.edmData ? this.edmData :  sources
     console.log('getRecommendedList Portfolio:',this.recommendedPortfolio)
   },
   methods:{
@@ -70,7 +70,7 @@ export default {
           console.log('check authorizationHeader:',this.authorizationHeader)
           res = await this.$api.postWF09('/recom',this.body,this.authorizationHeader)
         }
-        return  res.Result
+        return  res.Result.recom.portfolio
       } catch (error) {
         this.$api.handlerErr(error);
       } finally {

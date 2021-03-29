@@ -1,5 +1,5 @@
-import axiosWF09 from './apiTaste'
-import axiosEC from './apiEC'
+import axiosEC from "./apiEC";
+import axiosWF09 from "./apiTaste";
 
 export const getEC = (url, params,header) => {
     return axiosEC({
@@ -46,6 +46,7 @@ export const handlerErr = (err) => {
     if (err && err.response) {
         if (err.response.hasOwnProperty('data')) {
             if (err.response.data.hasOwnProperty('Status')) {
+                console.log('err.response.data:', err.response.data)
                 msg = err.response.data.Status.Desc
             }
         }

@@ -4,9 +4,9 @@
     <section class="item combination">
       <div class="container">
         <h2 class="tit-type2" title="建議的投組清單">建議的投組清單</h2>  
-        <recommendList></recommendList> 
+        <recommendList :edmData="edmResponse"></recommendList> 
         <h2 class="tit-type2" title="理財健檢報告">理財健檢報告</h2>
-        <report></report>
+        <report :edmData="edmResponse"></report>
 
         <!-- fix button -->
         <div class="btnArea twoBtn">
@@ -32,12 +32,32 @@ import report from '../components/report'
 import recommendList from '../components/recommendList'
 import { mapFields } from "vuex-map-fields"
 export default {
+  data(){
+    return {
+      edmResponse : {}
+    }
+  },
   components: { report, recommendList },
   computed: {
-    ...mapFields(["useMail", 'isLoaded'])
+    ...mapFields(["useMail", 'isLoaded']),
   },
-  mounted(){
+  async mounted(){
     this.isLoaded = false
+    this.edmResponse = await this.getEDMResults()
+  },
+  methods: {
+    async getEDMResults() {
+      try {
+        return await this.$api.getEC(
+          "/edm",
+          { port_id: this.$route.query.PID},
+        )
+      } catch (error) {
+        this.$api.handlerErr(error);
+      } finally {
+        this.isLoaded = true;
+      }
+    }
   }
 };
 </script>

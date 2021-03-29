@@ -1,11 +1,14 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import compare from '@/pages/compare'
-import edm from '@/pages/edm'
-import fundreport from '@/pages/fundreport'
+import Vue from "vue";
+
+import Router from "vue-router";
+
+import compare from "@/pages/compare";
+import edm from "@/pages/edm";
+import fundreport from "@/pages/fundreport";
 // import HelloWorld from '@/components/HelloWorld'
-import home from '@/pages/home'
-import myportfolio from '@/pages/myportfolio'
+import home from "@/pages/home";
+import myportfolio from "@/pages/myportfolio";
+
 Vue.use(Router)
 
 export default new Router({

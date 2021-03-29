@@ -60,7 +60,10 @@ router.beforeEach((to, from, next) => {
         next();
         return;
     } else { //其它頁面確認身分 (除了edm?)
-
+        if( to.name == 'edm'){
+            next()
+            return
+        }
         if ((!data.IdNo && !cookie.IdNo) || (!data.isLogin && !cookie.isLogin)) {
             alert('請點選資產檢測按鈕，登入或選擇搶先體驗')
             next("home");

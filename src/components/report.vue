@@ -64,6 +64,7 @@ import portfolioPerformance from "./report/portfolioPerformance";
 import monthlyPerformance from "./report/monthlyPerformance";
 import loading from "./includes/loading.vue";
 export default {
+  props: ["edmData"],
   data() {
     return {
       customData: {},
@@ -104,9 +105,12 @@ export default {
     }
   },
   async mounted() {
-    // console.log("authorizationHeader:", this.authorizationHeader);
-    let res = await this.getResults();
-    // console.log("getResults:", res);
+
+    console.log("edmData:", this.edmData);
+    console.log("recommendedPortfolio:", this.recommendedPortfolio);
+    console.log("personalPortfolio:", this.personalPortfolio);
+    let res = this.edmData ? this.edmData : await this.getResults()
+    console.log("getResults:", res);
     // console.log(
     //   "res.Result.custom.performance:",
     //   res.Result.custom.performance
@@ -118,8 +122,8 @@ export default {
 
       resolve();
     });
-    // console.log("customPromise:", customPromise);
-    // console.log("recomPromise:", recomPromise);
+    console.log("customPromise:", customPromise);
+    console.log("recomPromise:", recomPromise);
 
     this.customData = customPromise;
     if (!customPromise.performance){
@@ -135,9 +139,9 @@ export default {
     this.recomComponents = recomPromise.performance.slice(1)
     this.customReturns = customPromise.returns
     this.recomReturns = recomPromise.returns
-    // console.log("this.customReturns:", this.customReturns)
-    // console.log("this.recomReturns:", this.recomReturns)
-    // console.log("this.customComponents:", this.customComponents)
+    console.log("this.customReturns:", this.customReturns)
+    console.log("this.recomReturns:", this.recomReturns)
+    console.log("this.customComponents:", this.customComponents)
     let fundLine = []
     let fundLine2 = []
     let fundBar = []

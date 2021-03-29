@@ -487,7 +487,7 @@ validations: {
           this.$router.push("myportfolio");
         })
       } catch (error) {
-        console.log("login error")
+        console.log("login error:",error)
         this.isLogin = false
         this.$api.handlerErr(error)
       } finally {
