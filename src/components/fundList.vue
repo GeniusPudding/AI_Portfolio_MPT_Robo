@@ -309,15 +309,15 @@ export default {
     cusMarket(fundItem) {
       let defaultName = fundItem.name 
       let type = fundItem.type
-      console.log('fundItem:',fundItem)
-      console.log('fundItem.market:',fundItem.market)
+      // console.log('fundItem:',fundItem)
+      // console.log('fundItem.market:',fundItem.market)
       if (!this.fundPool) return [];
       var marketType = this.fundPool.filter(obj => {
         return obj.type == type;
       })[0]
       if (marketType.length <= 0) return [];
-      console.log('cusMarket:',marketType)
-      console.log('cusMarket markets:',marketType.markets)
+      // console.log('cusMarket:',marketType)
+      // console.log('cusMarket markets:',marketType.markets)
       let rrMarket = marketType.markets.filter(
         obj => obj.pool.some(
           fundobj => {
