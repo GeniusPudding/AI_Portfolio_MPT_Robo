@@ -11,7 +11,7 @@
     </div>
     <div class="fixedRightBtn type2">
       <a
-        href="https://etrade.franklin.com.tw/Open/Entrance"
+        href="https://etrade.franklin.com.tw/Open/OpenOnlineAuthenticated"
         target="_blank"
         title="立即開戶"
       >

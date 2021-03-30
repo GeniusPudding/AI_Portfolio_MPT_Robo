@@ -48,10 +48,19 @@ export default {
   methods: {
     async getEDMResults() {
       try {
-        let pid = await this.$api.getEC(
-          "/edm",
-          { port_id: this.$route.query.PID},
-        )
+        let pid
+        if (this.$route.query.type == 'www'){
+          pid = await this.$api.getWF09(
+            "/edm",
+            { port_id: this.$route.query.port_id},
+          )
+        }else{
+          pid = await this.$api.getEC(
+            "/edm",
+            { port_id: this.$route.query.port_id},
+          )
+        }
+
         console.log('debug pid:',pid)
         return pid
 
