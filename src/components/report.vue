@@ -104,14 +104,14 @@ export default {
     }
   },
   async mounted() {
-    console.log("EDM mounted this.$route.name:", this.$route.name);
-    console.log("recommendedPortfolio:", this.recommendedPortfolio);
-    console.log("personalPortfolio:", this.personalPortfolio);
+    this.localLog("EDM mounted this.$route.name:", this.$route.name);
+    this.localLog("recommendedPortfolio:", this.recommendedPortfolio);
+    this.localLog("personalPortfolio:", this.personalPortfolio);
     let res = this.$route.name == 'edm' ? await this.$parent.getEDMResults() : await this.getResults()
-    console.log("getResults:", res);
+    this.localLog("getResults:", res);
     var parsedobj = JSON.parse(JSON.stringify(res))
-    console.log('parsedobj res:',parsedobj)
-    // console.log(
+    this.localLog('parsedobj res:',parsedobj)
+    // this.localLog(
     //   "res.Result.custom.performance:",
     //   res.Result.custom.performance
     // );
@@ -122,8 +122,8 @@ export default {
 
       resolve();
     });
-    console.log("customPromise:", customPromise);
-    console.log("recomPromise:", recomPromise);
+    this.localLog("customPromise:", customPromise);
+    this.localLog("recomPromise:", recomPromise);
 
     this.customData = customPromise;
     if (!customPromise.performance){
@@ -139,9 +139,9 @@ export default {
     this.recomComponents = recomPromise.performance.slice(1)
     this.customReturns = customPromise.returns
     this.recomReturns = recomPromise.returns
-    console.log("this.customReturns:", this.customReturns)
-    console.log("this.recomReturns:", this.recomReturns)
-    console.log("this.customComponents:", this.customComponents)
+    this.localLog("this.customReturns:", this.customReturns)
+    this.localLog("this.recomReturns:", this.recomReturns)
+    this.localLog("this.customComponents:", this.customComponents)
     let fundLine = []
     let fundLine2 = []
     let fundBar = []
@@ -172,7 +172,7 @@ export default {
         })
       }
 
-      // console.log("fundLine:", fundLine)
+      // this.localLog("fundLine:", fundLine)
 
       Object.keys(yearly).forEach(obj => {
         fundBar.push({

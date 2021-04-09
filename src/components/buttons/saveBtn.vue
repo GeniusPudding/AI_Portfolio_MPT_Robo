@@ -79,8 +79,8 @@ export default {
   methods: {
       async savePortfolio() {
         if(this.BfNo!==0){//EC customers
-          console.log('this.client_ip:',this.client_ip)
-          console.log('this.body EC:',this.body)
+          this.localLog('this.client_ip:',this.client_ip)
+          this.localLog('this.body EC:',this.body)
           await this.$api.postEC('/create',this.body,this.authorizationHeader)
         }else{
           await this.$api.postWF09('/create',this.body,this.authorizationHeader)

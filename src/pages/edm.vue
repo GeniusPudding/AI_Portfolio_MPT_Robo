@@ -61,7 +61,7 @@ export default {
           )
         }
 
-        console.log('debug pid:',pid)
+        this.localLog('debug pid:',pid)
         return pid
 
       } catch (error) {

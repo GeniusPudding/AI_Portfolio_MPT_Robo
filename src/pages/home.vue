@@ -327,7 +327,7 @@ validations: {
         this.firstTyped[2] = true
         return
       }
-      console.log('watching username after fisrtTyped')
+      this.localLog('watching username after fisrtTyped')
       if (this.username && this.inputTasteNameNull){
         this.switchTasteNameNull()
       }else if(!this.username && !this.inputTasteNameNull){
@@ -351,7 +351,7 @@ validations: {
   methods: {
     firstType(index){
       this.firstTyped[index] = true
-      console.log('firstTyped:',firstTyped)
+      this.localLog('firstTyped:',firstTyped)
     },
     switchAccountNameNull(){
       this.inputAccountNameNull = !this.inputAccountNameNull
@@ -372,7 +372,7 @@ validations: {
     },
     initModal () {
       this.initObserveInput()
-      console.log('initModal firstTyped:',this.firstTyped)
+      this.localLog('initModal firstTyped:',this.firstTyped)
       this.toggleModal('member')
     },
     switchTaste() {
@@ -387,7 +387,7 @@ validations: {
       if(this.client_ip==''){
         this.client_ip = '210.65.139.185'
       }
-      console.log("this.client_ip:", this.client_ip);
+      this.localLog("this.client_ip:", this.client_ip);
     },
 
     async tasteLogin() {
@@ -412,7 +412,7 @@ validations: {
       //   data: JSON.stringify(this.tasteData)
       // }
       // axios(url,config).then(res=>{
-      //   console.log(JSON.stringify(res.data))
+      //   this.localLog(JSON.stringify(res.data))
       // })
       try {
         var login = await this.$api.postWF09(
@@ -420,10 +420,10 @@ validations: {
           JSON.stringify(this.tasteData),
           {}
         );
-        console.log("taste login:", login);
+        this.localLog("taste login:", login);
         this.isLogin = true;
         this.token = login.Result.token;
-        console.log("this.token:", this.token);
+        this.localLog("this.token:", this.token);
         this.$nextTick(() => {
           this.$cookies.set("mptLogin", {
             IdNo: "taste",
@@ -433,7 +433,7 @@ validations: {
           this.$router.push("myportfolio");
         });
       } catch (error) {
-        console.log("taste login error:",error);
+        this.localLog("taste login error:",error);
         this.isLogin = false;
         this.$api.handlerErr(error);
       } finally {
@@ -461,10 +461,10 @@ validations: {
       }
       if (this.isSubmit) return;
       this.isSubmit = true;
-      console.log("trying login");
+      this.localLog("trying login");
       try {
         var login = await this.ECLogin();
-        console.log("login response:", login);
+        this.localLog("login response:", login);
         // 等API確定再來接login.Result的內容到store
         if (login.Rtcode === "success") {
           //需要檢查後端回傳的登入狀態嗎?
@@ -477,7 +477,7 @@ validations: {
         this.Gid = login.Result.Gid
         this.token = login.Result.Token
         this.rr_value = login.Result.RiskType
-        console.log("EC token:", this.token)
+        this.localLog("EC token:", this.token)
         this.$nextTick(() => {
           this.$cookies.set("mptLogin", {
             IdNo: this.IdNo,
@@ -487,7 +487,7 @@ validations: {
           this.$router.push("myportfolio");
         })
       } catch (error) {
-        console.log("login error:",error)
+        this.localLog("login error:",error)
         this.isLogin = false
         this.$api.handlerErr(error)
       } finally {

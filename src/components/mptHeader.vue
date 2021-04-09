@@ -22,7 +22,7 @@
           <div class="logo-text">富蘭克林‧國民的基金</div>
         </a>
       </div>
-      <nav class="navBar" v-if="$route.name !== 'home'" :class="{ show: navbarShow }">
+      <nav class="navBar" v-if="$route.name !== 'home' && $route.name !== 'edm'" :class="{ show: navbarShow }">
         <ul>
           <li>Hi, {{username}} 您的風險屬性</li>
           <li v-if="isEditable">
@@ -86,19 +86,19 @@ export default {
   props: ['activeNumber'],
 
   mounted () {
-    console.log('header mounted $route:',this.$route.name)
-    if(this.$route.name !== 'home'){
+    this.localLog('header mounted $route:',this.$route.name)
+    if(this.$route.name !== 'home' && this.$route.name !== 'edm'){
       this.navbarShow = true
     }
   },
   methods: {
     changeRR (event) {
-      console.log('changeRR value:',this.rr_value)
+      this.localLog('changeRR value:',this.rr_value)
       this.rr_param = {"rr_value": this.rr_value}
-      console.log('action rr_param:',this.rr_param)
+      this.localLog('action rr_param:',this.rr_param)
     },
     toggleMobileNavbar () {
-      // console.log('toggleMobileNavbar:')
+      // this.localLog('toggleMobileNavbar:')
       this.menuBtnActive === false
         ? (this.menuBtnActive = true)
         : (this.menuBtnActive = false)

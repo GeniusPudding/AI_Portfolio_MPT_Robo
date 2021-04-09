@@ -44,12 +44,12 @@ export default {
       //   alert('請至少新增一檔基金!')
       //   return
       // }
-      console.log('jump check this.personalPortfolio:',this.personalPortfolio)
+      this.localLog('jump check this.personalPortfolio:',this.personalPortfolio)
 
       // let emptyIndex = []
       this.personalPortfolio = this.personalPortfolio.filter((item, index)=>{
-        // console.log('item.weight:',item.weight)
-        // console.log('item.name:',item.name)
+        // this.localLog('item.weight:',item.weight)
+        // this.localLog('item.name:',item.name)
         if (!item.name){
           this.investmentAmount[index] = 0
           this.isCheckingEmpty = true
@@ -57,7 +57,7 @@ export default {
         }
         return (item.name)
       })
-      console.log('this.investmentAmount:',this.investmentAmount)
+      this.localLog('this.investmentAmount:',this.investmentAmount)
       this.investmentAmount = this.investmentAmount.filter(num=>{
         return (num!==0)
       })

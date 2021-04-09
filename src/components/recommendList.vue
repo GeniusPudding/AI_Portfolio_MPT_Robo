@@ -8,6 +8,7 @@
           <li>市場</li>
           <li>基金名稱</li>
           <li>投資比重(%)</li>
+          <li>投資金額</li>
         </ol>
       </li>
       <li class="tbody">
@@ -19,7 +20,10 @@
               {{`${fundItem.fund_id} ${fundItem.name}`}}
             </p>
           </li>
-          <li data-title="投資比重(%)">{{Math.round(fundItem.weight)+'%'}}</li>         
+          <li data-title="投資比重(%)">{{Math.round(fundItem.weight)+'%'}}</li>
+          <li data-title="投資金額">
+              {{ showFundAmount($index) }}元
+          </li>         
         </ol>
       </li>
     </ul>
@@ -32,31 +36,38 @@ import loading from './includes/loading'
 export default {
   components: {loading},
   computed: {
-    ...mapState(['BfNo', 'rr_param', 'recommendedSource','personalPortfolio']),
+    ...mapState(['BfNo', 'rr_param', 'recommendedSource','personalPortfolio','investmentAmount']),
     ...mapFields(['isLoaded', 'recommendedPortfolio', 'authorizationHeader']),
     body(){
       let fund_list = this.personalPortfolio.map(fund=>fund.fund_id)
-      console.log('fund_list:',fund_list)
+      this.localLog('fund_list:',fund_list)
       return {
         ...this.rr_param,
         "fund_list":fund_list
       }
+    },
+    sumEditBudget(){
+      var sum = this.investmentAmount.reduce((a, b) => {
+        return a + Number(b)
+      }, 0)
+      this.localLog('sum:',sum)
+      return sum
     }
   },
   async mounted(){
-    console.log("RecomList mounted this.$route.name:", this.$route.name);
-    console.log('recom authorizationHeader:',this.authorizationHeader)
-    console.log('recom personalPortfolio:',this.personalPortfolio)
+    this.localLog("RecomList mounted this.$route.name:", this.$route.name);
+    this.localLog('recom authorizationHeader:',this.authorizationHeader)
+    this.localLog('recom personalPortfolio:',this.personalPortfolio)
 
     let sources = this.$route.name == 'edm' ? await this.$parent.getEDMResults() : await this.getRecommendedList()
 
     this.recommendedPortfolio = sources.Result.recom.portfolio
-    console.log('getRecommendedList Portfolio:',this.recommendedPortfolio)
+    this.localLog('getRecommendedList Portfolio:',this.recommendedPortfolio)
   },
   methods:{
     async getRecommendedList(){
       // let fund_list = this.personalPortfolio.map(fund=>fund.fund_id)
-      // console.log('fund_list:',fund_list)
+      // this.localLog('fund_list:',fund_list)
       // let body = {
       //   ...this.rr_param,
       //   "fund_list":fund_list
@@ -67,7 +78,7 @@ export default {
           res = await this.$api.postEC('/recom',this.body,this.authorizationHeader)
 
         }else{
-          console.log('check authorizationHeader:',this.authorizationHeader)
+          this.localLog('check authorizationHeader:',this.authorizationHeader)
           res = await this.$api.postWF09('/recom',this.body,this.authorizationHeader)
         }
         return  res
@@ -76,7 +87,21 @@ export default {
       } finally {
         this.isLoaded = true;
       }
-    }
+    },
+
+    showFundAmount(index){
+      const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'TWD',
+        minimumFractionDigits: 0
+      })
+
+      let fundItem = this.recommendedPortfolio[index]
+      let originAmount = Math.round(Math.round(fundItem.weight)*this.sumEditBudget/100)
+      let fcur = formatter.format(originAmount)
+      // this.localLog('fcur:',fcur)
+      return fcur
+    },
   }
 }
 </script>>

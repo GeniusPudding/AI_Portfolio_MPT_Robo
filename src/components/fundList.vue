@@ -155,7 +155,7 @@ export default {
       "isLoaded"
     ]),
     isEmptyPortfolio(){
-      console.log('isEmptyPortfolio personalPortfolio:',this.personalPortfolio)
+      this.localLog('isEmptyPortfolio personalPortfolio:',this.personalPortfolio)
       return this.personalPortfolio.length == 0
     },
     header() {
@@ -183,34 +183,34 @@ export default {
   },
   mounted() {
     this.isEditable = this.isEditableProp;
-    console.log("fundlist mounted this.$route.name:", this.$route.name);
+    this.localLog("fundlist mounted this.$route.name:", this.$route.name);
     if (this.token === "") {
       this.token = this.$cookies.get("mptLogin").token;
     }
     this.authorizationHeader = { Authorization: "Bearer " + this.token };
-    // console.log('authorizationHeader:',this.authorizationHeader)
+    // this.localLog('authorizationHeader:',this.authorizationHeader)
     this.rr_param = { rr_value: this.rr_value };
     if (this.$route.name === "myportfolio") {
       this.isCheckingEmpty = false;
       this.initList();
     } else {
-      console.log("Debug personalPortfolio:", this.personalPortfolio);
+      this.localLog("Debug personalPortfolio:", this.personalPortfolio);
     }
   },
   watch: {
     // "$store.state.personalPortfolio": function() {
     //   let p = this.$store.state.personalPortfolio;
-    //   console.log("this.$store.state.personalPortfolio:", p);
+    //   this.localLog("this.$store.state.personalPortfolio:", p);
     //   if (p.length > 2) {
     //     this.recommendedSource = "mpt";
-    //     console.log("personalPortfolio MPT");
+    //     this.localLog("personalPortfolio MPT");
     //   } else {
     //     this.recommendedSource = "tv";
-    //     console.log("personalPortfolio TV");
+    //     this.localLog("personalPortfolio TV");
     //   }
     // },
     "this.rr_value": function() {
-      console.log('rr_value:',this.rr_value)
+      this.localLog('rr_value:',this.rr_value)
     }
   },
   methods: {
@@ -236,7 +236,7 @@ export default {
       if (this.BfNo !== 0) {
         //EC customers
         let response = await this.$api.postEC("/init", this.body, this.header);
-        console.log('response.Result.init:',response.Result.init)
+        this.localLog('response.Result.init:',response.Result.init)
         return response.Result.init;
       } else {
         // let response = await this.$api.getWF09(
@@ -252,13 +252,13 @@ export default {
       // if (this.isSubmit) return
       // this.isSubmit = true;
       try {
-        console.log('try')
+        this.localLog('try')
         if (this.fundPool.length !== 0) return;
-        console.log("init List");
+        this.localLog("init List");
         var pool = await this.getFundPool();
 
         this.fundPool = pool.Result.fundpool;
-        console.log("testing fundPool:", this.fundPool);
+        this.localLog("testing fundPool:", this.fundPool);
 
         // let config = {
         //   method: 'get',
@@ -269,19 +269,19 @@ export default {
         // }
         // var originfundPool = await axios('https://www.jlf.com.tw/api/twb/fundpool',config)
         // this.fundPool = originfundPool//.data.Result
-        // console.log("origin fundPool:", originfundPool)
-        // console.log("origin res:", this.fundPool.data.Result)
+        // this.localLog("origin fundPool:", originfundPool)
+        // this.localLog("origin res:", this.fundPool.data.Result)
         this.personalPortfolio = await this.getInitPortfolio();
-        console.log("portfolio:", this.personalPortfolio);
+        this.localLog("portfolio:", this.personalPortfolio);
 
         this.initBudget();
         this.initPorfolio = [...this.personalPortfolio];
         this.initAmount = [...this.investmentAmount];
       } catch (error) {
-        console.log('catch')
+        this.localLog('catch')
         this.$api.handlerErr(error);
       } finally {
-        console.log('finally')
+        this.localLog('finally')
         this.isLoaded = true;
       }
     },
@@ -292,34 +292,34 @@ export default {
         minimumFractionDigits: 0
       })
       let fcur = formatter.format(Math.round(this.investmentAmount[index])) 
-      // console.log('fcur:',fcur)
+      // this.localLog('fcur:',fcur)
       return fcur
     },
     changeFund(event, index) {
-      console.log("changeFund event:", event)
-      // console.log("changeFund index:", index)
+      this.localLog("changeFund event:", event)
+      // this.localLog("changeFund index:", index)
       let name =  event.target.value
-      // console.log("changeFund event.target.value:",name);
+      // this.localLog("changeFund event.target.value:",name);
       if(this.fundID_map[name]){
-        console.log("fundID_map :", this.fundID_map[name])
+        this.localLog("fundID_map :", this.fundID_map[name])
         this.personalPortfolio[index].fund_id = this.fundID_map[name]
       }
 
-      // console.log("select fundItem.fund:", fundItem);
+      // this.localLog("select fundItem.fund:", fundItem);
     },
     cusMarket(fundItem) {
       let defaultName = fundItem.name 
       let type = fundItem.type
-      console.log('fundItem:',fundItem)
-      console.log('this.fundPool:',this.fundPool)
-      console.log('fundItem.type:',fundItem.type)
+      this.localLog('fundItem:',fundItem)
+      this.localLog('this.fundPool:',this.fundPool)
+      this.localLog('fundItem.type:',fundItem.type)
       if (!this.fundPool) return [];
       var marketType = this.fundPool.filter(obj => {
-        console.log('obj type:',obj.type)
+        this.localLog('obj type:',obj.type)
         return obj.type == type;
       })
       if (marketType.length <= 0) return []
-      console.log('cusMarket:',marketType)
+      this.localLog('cusMarket:',marketType)
       marketType = marketType[0]
       
       let rrMarket = marketType.markets.filter(
@@ -344,7 +344,7 @@ export default {
     cusFund(fundItem) {
       var defaultName = fundItem.name 
       var key = fundItem.market;
-      // console.log('key:',key)
+      // this.localLog('key:',key)
       if (!this.fundPool || !key) return [];
 
       var type = fundItem.type;
@@ -352,15 +352,15 @@ export default {
         return obj.type == type;
       })[0]
 
-      // console.log('marketType:',marketType)
+      // this.localLog('marketType:',marketType)
       var filteredMarket = [];
       if (marketType) {
         filteredMarket = marketType.markets.filter(obj => {
           return obj.name == key;
         });
       }
-      console.log('filteredMarket:',filteredMarket)
-      // console.log('filteredMarket[0].pool:',filteredMarket[0].pool)
+      this.localLog('filteredMarket:',filteredMarket)
+      // this.localLog('filteredMarket[0].pool:',filteredMarket[0].pool)
       if (filteredMarket.length <= 0) return [];
       let rrPool = filteredMarket[0].pool.filter(obj => {
           if(!this.fundID_map[obj.fund.name]){
@@ -369,12 +369,12 @@ export default {
 
           return obj.rr <= this.rr_value || obj.fund.name == defaultName // except for matched rr value, add the one in the storage
       })
-      console.log('rrPool:',rrPool)
+      this.localLog('rrPool:',rrPool)
       return rrPool
       // return filteredMarket[0].pool;
     },
     calcPercent(index) {
-      // console.log('calcPercent')
+      // this.localLog('calcPercent')
       var data = [];
       this.investmentAmount.forEach((obj, key) => {
         var calcValue = (obj / this.sumEditBudget()) * 100
@@ -391,9 +391,9 @@ export default {
         data[maxIndex] =
           data[maxIndex] - (tempTotalPercent - 100)
       }
-      // console.log('calcPercent data:',data)
+      // this.localLog('calcPercent data:',data)
       data.forEach((obj,key)=>{
-        // console.log('data weight:',obj)
+        // this.localLog('data weight:',obj)
         this.personalPortfolio[key].weight = obj
       })
       return data[index] + '%'
@@ -420,15 +420,15 @@ export default {
         this.calcPercent()
         // this.personalPortfolio.forEach((obj, key) => {
         //   obj.weight = this.calcPercent()[key];
-        //   console.log("obj.weight:", obj.weight);
+        //   this.localLog("obj.weight:", obj.weight);
         // });
       }
     },
     calcBudget(evt, index) {
-      console.log("calcBudget:",evt)
+      this.localLog("calcBudget:",evt)
       this.$nextTick(() => {
         var tempValue = Math.floor(evt.target.value / 1000) * 1000
-        console.log('tempValue:',tempValue)
+        this.localLog('tempValue:',tempValue)
         this.personalPortfolio[index].MarketValue = tempValue
         this.investmentAmount[index] = tempValue
         this.sumEditBudget()
@@ -445,15 +445,15 @@ export default {
       this.investmentAmount = [...this.initAmount];
     },
     async addFund() {
-      console.log('add this.personalPortfolio.__ob__:',this.personalPortfolio.__ob__)
+      this.localLog('add this.personalPortfolio.__ob__:',this.personalPortfolio.__ob__)
       let testPP =  JSON.parse(JSON.stringify(this.personalPortfolio))
-      console.log('testPP:',testPP)
+      this.localLog('testPP:',testPP)
       if (testPP.length >= 10) {
-        console.log('testPP.length:',testPP.length)
+        this.localLog('testPP.length:',testPP.length)
         alert("自訂基金最多為 10 組！");
         return;
       }
-      console.log('test alert')
+      this.localLog('test alert')
       this.personalPortfolio.push({
         MarketValue: 0,
         fund_id: "",
@@ -462,9 +462,9 @@ export default {
         type: "",
         weight: 0
       });
-      console.log('test push')
+      this.localLog('test push')
       this.investmentAmount.push(5000);
-      console.log('test push2')
+      this.localLog('test push2')
     },
     deleteFund(index) {
       this.isDelete = true;
