@@ -1,5 +1,7 @@
 import axios from "axios";
+
 import config from "./config.js";
+
 // import qs from 'qs'
 // import store from "../store";
 
@@ -82,6 +84,9 @@ export default function $axios(options) {
                 }
 
                 if (typeof data == "string") {
+                    if (data.includes('Sortino_Ratio')){
+                        data = data.replaceAll('Infinity','\"Infinity\"')
+                    }
                     data = JSON.parse(data);
                     // data.status = response.status;
                 }
