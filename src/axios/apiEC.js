@@ -5,7 +5,6 @@ import axios from "axios";
 const ECbaseURL = location.hostname == 'localhost' 
     ? 'http://10.20.1.7/ec/' : 'https://ai.franklin.com.tw/ec/' // 'http://210.65.139.185/ec/'
 export default function $axios(options) {
-    console.log('EC options:', options)
     return new Promise((resolve, reject) => {
         const instance = axios.create({
             baseURL: ECbaseURL,
@@ -33,13 +32,7 @@ export default function $axios(options) {
                 } else {
                     data = response.data;
                 }
-                if(data.includes('Sortino_Ratio')){
-                    data = data.replaceAll('Infinity','\"Infinity\"')
-                }
-                // console.log('test API response.data:',data)
-                // console.log('test API response.data.code:',data.code)
-                // console.log('test API response.data includes Sortino_Ratio:',data.includes('Sortino_Ratio'))
-
+                
                 // 根據返回的code值來做不同的處理（和後端約定）
                 switch (data.code) {
                     case "":
@@ -48,6 +41,9 @@ export default function $axios(options) {
                 }
 
                 if (typeof data == "string") {
+                    if (data.includes('Sortino_Ratio')){
+                        data = data.replaceAll('Infinity','\"Infinity\"')
+                    }
                     data = JSON.parse(data);
                 }
                 return data;
