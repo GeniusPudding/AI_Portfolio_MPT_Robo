@@ -25,12 +25,21 @@ export default function $axios(options) {
         instance.interceptors.response.use(
             (response) => {
                 let data;
+
+                
                 // IE9時response.data是undefined，因此需要使用response.request.responseText(Stringify後的字符串)
                 if (response.data == undefined) {
                     data = response.request.responseText;
                 } else {
                     data = response.data;
                 }
+                if(data.includes('Sortino_Ratio')){
+                    data = data.replaceAll('Infinity','\"Infinity\"')
+                }
+                // console.log('test API response.data:',data)
+                // console.log('test API response.data.code:',data.code)
+                // console.log('test API response.data includes Sortino_Ratio:',data.includes('Sortino_Ratio'))
+
                 // 根據返回的code值來做不同的處理（和後端約定）
                 switch (data.code) {
                     case "":

@@ -223,10 +223,18 @@ export default {
   },
   methods: {
     percentFormat(floatNum) {
-      return floatNum ? Math.round(floatNum * 100) / 100 + "%" : "";
+      // this.localLog('percentFormat:',floatNum)
+      if ((floatNum+'').includes('Infinity')){
+        return "None"
+      }
+      return !isNaN(floatNum) ? Math.round(floatNum * 100) / 100 + "%" : "";
     },
     ratioFormat(floatNum) {
-      return floatNum ? Math.round(floatNum * 100) / 100 : "";
+      // this.localLog('ratioFormat:',floatNum)
+      if ((floatNum+'').includes('Infinity')){
+        return "None"
+      }
+      return !isNaN(floatNum) ? Math.round(floatNum * 100) / 100 : "";
     },
     async getResults() {
       try {
