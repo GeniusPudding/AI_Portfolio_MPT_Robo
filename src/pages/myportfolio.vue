@@ -33,27 +33,18 @@ export default {
     }
   },
   methods: {
-    // setPercentage (val, quantile, isSign) {
-    //   var num = val ? val : 0
-    //   var percent = isSign ? `${num.toFixed(quantile)}%` : Number(num.toFixed(quantile))
-    //   return percent
-    // },
-    jumpCheck (){
-      if(!this.isLoaded) return
+    jumpCheck (){// check before getting recom portfolio
+      if(!this.isLoaded) return // wait for checking
       // if(this.personalPortfolio.length==0){
       //   alert('請至少新增一檔基金!')
       //   return
       // }
       this.localLog('jump check this.personalPortfolio:',this.personalPortfolio)
-
-      // let emptyIndex = []
+      // remove empty funds
       this.personalPortfolio = this.personalPortfolio.filter((item, index)=>{
-        // this.localLog('item.weight:',item.weight)
-        // this.localLog('item.name:',item.name)
         if (!item.name){
           this.investmentAmount[index] = 0
           this.isCheckingEmpty = true
-          // emptyIndex.push(index)
         }
         return (item.name)
       })

@@ -66,12 +66,7 @@ export default {
   },
   methods:{
     async getRecommendedList(){
-      // let fund_list = this.personalPortfolio.map(fund=>fund.fund_id)
-      // this.localLog('fund_list:',fund_list)
-      // let body = {
-      //   ...this.rr_param,
-      //   "fund_list":fund_list
-      // }
+
       try {
         let res
         if(this.BfNo!==0){//EC customers

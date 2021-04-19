@@ -197,7 +197,7 @@ export default {
     await new Promise(resolve => {
       lineSeries = [
         {
-          name: "推薦投資組合",
+          name: "建議投資組合",
           data: fundLine
         },
         {
@@ -207,7 +207,7 @@ export default {
       ];
       barSeries = [
         {
-          name: "推薦投資組合",
+          name: "建議投資組合",
           data: fundBar
         },
         {

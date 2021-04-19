@@ -5,17 +5,10 @@
       <div class="container">
         <h2 class="tit-type2" title="您的基金組合">您的基金組合</h2>
         <fundList></fundList>
-        <!-- <div class="btnArea">
-          <div class="btn">
-            <a href="" title="取得建議">取得建議</a>
-          </div>
-        </div> -->
       </div>
       <div class="container">
         <h2 class="tit-type2" title="建議的投組清單">建議的投組清單</h2>
         <div class="btn reportbtn">
-          <!-- <router-link to="/fundreport">理財健檢報告</router-link> -->
-          <!-- <a href="fundreport">理財健檢報告</a> -->
           <a href="" @click.prevent="goReport()" title="理財健檢報告">理財健檢報告</a>
         </div>
         <recommendList></recommendList>
@@ -40,7 +33,7 @@
           </div>
         </div>
 
-        <div class="btnArea twoBtn" v-show="questionnaire == 0">
+        <div class="btnArea twoBtn">
           <div class="btn type6">
             <a href="#/myportfolio" title="重新自訂投組">重新自訂投組</a>
           </div>
@@ -56,7 +49,6 @@
   </article>
 </template>
 <script>
-import { mapState } from "vuex";
 import recommendList from "../components/recommendList";
 import fundList from "../components/fundList";
 import saveBtn from "../components/buttons/saveBtn";
@@ -64,12 +56,10 @@ import { mapFields } from "vuex-map-fields";
 export default {
   components: { recommendList, fundList, saveBtn },
   computed: {
-    ...mapState(["questionnaire"]),
     ...mapFields(["useMail", 'isLoaded'])
   },
   methods: {
     switchSend(event) {
-      // targetId = event.currentTarget.id;
       if (event.target.innerText === "手機簡訊") {
         this.useMail = false;
       } else if (event.target.innerText === "電子郵件") {

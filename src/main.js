@@ -4,8 +4,6 @@ import Vue from "vue";
 
 import ElementUI from "element-ui";
 import HighchartsVue from "highcharts-vue";
-// import VueScrollmagic from 'vue-scrollmagic'
-import VueApexCharts from "vue-apexcharts";
 import VueCookies from "vue-cookies";
 import VueCurrencyFilter from "vue-currency-filter";
 import VueScrollTo from "vue-scrollto";
@@ -27,8 +25,8 @@ Vue.use(VueCurrencyFilter,{
 Vue.mixin(sharedFunction)
 Vue.use(VueCookies)
 Vue.use(axios)
-Vue.use(VueApexCharts);
-Vue.component("apexchart", VueApexCharts)
+// Vue.use(VueApexCharts);
+// Vue.component("apexchart", VueApexCharts)
 // Vue.use(VueScrollmagic)
     // Vue.config.productionTip = false
 Vue.use(VueScrollTo)

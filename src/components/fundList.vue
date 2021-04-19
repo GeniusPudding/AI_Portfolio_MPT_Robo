@@ -128,17 +128,15 @@ export default {
   },
   data() {
     return {
+      budget: 100000,
       fundID_map: {}, // name to fund_id
       isTesting: false,
       isDelete: false
-      // isSubmit: false,
-      // rr_param: {},
-      // authorizationHeader : {}
     };
   },
   components: { Fragment,loading },
   computed: {
-    ...mapState(["user_id", "BfNo", "rr_value", "IdNo", "client_ip"]),
+    ...mapState(["BfNo", "rr_value", "IdNo", "client_ip"]),
     ...mapFields([
       "isEditable",
       "fundPool",
@@ -146,12 +144,10 @@ export default {
       "token",
       "rr_param",
       "personalPortfolio",
-      "budget",
       "isCheckingEmpty",
       "authorizationHeader",
       "initPorfolio",
       "initAmount",
-      "recommendedSource",
       "isLoaded"
     ]),
     isEmptyPortfolio(){
@@ -198,17 +194,7 @@ export default {
     }
   },
   watch: {
-    // "$store.state.personalPortfolio": function() {
-    //   let p = this.$store.state.personalPortfolio;
-    //   this.localLog("this.$store.state.personalPortfolio:", p);
-    //   if (p.length > 2) {
-    //     this.recommendedSource = "mpt";
-    //     this.localLog("personalPortfolio MPT");
-    //   } else {
-    //     this.recommendedSource = "tv";
-    //     this.localLog("personalPortfolio TV");
-    //   }
-    // },
+
     "this.rr_value": function() {
       this.localLog('rr_value:',this.rr_value)
     }
@@ -220,14 +206,12 @@ export default {
         return await this.$api.getEC(
           "/fundpool",
           { rr_value: 5},
-          // this.rr_param,
           this.authorizationHeader
         );
       } else {
         return await this.$api.getWF09(
           "/fundpool",
           { rr_value: 5},
-          // this.rr_param,
           this.authorizationHeader
         );
       }
@@ -238,7 +222,7 @@ export default {
         let response = await this.$api.postEC("/init", this.body, this.header);
         this.localLog('response.Result.init:',response.Result.init)
         return response.Result.init;
-      } else {
+      } else {//Do not need 'init' ?
         // let response = await this.$api.getWF09(
         //   "/init",
         //   this.rr_param,
@@ -249,8 +233,6 @@ export default {
       }
     },
     async initList() {
-      // if (this.isSubmit) return
-      // this.isSubmit = true;
       try {
         this.localLog('try')
         if (this.fundPool.length !== 0) return;
@@ -260,17 +242,6 @@ export default {
         this.fundPool = pool.Result.fundpool;
         this.localLog("testing fundPool:", this.fundPool);
 
-        // let config = {
-        //   method: 'get',
-
-        //   headers:{
-        //     'Authorization' : md5(`${today} Franklin`)
-        //   },
-        // }
-        // var originfundPool = await axios('https://www.jlf.com.tw/api/twb/fundpool',config)
-        // this.fundPool = originfundPool//.data.Result
-        // this.localLog("origin fundPool:", originfundPool)
-        // this.localLog("origin res:", this.fundPool.data.Result)
         this.personalPortfolio = await this.getInitPortfolio();
         this.localLog("portfolio:", this.personalPortfolio);
 
@@ -331,15 +302,7 @@ export default {
 
       )
 
-      // return marketType.markets;
       return rrMarket
-      // let rrPool = filteredMarket[0].pool.filter(obj => {
-      //     if(!this.fundID_map[obj.fund.name]){
-      //       this.fundID_map[obj.fund.name] = obj.fund.id
-      //     }  
-
-      //     return obj.rr <= this.rr_value || obj.fund.name == defaultName // except for matched rr value, add the one that already in the storage
-      // })
     },
     cusFund(fundItem) {
       var defaultName = fundItem.name 
@@ -371,7 +334,6 @@ export default {
       })
       this.localLog('rrPool:',rrPool)
       return rrPool
-      // return filteredMarket[0].pool;
     },
     calcPercent(index) {
       // this.localLog('calcPercent')
@@ -412,16 +374,11 @@ export default {
       } else {
         //EC account
         this.budget = 0;
-
         this.personalPortfolio.forEach((obj, key) => {
           this.investmentAmount[key] = obj.MarketValue
           this.budget += obj.MarketValue
         })
         this.calcPercent()
-        // this.personalPortfolio.forEach((obj, key) => {
-        //   obj.weight = this.calcPercent()[key];
-        //   this.localLog("obj.weight:", obj.weight);
-        // });
       }
     },
     calcBudget(evt, index) {
@@ -462,9 +419,7 @@ export default {
         type: "",
         weight: 0
       });
-      this.localLog('test push')
       this.investmentAmount.push(5000);
-      this.localLog('test push2')
     },
     deleteFund(index) {
       this.isDelete = true;

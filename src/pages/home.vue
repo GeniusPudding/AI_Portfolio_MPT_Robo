@@ -28,7 +28,7 @@
           富蘭克林投顧結合金融科技，推出真‧懂你的理財健檢機器人<br />
           24小時線上服務，提供您最完善的理財資產建議
         </p>
-        <div class="btnArea" v-show="questionnaire == 0">
+        <div class="btnArea">
           <div class="btn">
             <a
               href="javascript:void(0);"
@@ -55,7 +55,7 @@
       <modal ref="member" :can-close="true" class="md">
         <slot slot="infoArea">
           <div class="alertModal step1">
-            <h3>富蘭克林 國民E帳戶 登入</h3>
+            <h3>富蘭克林 國民e帳戶 登入</h3>
             <div>
               <!-- 一般狀態 start -->
               <div class="formArea wow fadeInUp">
@@ -125,7 +125,7 @@
               <!-- 一般狀態 end -->
             </div>
             <hr>
-            <h3>沒有國民E帳戶!?</h3>
+            <h3>沒有國民e帳戶!?</h3>
             <div class="btnArea twoBtn">
               <div class="btn">
                 <a
@@ -212,16 +212,14 @@
   </section>
 </template>
 <script>
-import { mapState } from "vuex";
 import { mapFields } from "vuex-map-fields";
 import modal from "../components/modal";
 import md5 from "blueimp-md5";
-import { required, minLength, between } from 'vuelidate/lib/validators'
+import { required, minLength } from 'vuelidate/lib/validators'
 // import axios from "axios";
 export default {
   data() {
     return {
-
       vmodelEmail: "",
       vmodelCellphone: "",
       inputAccountNameNull: false,
@@ -242,12 +240,9 @@ validations: {
     modal
   },
   computed: {
-    ...mapState(["questionnaire"]),
     ...mapFields([
       "isLogin",
       "isSubmit",
-      "isEC",
-      "user_id",
       "BfNo",
       "token",
       "IdNo",
@@ -280,24 +275,10 @@ validations: {
         client_ip: this.client_ip
       };
     },
-    // invalidEmail(){
-    //   return !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.vmodelEmail)
-    // },
-    // invalidPhone(){
-    //   return this.firstTyped[4] ? (!/09[0-9]{8}$/.test(this.vmodelCellphone)) : false
-    //  }
+
   },
   mounted() {
     this.getIP();
-    // if (this.IdNo){
-    //   this.inputAccountNameNull = false
-    // }
-    // if (this.Passwd){
-    //   this.inputPasswordNull = false
-    // }
-    // if (this.username){
-    //   this.inputTasteNameNull = false
-    // }
   },
   watch:{
     IdNo: function() {
@@ -402,18 +383,7 @@ validations: {
 
       if (this.isSubmit) return
       this.isSubmit = true
-      // var url= 'http://10.20.1.7/www/auth'
-      // var config = {
-      //   method: 'post',
 
-      //   headers:{
-      //     'Content-Type' : 'application/json'
-      //   },
-      //   data: JSON.stringify(this.tasteData)
-      // }
-      // axios(url,config).then(res=>{
-      //   this.localLog(JSON.stringify(res.data))
-      // })
       try {
         var login = await this.$api.postWF09(
           "/auth",
@@ -442,13 +412,7 @@ validations: {
     },
 
     async ECLogin() {
-      // const ECheaders = {
-      //   "x-ft-idno": this.loginData.IdNo,
-      //   "X-ft-clientip": this.client_ip,
-      //   "x-ft-apikey": "c6db7c09-3798-4ded-b851-c806f7066c2d",
-      //   "Content-Type": "application/json"
-      //   // app:4750b422-8dec-4162-a855-5afe9626a4b7, web: c6db7c09-3798-4ded-b851-c806f7066c2d
-      // };
+
       return this.$api.postEC("/auth", this.loginData, this.ECheaders);
     },
     async next() {
@@ -465,14 +429,8 @@ validations: {
       try {
         var login = await this.ECLogin();
         this.localLog("login response:", login);
-        // 等API確定再來接login.Result的內容到store
-        if (login.Rtcode === "success") {
-          //需要檢查後端回傳的登入狀態嗎?
-        }
 
         this.isLogin = true
-        // this.user_id = ''
-        this.isEC = true
         this.BfNo = login.Result.BfNo
         this.Gid = login.Result.Gid
         this.token = login.Result.Token

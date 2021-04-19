@@ -40,9 +40,10 @@ import { Fragment } from "vue-fragment";
 export default {
   components: { modal, Fragment },
   computed: {
-    ...mapState(['authorizationHeader','useMail','BfNo','recommendedPortfolio','personalPortfolio','client_ip','rr_value','Gid']),
-    body () {
-      if (this.BfNo!==0){
+    ...mapState(['authorizationHeader','useMail','BfNo','recommendedPortfolio',
+    'personalPortfolio','client_ip','rr_value','Gid']),
+    body () {// gen package body for create API
+      if (this.BfNo!==0){// is EC
         if (!this.useMail){
           return {
             'client_ip': this.client_ip,
