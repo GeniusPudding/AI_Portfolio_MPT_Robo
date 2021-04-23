@@ -5,7 +5,7 @@
         <tr class="text-center">
           <th></th>
           <th>建議投資組合</th>
-          <th>自訂投資組合</th>
+          <th v-if="!isCustomNone">自訂投資組合</th>
           <!---->
         </tr>
       </thead>
@@ -15,7 +15,7 @@
           <td>
             {{ recomTotalPerf.start_date + ' - ' +  recomTotalPerf.end_date}} 
           </td>
-          <td>
+          <td v-if="!isCustomNone">
             {{ customTotalPerf.start_date ? customTotalPerf.start_date + ' - ' +  customTotalPerf.end_date : null}} 
           </td>
           <!-- Jan 2020 - Jan 2021 -->
@@ -23,15 +23,20 @@
         <tr>
           <td>期初投資餘額Start Balance</td>
           <td>{{ recomTotalPerf.Start_Balance | currency }}</td>
-          <td v-if="customTotalPerf.Start_Balance">{{customTotalPerf.Start_Balance | currency}}</td>
-          <td v-else></td>   
+          <Fragment v-if="!isCustomNone">
+            <td v-if="customTotalPerf.Start_Balance">{{customTotalPerf.Start_Balance | currency}}</td>
+            <td v-else></td> 
+          </Fragment>
+  
           <!---->
         </tr>
         <tr>
           <td>期末餘額End Balance</td>
           <td>{{ recomTotalPerf.End_Balance | currency }}</td>
-          <td v-if="customTotalPerf.End_Balance">{{customTotalPerf.End_Balance | currency}}</td>
-          <td v-else></td> 
+          <Fragment v-if="!isCustomNone">
+            <td v-if="customTotalPerf.End_Balance">{{customTotalPerf.End_Balance | currency}}</td>
+            <td v-else></td> 
+          </Fragment>
           <!---->
         </tr>
         <tr>
@@ -40,7 +45,7 @@
             :content="recomTotalPerf['CAGR(%)']"
             :numFormat="percentFormat"
           ></tdNum>
-          <tdNum
+          <tdNum v-if="!isCustomNone"
             :content="customTotalPerf['CAGR(%)']"
             :numFormat="percentFormat"
           ></tdNum>
@@ -52,7 +57,7 @@
             :content="recomTotalPerf['Stdev(%)']"
             :numFormat="percentFormat"
           ></tdNum>
-          <tdNum
+          <tdNum v-if="!isCustomNone"
             :content="customTotalPerf['Stdev(%)']"
             :numFormat="percentFormat"
           ></tdNum>
@@ -64,7 +69,7 @@
             :content="recomTotalPerf['max_year_return']"
             :numFormat="percentFormat"
           ></tdNum>
-          <tdNum
+          <tdNum v-if="!isCustomNone"
             :content="customTotalPerf['max_year_return']"
             :numFormat="percentFormat"
           ></tdNum>
@@ -76,7 +81,7 @@
             :content="recomTotalPerf['min_year_return']"
             :numFormat="percentFormat"
           ></tdNum>
-          <tdNum
+          <tdNum v-if="!isCustomNone"
             :content="customTotalPerf['min_year_return']"
             :numFormat="percentFormat"
           ></tdNum>
@@ -88,7 +93,7 @@
             :content="recomTotalPerf['Max.Drawdown(%)']"
             :numFormat="percentFormat"
           ></tdNum>
-          <tdNum
+          <tdNum v-if="!isCustomNone"
             :content="customTotalPerf['Max.Drawdown(%)']"
             :numFormat="percentFormat"
           ></tdNum>
@@ -100,7 +105,7 @@
             :content="recomTotalPerf['Sharpe_Ratio']"
             :numFormat="ratioFormat"
           ></tdNum>
-          <tdNum
+          <tdNum v-if="!isCustomNone"
             :content="customTotalPerf['Sharpe_Ratio']"
             :numFormat="ratioFormat"
           ></tdNum>
@@ -112,7 +117,7 @@
             :content="recomTotalPerf['Downsid_Deviation(monthly)(%)']"
             :numFormat="percentFormat"
           ></tdNum>
-          <tdNum
+          <tdNum v-if="!isCustomNone"
             :content="customTotalPerf['Downsid_Deviation(monthly)(%)']"
             :numFormat="percentFormat"
           ></tdNum>
@@ -124,7 +129,7 @@
             :content="recomTotalPerf['Sortino_Ratio']"
             :numFormat="ratioFormat"
           ></tdNum>
-          <tdNum
+          <tdNum v-if="!isCustomNone"
             :content="customTotalPerf['Sortino_Ratio']"
             :numFormat="ratioFormat"
           ></tdNum>
@@ -136,7 +141,7 @@
             :content="recomTotalPerf['Calmar_Ratio']"
             :numFormat="ratioFormat"
           ></tdNum>
-          <tdNum
+          <tdNum v-if="!isCustomNone"
             :content="customTotalPerf['Calmar_Ratio']"
             :numFormat="ratioFormat"
           ></tdNum>
@@ -147,15 +152,16 @@
   </div>
 </template>
 <script>
-import tdNum from "../tdNum";
+import tdNum from "../tdNum"
+import { Fragment } from "vue-fragment"
 export default {
   props: {
-    funds: Array,
+    isCustomNone: Boolean,
     percentFormat: Function,
     ratioFormat: Function,
     recomTotalPerf: Object,
     customTotalPerf: Object
   },
-  components: { tdNum }
+  components: { tdNum, Fragment }
 };
 </script>

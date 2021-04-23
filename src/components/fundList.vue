@@ -114,13 +114,13 @@
 <script>
 /* eslint-disable */
 //抓後端資料, 只有在myportfolio自訂頁面可以有修改功能, v-for
-import { mapState } from "vuex";
-import { mapFields } from "vuex-map-fields";
-import { Fragment } from "vue-fragment";
+import { mapState } from "vuex"
+import { mapFields } from "vuex-map-fields"
+import { Fragment } from "vue-fragment"
 // import axios from "axios";
 // import md5 from "blueimp-md5";
 // import dayjs from "dayjs"
-import loading from './includes/loading.vue';
+import loading from './includes/loading.vue'
 // const today = dayjs(new Date()).format("YYYY-MM-DD");
 export default {
   props: {

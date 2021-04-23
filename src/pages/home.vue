@@ -62,7 +62,7 @@
                 <!-- 有錯誤時[.formArea-item]加[.error] -->
                 <div class="formArea-item" :class="{ error: inputAccountNameNull }">
                   <div class="formArea-item-tit">
-                    <label for="id"> 帳號 </label>
+                    <div for="id"> 帳號 </div>
                   </div>
                   <div class="formArea-item-input">
                     <input
@@ -80,7 +80,7 @@
                 </div>
                 <div class="formArea-item" :class="{ error: inputPasswordNull }">
                   <div class="formArea-item-tit">
-                    <label for="password"> 密碼 </label>
+                    <div for="password"> 密碼 </div>
                   </div>
                   <div class="formArea-item-input">
                     <input
@@ -152,7 +152,7 @@
               <div class="formArea wow fadeInUp">
                 <div class="formArea-item" :class="{ error: inputTasteNameNull }">
                   <div class="formArea-item-tit">
-                    <label for="name"> 姓名 </label>
+                    <div for="name"> 姓名 </div>
                   </div>
                   <div class="formArea-item-input">
                     <input
@@ -167,7 +167,7 @@
                 </div>
                 <div class="formArea-item" :class="{ error: invalidEmail }">
                   <div class="formArea-item-tit">
-                    <label for="email"> Email </label>
+                    <div for="email"> Email </div>
                   </div>
                   <div class="formArea-item-input">
                     <input
@@ -182,7 +182,7 @@
                 </div>
                 <div class="formArea-item" :class="{ error: invalidPhone }">
                   <div class="formArea-item-tit">
-                    <label for="phone"> 手機 </label>
+                    <div for="phone"> 手機 </div>
                   </div>
                   <div class="formArea-item-input">
                     <input

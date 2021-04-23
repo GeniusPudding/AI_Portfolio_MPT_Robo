@@ -20,7 +20,7 @@
               {{`${fundItem.fund_id} ${fundItem.name}`}}
             </p>
           </li>
-          <li data-title="投資比重(%)">{{Math.round(fundItem.weight)+'%'}}</li>
+          <li style="font-weight: bold; color: red" data-title="投資比重(%)">{{Math.round(fundItem.weight)+'%'}}</li>
           <li data-title="投資金額">
               {{ showFundAmount($index) }}元
           </li>         
