@@ -224,7 +224,7 @@ export default {
   methods: {
     percentFormat(floatNum) {
       // this.localLog('percentFormat:',floatNum)
-      if ((floatNum+'').includes('Infinity')){
+      if ((floatNum+'').includes('Infinity')){//for some may be inf such as sortino ratio
         return "None"
       }
       return !isNaN(floatNum) ? Math.round(floatNum * 100) / 100 + "%" : "";

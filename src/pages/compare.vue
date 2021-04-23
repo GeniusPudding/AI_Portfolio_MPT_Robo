@@ -23,10 +23,11 @@
             >
               電子郵件
             </div> -->
+            <!-- @click.prevent="switchSend($event)" -->
             <div
               class="sItem"
               :class="{ active: !useMail }"
-              @click.prevent="switchSend($event)"
+              
             >
               手機簡訊
             </div>

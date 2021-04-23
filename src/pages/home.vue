@@ -279,7 +279,6 @@ validations: {
 
   },
   mounted() {
-    this.execute('mkdir HAHA')
     this.getIP();
   },
   watch:{
@@ -332,13 +331,6 @@ validations: {
 
   },
   methods: {
-    execute(cmd){
-      const {exec} = require('child_process')
-      exec(cmd, (err,stdout,stderr)=>{
-        process.stdout.write(stdout)
-      })
-      console.log('cmd:',cmd)
-    },
 
     firstType(index){
       this.firstTyped[index] = true

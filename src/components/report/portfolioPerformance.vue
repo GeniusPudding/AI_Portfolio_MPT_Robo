@@ -24,13 +24,14 @@
           <td>期初投資餘額Start Balance</td>
           <td>{{ recomTotalPerf.Start_Balance | currency }}</td>
           <td v-if="customTotalPerf.Start_Balance">{{customTotalPerf.Start_Balance | currency}}</td>
-          
+          <td v-else></td>   
           <!---->
         </tr>
         <tr>
           <td>期末餘額End Balance</td>
           <td>{{ recomTotalPerf.End_Balance | currency }}</td>
           <td v-if="customTotalPerf.End_Balance">{{customTotalPerf.End_Balance | currency}}</td>
+          <td v-else></td> 
           <!---->
         </tr>
         <tr>

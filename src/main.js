@@ -37,12 +37,7 @@ router.beforeEach((to, from, next) => {
     // console.log("router.to:", to.name, Vue.$cookies.get("mptLogin"));
     const data = store.state;
     const cookie = Vue.$cookies.get("mptLogin") || {
-        // sales_id: "",
-        // roro: "",
-        // sales_branch_id: "",
-        // sales_name: "",
-        // user_id: "",
-        // strategyType: "",
+
         token: '',
         IdNo: '',
         isLogin: false,

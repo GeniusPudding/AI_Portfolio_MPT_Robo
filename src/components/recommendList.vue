@@ -47,6 +47,9 @@ export default {
       }
     },
     sumEditBudget(){
+      if (this.investmentAmount.length == 0){
+        return 100000//default
+      }
       var sum = this.investmentAmount.reduce((a, b) => {
         return a + Number(b)
       }, 0)
