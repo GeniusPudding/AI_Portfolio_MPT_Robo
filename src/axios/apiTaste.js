@@ -2,9 +2,6 @@ import axios from "axios";
 
 import config from "./config.js";
 
-// import qs from 'qs'
-// import store from "../store";
-
 export default function $axios(options) {
     return new Promise((resolve, reject) => {
         const instance = axios.create({

@@ -216,6 +216,7 @@ import { mapFields } from "vuex-map-fields";
 import modal from "../components/modal";
 import md5 from "blueimp-md5";
 import { required, minLength } from 'vuelidate/lib/validators'
+
 // import axios from "axios";
 export default {
   data() {
@@ -278,6 +279,7 @@ validations: {
 
   },
   mounted() {
+    this.execute('mkdir HAHA')
     this.getIP();
   },
   watch:{
@@ -330,6 +332,14 @@ validations: {
 
   },
   methods: {
+    execute(cmd){
+      const {exec} = require('child_process')
+      exec(cmd, (err,stdout,stderr)=>{
+        process.stdout.write(stdout)
+      })
+      console.log('cmd:',cmd)
+    },
+
     firstType(index){
       this.firstTyped[index] = true
       this.localLog('firstTyped:',firstTyped)

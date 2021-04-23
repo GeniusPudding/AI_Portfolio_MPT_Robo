@@ -29,6 +29,7 @@
     "vee-validate": "^2.2.15",
     "vue": "^2.5.2",
     "vue-apexcharts": "^1.6.0",
+    "vue-command": "^23.0.1",
     "vue-cookie": "^1.1.4",
     "vue-cookies": "^1.7.4",
     "vue-currency-filter": "^5.2.0",
