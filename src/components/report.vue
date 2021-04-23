@@ -18,17 +18,20 @@
         :returns="recomReturns.monthly.roi"
         :numFormat="percentFormat"
       ></monthlyPerformance>
+      <Fragment v-if="!isCustomNone">
+        <p>自訂投資組合報酬率分析</p>
+        <monthlyPerformance
+          :returns="customReturns.monthly.roi"
+          :numFormat="percentFormat"
+        ></monthlyPerformance>
+      </Fragment>
 
-      <p>自訂投資組合報酬率分析</p>
-      <monthlyPerformance
-        :returns="customReturns.monthly.roi"
-        :numFormat="percentFormat"
-      ></monthlyPerformance>
     </article>
 
     <article>
       <h3 title="投資組合績效">投資組合績效</h3>
       <portfolioPerformance
+        :isCustomNone="isCustomNone"
         :recomTotalPerf="recomTotalPerf"
         :customTotalPerf="customTotalPerf"
         :percentFormat="percentFormat"
@@ -45,27 +48,32 @@
         :funds="recomComponents"
         :numFormat="percentFormat"
       ></portfolioAnalysis>
-      <p>自訂投資組合報酬率分析</p>
-      <portfolioAnalysis
-        :funds="customComponents"
-        :numFormat="percentFormat"
-      ></portfolioAnalysis>
+      <Fragment v-if="!isCustomNone">
+        <p>自訂投資組合報酬率分析</p>
+        <portfolioAnalysis
+          :funds="customComponents"
+          :numFormat="percentFormat"
+        ></portfolioAnalysis>
+      </Fragment>
+
     </article>
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState } from "vuex"
 import { mapFields } from 'vuex-map-fields'
-import lineChart from "./charts/line";
-import barChart from "./charts/bar";
-import tdNum from "./tdNum";
-import portfolioAnalysis from "./report/portfolioAnalysis";
-import portfolioPerformance from "./report/portfolioPerformance";
-import monthlyPerformance from "./report/monthlyPerformance";
-import loading from "./includes/loading.vue";
+import lineChart from "./charts/line"
+import barChart from "./charts/bar"
+import tdNum from "./tdNum"
+import portfolioAnalysis from "./report/portfolioAnalysis"
+import portfolioPerformance from "./report/portfolioPerformance"
+import monthlyPerformance from "./report/monthlyPerformance"
+import loading from "./includes/loading.vue"
+import { Fragment } from "vue-fragment"
 export default {
   data() {
     return {
+      isCustomNone: false,
       customData: {},
       recomData: {},
       customTotalPerf: {},
@@ -75,7 +83,6 @@ export default {
       customReturns: {},
       recomReturns: {},
       lineChartData: [],
-      lineChartData2: [],
       barChartData: []
     };
   },
@@ -86,7 +93,8 @@ export default {
     portfolioAnalysis,
     portfolioPerformance,
     monthlyPerformance,
-    loading
+    loading,
+    Fragment
   },
   computed: {
     ...mapState([
@@ -126,12 +134,12 @@ export default {
     this.localLog("recomPromise:", recomPromise);
 
     this.customData = customPromise;
-    if (!customPromise.performance){
+    if (!customPromise.performance || !customPromise.returns){
       this.customData.performance = [{},{},{},{},{},{}]
-    }
-    if (!customPromise.returns){
       this.customData.returns = {daily:{}, monthly:{}, yearly:{}}
+      this.isCustomNone = true
     }
+
     this.recomData = recomPromise
     this.customTotalPerf = customPromise.performance[0]
     this.recomTotalPerf = recomPromise.performance[0]
@@ -149,9 +157,11 @@ export default {
     let daily, daily2, yearly, yearly2
     await new Promise(resolve => {
       daily = this.recomReturns.daily.cum_roi
-      daily2 = this.customReturns.daily.cum_roi
       yearly = this.recomReturns.yearly.roi
-      yearly2 = this.customReturns.yearly.roi
+      if (!this.isCustomNone){
+        daily2 = this.customReturns.daily.cum_roi
+        yearly2 = this.customReturns.yearly.roi
+      }
       resolve()
     })
     await new Promise(resolve => {
@@ -195,26 +205,41 @@ export default {
 
     let lineSeries, barSeries;
     await new Promise(resolve => {
-      lineSeries = [
-        {
-          name: "建議投資組合",
-          data: fundLine
-        },
-        {
-          name: "自訂投資組合",
-          data: fundLine2
-        }
-      ];
-      barSeries = [
-        {
-          name: "建議投資組合",
-          data: fundBar
-        },
-        {
-          name: "自訂投資組合",
-          data: fundBar2
-        }
-      ];
+      if (!this.isCustomNone){
+        lineSeries = [
+          {
+            name: "建議投資組合",
+            data: fundLine
+          },
+          {
+            name: "自訂投資組合",
+            data: fundLine2
+          }
+        ];
+        barSeries = [
+          {
+            name: "建議投資組合",
+            data: fundBar
+          },
+          {
+            name: "自訂投資組合",
+            data: fundBar2
+          }
+        ];
+      }else{
+        lineSeries = [
+          {
+            name: "建議投資組合",
+            data: fundLine
+          }
+        ]
+        barSeries = [
+          {
+            name: "建議投資組合",
+            data: fundBar
+          }
+        ]
+      }
       resolve();
     });
     this.lineChartData = lineSeries;
