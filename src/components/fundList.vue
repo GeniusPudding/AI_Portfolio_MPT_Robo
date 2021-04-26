@@ -8,7 +8,7 @@
           <li>市場</li>
           <li>基金名稱</li>
           <li>投資比重(%)</li>
-          <li>投資金額</li>
+          <li>參考市值</li>
           <li>&ensp;</li>
         </ol>
       </li>
@@ -70,7 +70,7 @@
                 />
               </li>
 
-              <li data-title="投資金額">
+              <li data-title="參考市值">
                 <input
                   type="number"
                   step="1000"
@@ -98,7 +98,7 @@
             </li>
 
             <li data-title="投資比重(%)">{{ calcPercent($index)}}</li>
-            <li data-title="投資金額">
+            <li data-title="">
               {{ showFundAmount($index) }}元
             </li>
           </Fragment>

@@ -8,7 +8,7 @@
           <li>市場</li>
           <li>基金名稱</li>
           <li>投資比重(%)</li>
-          <li>投資金額</li>
+          <li>參考市值</li>
         </ol>
       </li>
       <li class="tbody">
@@ -21,7 +21,7 @@
             </p>
           </li>
           <li style="font-weight: bold; color: red" data-title="投資比重(%)">{{Math.round(fundItem.weight)+'%'}}</li>
-          <li data-title="投資金額">
+          <li data-title="參考市值">
               {{ showFundAmount($index) }}元
           </li>         
         </ol>
