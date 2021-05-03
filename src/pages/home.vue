@@ -217,7 +217,7 @@ import modal from "../components/modal";
 import md5 from "blueimp-md5";
 import { required, minLength } from 'vuelidate/lib/validators'
 
-// import axios from "axios";
+import axios from "axios";
 export default {
   data() {
     return {
@@ -414,8 +414,15 @@ validations: {
     },
 
     async ECLogin() {
-
-      return this.$api.postEC("/auth", this.loginData, this.ECheaders);
+      if(location.hostname == 'localhost' ){
+        return this.$api.postEC("/auth", this.loginData, this.ECheaders);
+      }else{
+        const config = {
+          headers: this.ECheaders,
+          baseURL: 'https://etrade.franklin.com.tw:8080'
+        }
+        return axios.post('/v2/user/auth/login', this.loginData, config)
+      }
     },
     async next() {
       if (this.inputAccountNameNull || this.inputPasswordNull ) return
