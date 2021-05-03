@@ -40,16 +40,12 @@
       </nav>
       <!--手機menu按鍵-->
       <div
+        v-if="$route.name !== 'home' && $route.name !== 'edm'"
         class="menuBtn"
         data-wow-delay="0.8s"
         :class="{ active: menuBtnActive }"
         @click="toggleMobileNavbar()"
       >
-        <span> </span>
-        <span> </span>
-        <span> </span>
-        <span> </span>
-        <span> </span>
       </div>
     </div>
   </header>
@@ -62,8 +58,8 @@ export default {
     return {
       options: '',
       selectName: '',
-      menuBtnActive: false, //這兩個啥意思?
-      navbarShow: false, //這兩個啥意思?
+      menuBtnActive: false,
+      navbarShow: false,
       rist_list: [{risk:'積極',val:5},
         {risk:'穩健',val:4},{risk:'保守',val:3}],
 
