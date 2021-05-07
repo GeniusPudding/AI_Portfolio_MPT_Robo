@@ -414,6 +414,12 @@ validations: {
     },
 
     async ECLogin() {
+    //   const config = {
+    //       headers: this.ECheaders,
+    //       baseURL: location.hostname == 'localhost'
+    // ? 'http://10.20.1.7/ec/' : 'https://ai.franklin.com.tw/ec/'
+    //     }
+    //   return axios.post('/auth', this.loginData, config)
       return this.$api.postEC("/auth", this.loginData, this.ECheaders);
       // if(location.hostname == 'localhost' ){
       //   return this.$api.postEC("/auth", this.loginData, this.ECheaders);
@@ -439,12 +445,13 @@ validations: {
       try {
         var login = await this.ECLogin();
         this.localLog("login response:", login);
-
+        // this.localLog("login data:", login.data);
+        // login = login.data
         this.isLogin = true
         this.BfNo = login.Result.BfNo
         this.Gid = login.Result.Gid
         this.token = login.Result.Token
-        this.rr_value = login.Result.RiskType
+        this.rr_value = login.Result.RiskType + 2
         this.localLog("EC token:", this.token)
         this.$nextTick(() => {
           this.$cookies.set("mptLogin", {

@@ -5,8 +5,8 @@ let data = {
     Gid: '',// EC account 
     token: '',// for identify the API client, especially those not EC customers
     username: "",// name that will displayed on header
-    rr_value: 3, // acceptable risk level of client
-    rr_param: {"rr_value": 3}, // rr for API parameter format
+    rr_value: 5, // 1~3 acceptable risk level of client
+    rr_param: {"rr_value": 5}, // rr for API parameter format
     useMail: false, // channel for report sending  (default: sms)
     authorizationHeader: {},// used for API header
     fundPool: [
