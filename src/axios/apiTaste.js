@@ -82,7 +82,8 @@ export default function $axios(options) {
 
                 if (typeof data == "string") {
                     if (data.includes('Sortino_Ratio')){
-                        data = data.replaceAll('Infinity','\"Infinity\"')
+                        data = data.replace(/Infinity/g,'\"Infinity\"')
+                        // data = data.replaceAll('Infinity','\"Infinity\"')//for new version JS
                     }
                     data = JSON.parse(data);
                     // data.status = response.status;
