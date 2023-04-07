@@ -1,6 +1,6 @@
 # mpt_robo
 
-> A Vue.js project
+> AI(MPT-based algorithm) for portfolio recommendation
 
 ## Build Setup
 
